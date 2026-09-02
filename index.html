@@ -1,6073 +1,1077 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>TANK ARENA — 2012</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>TANKI CLASSIC — 2012–2015</title>
 <style>
-/* =========================================================
-   TANK ARENA RETRO 2012
-   ONE FILE
-   PC + MOBILE
-========================================================= */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#05080b;color:#fff;font-family:Arial,Helvetica,sans-serif}
+button{font:inherit;color:inherit}
+#app{width:100%;height:100%;position:relative;overflow:hidden}
+.screen{position:absolute;inset:0;display:none}
+.screen.on{display:block}
+.hidden{display:none!important}
 
-*{
- box-sizing:border-box;
- -webkit-tap-highlight-color:transparent;
-}
-
-html,body{
- width:100%;
- height:100%;
- margin:0;
- padding:0;
- overflow:hidden;
- background:#05090c;
- color:#d8e1e4;
- font-family:Arial,Helvetica,sans-serif;
-}
-
-body{
- user-select:none;
- touch-action:none;
-}
-
-button,input{
- font-family:Arial,Helvetica,sans-serif;
-}
-
-button{
- cursor:pointer;
-}
-
-:root{
- --blue:#168ab8;
- --blue2:#0c4f68;
- --blue3:#2ab5e9;
- --dark:#071015;
- --dark2:#0d1b22;
- --dark3:#14262e;
- --line:#38505a;
- --line2:#536a73;
- --text:#dbe5e8;
- --muted:#71858e;
- --green:#55bd62;
- --red:#d95b5b;
- --yellow:#d9b33c;
-}
-
-/* =========================================================
-   GLOBAL
-========================================================= */
-
-.screen{
- position:absolute;
- inset:0;
- display:none;
-}
-
-.screen.active{
- display:block;
-}
-
-.hidden{
- display:none!important;
-}
-
-.glass{
- background:linear-gradient(
-  180deg,
-  rgba(28,45,54,.97),
-  rgba(7,15,20,.97)
- );
- border:1px solid #4b626b;
- box-shadow:
-  inset 0 1px rgba(255,255,255,.07),
-  0 15px 60px rgba(0,0,0,.65);
-}
-
-.btn{
- min-height:42px;
- padding:0 18px;
- border:1px solid #55717c;
- color:#eaf5f8;
- background:
- linear-gradient(#287a99,#0d465c);
- box-shadow:
-  inset 0 1px rgba(255,255,255,.12),
-  0 2px 5px #0009;
- font-size:10px;
- font-weight:bold;
- letter-spacing:1px;
- text-transform:uppercase;
- transition:.12s;
-}
-
-.btn:hover{
- filter:brightness(1.18);
-}
-
-.btn:active{
- transform:translateY(1px);
- filter:brightness(.95);
-}
-
-.btn.blue{
- background:linear-gradient(#28a9dc,#0b5878);
-}
-
-.btn.green{
- background:linear-gradient(#3c9d4b,#205a29);
- border-color:#5e9d68;
-}
-
-.btn.red{
- background:linear-gradient(#8b4141,#4b2222);
- border-color:#9c5a5a;
-}
-
-.btn.gold{
- background:linear-gradient(#a0832c,#55430f);
- border-color:#c0a84e;
-}
-
-.btn.dark{
- background:linear-gradient(#30414a,#111c21);
-}
-
-input{
- outline:none;
-}
-
-::-webkit-scrollbar{
- width:6px;
- height:6px;
-}
-
-::-webkit-scrollbar-track{
- background:#071015;
-}
-
-::-webkit-scrollbar-thumb{
- background:#38515b;
-}
-
-/* =========================================================
-   CRT / OLD CLIENT EFFECT
-========================================================= */
-
-.crt:after{
- content:"";
- pointer-events:none;
- position:absolute;
- inset:0;
- z-index:9999;
- opacity:.07;
- background:
- repeating-linear-gradient(
-  0deg,
-  transparent 0px,
-  transparent 3px,
-  #fff 4px
- );
-}
-
-.vignette:before{
- content:"";
- pointer-events:none;
- position:absolute;
- inset:0;
- z-index:9998;
- background:
- radial-gradient(
-  ellipse at center,
-  transparent 45%,
-  rgba(0,0,0,.42) 100%
- );
-}
-
-/* =========================================================
-   BOOT
-========================================================= */
-
+/* BOOT */
 #boot{
  background:
- radial-gradient(
-  ellipse at center,
-  #294049 0,
-  #14252d 35%,
-  #05090c 80%
- );
+ radial-gradient(circle at 50% 45%,rgba(55,75,82,.35),transparent 45%),
+ linear-gradient(#081116,#020405);
 }
-
-.bootNoise{
- position:absolute;
- inset:0;
- opacity:.15;
- background:
- repeating-linear-gradient(
-  0deg,
-  transparent 0 2px,
-  rgba(255,255,255,.3) 3px
- );
-}
-
-.bootCenter{
- position:absolute;
- left:50%;
- top:46%;
- transform:translate(-50%,-50%);
- width:650px;
- max-width:90%;
- text-align:center;
-}
-
 .bootLogo{
- font-size:70px;
- line-height:1;
- font-weight:900;
- letter-spacing:9px;
- text-shadow:
-  0 4px #000,
-  0 0 25px rgba(37,183,232,.45);
+ position:absolute;left:50%;top:43%;transform:translate(-50%,-50%);
+ text-align:center;letter-spacing:5px;text-shadow:0 2px 8px #000;
 }
+.bootLogo .tank{font-size:64px;font-weight:900;color:#c7d2d5}
+.bootLogo .classic{font-size:18px;color:#9aabb0;margin-top:10px}
+.loadbar{width:360px;max-width:80vw;height:5px;background:#263137;margin:32px auto 0}
+.loadbar i{display:block;width:0;height:100%;background:#d7e0e2}
+.bootText{font-size:11px;color:#718086;margin-top:10px}
 
-.bootLogo span{
- color:#2db5e8;
-}
-
-.bootSubtitle{
- margin-top:12px;
- color:#7f969e;
- font-size:11px;
- letter-spacing:5px;
-}
-
-.bootProgress{
- width:520px;
- max-width:90%;
- height:8px;
- margin:38px auto 12px;
- background:#050b0e;
- border:1px solid #435760;
-}
-
-.bootProgress i{
- display:block;
- width:0%;
- height:100%;
- background:linear-gradient(90deg,#086a91,#55d1fa);
- box-shadow:0 0 16px #1ba9dc;
-}
-
-.bootStatus{
- color:#70858e;
- font-size:10px;
- letter-spacing:1px;
-}
-
-.bootBottom{
- position:absolute;
- left:20px;
- right:20px;
- bottom:20px;
- display:flex;
- justify-content:space-between;
- color:#40535b;
- font-size:9px;
- letter-spacing:1px;
-}
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-#login{
+/* AUTH */
+#auth{
  background:
- radial-gradient(
-  ellipse at 50% 75%,
-  #173c4b 0,
-  transparent 45%
- ),
- linear-gradient(#071117,#0b171e);
+ linear-gradient(rgba(0,0,0,.38),rgba(0,0,0,.7)),
+ radial-gradient(circle at 55% 40%,#47535a 0,#182126 35%,#050709 75%);
 }
-
-.loginFloor{
- position:absolute;
- left:-20%;
- right:-20%;
- bottom:-30%;
- height:70%;
- transform:
-  perspective(650px)
-  rotateX(62deg);
- background:
- linear-gradient(
-  90deg,
-  transparent 49.5%,
-  rgba(75,130,150,.35) 50%,
-  transparent 50.5%
- ),
- linear-gradient(
-  0deg,
-  transparent 49.5%,
-  rgba(75,130,150,.35) 50%,
-  transparent 50.5%
- );
- background-size:90px 90px;
- opacity:.25;
-}
-
-.loginTank{
- position:absolute;
- width:500px;
- height:300px;
- left:50%;
- bottom:6%;
- transform:translateX(-50%);
- opacity:.35;
- filter:drop-shadow(0 25px 15px #000);
-}
-
-.loginTankHull{
- position:absolute;
- left:100px;
- top:155px;
- width:300px;
- height:95px;
- background:linear-gradient(#65787e,#25353b);
- clip-path:
- polygon(
-  5% 0,
-  95% 0,
-  100% 40%,
-  93% 100%,
-  7% 100%,
-  0 40%
- );
-}
-
-.loginTankTurret{
- position:absolute;
- left:165px;
- top:92px;
- width:180px;
- height:100px;
- background:linear-gradient(#73868b,#293b41);
- clip-path:
- polygon(
-  13% 0,
-  87% 0,
-  100% 58%,
-  84% 100%,
-  16% 100%,
-  0 58%
- );
-}
-
-.loginTankBarrel{
- position:absolute;
- left:320px;
- top:119px;
- width:210px;
- height:20px;
- background:linear-gradient(#859398,#2c3c42);
- transform:skewY(-3deg);
-}
-
-.loginBox{
- position:absolute;
- z-index:20;
- width:440px;
- max-width:92%;
- left:50%;
- top:44%;
+.authPanel{
+ position:absolute;width:410px;max-width:90vw;left:50%;top:50%;
  transform:translate(-50%,-50%);
- padding:30px;
- background:rgba(5,12,16,.95);
- border:1px solid #506771;
- box-shadow:0 30px 100px #000;
-}
-
-.loginBrand{
- text-align:center;
- font-weight:900;
- font-size:35px;
- letter-spacing:5px;
- text-shadow:0 3px #000;
-}
-
-.loginBrand span{
- color:#2db4e8;
-}
-
-.loginDescription{
- text-align:center;
- color:#718790;
- font-size:9px;
- letter-spacing:3px;
- margin-top:7px;
- margin-bottom:27px;
-}
-
-.loginField{
- margin-bottom:13px;
-}
-
-.loginField label{
- display:block;
- color:#738891;
- font-size:9px;
- letter-spacing:1px;
- margin-bottom:5px;
- text-transform:uppercase;
-}
-
-.loginField input{
- width:100%;
- height:43px;
- padding:0 12px;
- color:#eaf3f5;
- background:#050d11;
- border:1px solid #344a53;
-}
-
-.loginField input:focus{
- border-color:#259fcf;
-}
-
-.loginFoot{
- margin-top:18px;
- color:#41545c;
- font-size:9px;
- line-height:16px;
- text-align:center;
-}
-
-/* =========================================================
-   TOP BAR
-========================================================= */
-
-.top{
- position:absolute;
- z-index:100;
- left:0;
- right:0;
- top:0;
- height:62px;
- display:flex;
- align-items:center;
- padding:0 16px;
- gap:22px;
- background:
- linear-gradient(#1c2e37,#0b161c);
- border-bottom:1px solid #40555e;
- box-shadow:0 4px 20px #0008;
-}
-
-.logo{
- font-weight:900;
- font-size:18px;
- letter-spacing:2px;
- white-space:nowrap;
-}
-
-.logo span{
- color:#31b3e7;
-}
-
-.topSection{
- color:#82969e;
- font-size:10px;
- letter-spacing:2px;
-}
-
-.topPlayer{
- margin-left:auto;
- display:flex;
- align-items:center;
- gap:10px;
- font-size:10px;
-}
-
-.rankBox{
- width:35px;
- height:35px;
- display:grid;
- place-items:center;
- background:
- linear-gradient(#60747b,#26353b);
- border:1px solid #829196;
- font-weight:bold;
-}
-
-.balance{
- color:#57c9ed;
-}
-
-.balance.gold{
- color:#e3be42;
-}
-
-/* =========================================================
-   GARAGE
-========================================================= */
-
-#garage{
- background:#091218;
-}
-
-.garage{
- position:absolute;
- top:62px;
- left:0;
- right:0;
- bottom:0;
- display:grid;
- grid-template-columns:230px 1fr 280px;
-}
-
-.sidebar{
- background:
- linear-gradient(90deg,#122029,#081117);
- border-right:1px solid #334951;
- padding:9px;
-}
-
-.sidebar.right{
- border-left:1px solid #334951;
- border-right:0;
-}
-
-.sideCaption{
- color:#637983;
- font-size:9px;
- letter-spacing:2px;
- padding:11px 7px;
- border-bottom:1px solid #25373e;
- text-transform:uppercase;
-}
-
-.nav{
- height:42px;
- display:flex;
- align-items:center;
- padding:0 10px;
- color:#adbbc0;
- border-bottom:1px solid #1b2b32;
- font-size:10px;
- transition:.1s;
-}
-
-.nav:hover,
-.nav.active{
- background:
- linear-gradient(90deg,#174c63,#0d222c);
- border-left:3px solid #2daee1;
- color:#fff;
-}
-
-.navIcon{
- width:27px;
- color:#6ca5ba;
- font-size:15px;
-}
-
-.garageCenter{
- position:relative;
- overflow:hidden;
- background:
- radial-gradient(
-  ellipse at 50% 43%,
-  #51636a 0,
-  #26363c 45%,
-  #091116 100%
- );
-}
-
-.garageCenter:before{
- content:"";
- position:absolute;
- inset:0;
- background:
- linear-gradient(
-  90deg,
-  rgba(0,0,0,.35),
-  transparent 28%,
-  transparent 72%,
-  rgba(0,0,0,.35)
- );
- pointer-events:none;
-}
-
-.garageFloor{
- position:absolute;
- left:-20%;
- right:-20%;
- bottom:-35%;
- height:72%;
- transform:
-  perspective(650px)
-  rotateX(60deg);
- background:
- linear-gradient(
-  90deg,
-  transparent 49.5%,
-  rgba(160,180,180,.25) 50%,
-  transparent 50.5%
- ),
- linear-gradient(
-  0deg,
-  transparent 49.5%,
-  rgba(160,180,180,.25) 50%,
-  transparent 50.5%
- );
- background-size:100px 100px;
- opacity:.3;
-}
-
-.garagePlatform{
- position:absolute;
- left:50%;
- top:52%;
- width:500px;
- height:210px;
- transform:translate(-50%,-50%);
- border-radius:50%;
- background:
- radial-gradient(
-  ellipse,
-  #68777a,
-  #39494e 48%,
-  #1a272c 72%,
-  transparent 73%
- );
- opacity:.9;
-}
-
-.gTank{
- position:absolute;
- z-index:10;
- width:470px;
- height:320px;
- left:50%;
- top:43%;
- transform:translate(-50%,-50%);
- filter:drop-shadow(0 28px 17px #000b);
-}
-
-.tTrack{
- position:absolute;
- width:300px;
- height:72px;
- top:194px;
- border:8px solid #59696d;
- background:#10191d;
- border-radius:40px;
- box-shadow:
-  inset 0 0 0 4px #263439,
-  inset 0 0 20px #000;
-}
-
-.tTrack.left{
- left:37px;
-}
-
-.tTrack.right{
- right:37px;
-}
-
-.tHull{
- position:absolute;
- left:78px;
- top:145px;
- width:314px;
- height:115px;
- background:
- linear-gradient(
-  #708287,
-  #2b3b41
- );
- clip-path:
- polygon(
-  6% 0,
-  94% 0,
-  100% 42%,
-  94% 96%,
-  6% 96%,
-  0 42%
- );
- border:1px solid #829298;
-}
-
-.tHull:after{
- content:"";
- position:absolute;
- left:18px;
- right:18px;
- bottom:15px;
- height:10px;
- background:#182327;
- opacity:.8;
-}
-
-.turret{
- position:absolute;
- left:145px;
- top:82px;
- width:185px;
- height:100px;
- background:
- linear-gradient(
-  #788a8f,
-  #2d3e43
- );
- clip-path:
- polygon(
-  14% 0,
-  86% 0,
-  100% 57%,
-  83% 100%,
-  17% 100%,
-  0 57%
- );
- transform-origin:45% 80%;
-}
-
-.turret:after{
- content:"";
- position:absolute;
- left:50%;
- bottom:5px;
- width:55px;
- height:10px;
- transform:translateX(-50%);
- background:#1a262a;
- border-radius:50%;
-}
-
-.barrel{
- position:absolute;
- left:294px;
- top:110px;
- width:215px;
- height:21px;
- background:
- linear-gradient(#87969b,#2e3e44);
- clip-path:
- polygon(
-  0 15%,
-  100% 0,
-  100% 100%,
-  0 85%
- );
- transform-origin:5% 50%;
-}
-
-.garageName{
- position:absolute;
- z-index:15;
- top:calc(43% + 160px);
- left:0;
- right:0;
- text-align:center;
- font-size:15px;
- letter-spacing:3px;
- font-weight:bold;
-}
-
-.garageSub{
- position:absolute;
- z-index:15;
- top:calc(43% + 183px);
- left:0;
- right:0;
- text-align:center;
- color:#73878f;
- font-size:9px;
- letter-spacing:1px;
-}
-
-/* =========================================================
-   GARAGE BOTTOM
-========================================================= */
-
-.garageBottom{
- position:absolute;
- z-index:30;
- left:0;
- right:0;
- bottom:0;
- height:76px;
- display:flex;
- justify-content:center;
- align-items:center;
- gap:8px;
- padding:10px;
- background:
- linear-gradient(#16262e,#081117);
- border-top:1px solid #42565e;
-}
-
-.garageBottom .btn{
- min-width:125px;
-}
-
-/* =========================================================
-   CHAT
-========================================================= */
-
-.chat{
- position:absolute;
- z-index:40;
- left:12px;
- bottom:90px;
- width:375px;
- height:195px;
- background:rgba(3,8,11,.91);
- border:1px solid #41565f;
- box-shadow:0 7px 25px #000b;
-}
-
-.chatHead{
- height:29px;
- display:flex;
- align-items:center;
- padding:0 9px;
- background:linear-gradient(#1b2b33,#101d23);
- border-bottom:1px solid #344951;
- color:#8ea1a8;
- font-size:9px;
- letter-spacing:1px;
-}
-
-.chatBody{
- height:131px;
- padding:7px 9px;
- overflow:auto;
- font-size:10px;
- line-height:16px;
-}
-
-.chatMessage{
- color:#aebcc1;
-}
-
-.chatMessage b{
- color:#42b4e5;
-}
-
-.chatMessage.red b{
- color:#db6565;
-}
-
-.chatSystem{
- color:#60777f;
-}
-
-.chatInput{
- height:35px;
- display:flex;
- border-top:1px solid #30434b;
-}
-
-.chatInput input{
- flex:1;
- min-width:0;
- background:#071015;
- border:0;
- color:#ddd;
- padding:0 9px;
- font-size:10px;
-}
-
-.chatInput button{
- width:65px;
- border:0;
- background:#185a73;
- color:#fff;
- font-size:8px;
-}
-
-/* =========================================================
-   RIGHT STATS
-========================================================= */
-
-.statHeader{
- padding:11px 6px;
- color:#667e87;
- border-bottom:1px solid #293b42;
- font-size:9px;
- letter-spacing:2px;
-}
-
-.itemTitle{
- padding:13px 6px 3px;
- font-size:15px;
- font-weight:bold;
-}
-
-.itemDesc{
- padding:0 6px 13px;
- color:#71868e;
- font-size:9px;
-}
-
-.stat{
- margin:12px 6px;
-}
-
-.statLine{
- display:flex;
- justify-content:space-between;
- margin-bottom:5px;
- color:#aab9bd;
- font-size:9px;
-}
-
-.statBar{
- height:7px;
- background:#101b20;
- border:1px solid #344850;
-}
-
-.statBar i{
- display:block;
- height:100%;
- background:linear-gradient(90deg,#126d91,#3bb6df);
-}
-
-.equipment{
- margin:20px 6px;
- padding:13px;
- background:#091419;
- border:1px solid #33474f;
- color:#9aabb0;
- font-size:9px;
- line-height:17px;
-}
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.modalShade{
- position:absolute;
- z-index:500;
- inset:0;
- background:rgba(0,0,0,.72);
- display:none;
-}
-
-.modalShade.active{
- display:block;
-}
-
-.modal{
- position:absolute;
- z-index:510;
- width:850px;
- max-width:94%;
- max-height:90%;
- left:50%;
- top:50%;
- transform:translate(-50%,-50%);
- background:#0c171d;
- border:1px solid #50666f;
- box-shadow:0 30px 120px #000;
-}
-
-.modalHeader{
- height:46px;
- display:flex;
- align-items:center;
- padding:0 15px;
- background:linear-gradient(#1c2d35,#0d181e);
- border-bottom:1px solid #40545c;
- font-size:11px;
- font-weight:bold;
- letter-spacing:2px;
-}
-
-.modalClose{
- margin-left:auto;
- width:35px;
- height:35px;
- border:0;
- background:transparent;
- color:#9babb0;
- font-size:24px;
-}
-
-.modalContent{
- padding:17px;
- max-height:calc(90vh - 46px);
- overflow:auto;
-}
-
-/* =========================================================
-   BATTLE LIST
-========================================================= */
-
-.tabs{
- display:flex;
- border-bottom:1px solid #364a52;
- margin-bottom:14px;
-}
-
-.tab{
- padding:11px 17px;
- color:#71858d;
- font-size:9px;
- letter-spacing:1px;
-}
-
-.tab.active{
- color:#fff;
- border-bottom:2px solid #2ca8d8;
-}
-
-.battleRow{
- display:grid;
- grid-template-columns:45px 1fr 110px 110px 90px;
- min-height:60px;
- align-items:center;
- padding:0 10px;
- background:#0a151b;
- border:1px solid #24373e;
- border-bottom:0;
- font-size:10px;
-}
-
-.battleRow:last-child{
- border-bottom:1px solid #24373e;
-}
-
-.battleRow:hover{
- background:#11252e;
-}
-
-.mapThumb{
- width:35px;
- height:35px;
- background:
- linear-gradient(135deg,#586b62,#25352e);
- border:1px solid #50636a;
- position:relative;
-}
-
-.mapThumb:after{
- content:"";
- position:absolute;
- left:7px;
- top:15px;
- width:22px;
- height:5px;
- background:#81918c;
- transform:rotate(-20deg);
-}
-
-.mapName{
- font-weight:bold;
-}
-
-.mapType{
- color:#657b83;
- font-size:8px;
- margin-top:4px;
-}
-
-.playersGreen{
- color:#58c66a;
-}
-
-/* =========================================================
-   SHOP
-========================================================= */
-
-.shopItem{
- display:grid;
- grid-template-columns:115px 1fr 135px;
- gap:15px;
- align-items:center;
- padding:13px 5px;
- border-bottom:1px solid #273940;
-}
-
-.shopPreview{
- height:75px;
- position:relative;
- background:
- linear-gradient(135deg,#46595e,#16252b);
- border:1px solid #4c6269;
- overflow:hidden;
-}
-
-.shopPreview:after{
- content:"";
- position:absolute;
- left:25px;
- top:32px;
- width:70px;
- height:20px;
- background:#73858a;
- clip-path:polygon(0 25%,100% 0,100% 100%,0 75%);
-}
-
-.shopInfo b{
- font-size:13px;
-}
-
-.shopInfo small{
- display:block;
- color:#71868e;
- font-size:9px;
- line-height:15px;
- margin-top:5px;
-}
-
-.shopPrice{
- text-align:right;
- color:#58c6ec;
- font-size:10px;
-}
-
-.shopPrice .btn{
- margin-top:7px;
- min-height:32px;
-}
-
-/* =========================================================
-   PROFILE
-========================================================= */
-
-.profileGrid{
- display:grid;
- grid-template-columns:180px 1fr;
- gap:20px;
-}
-
-.avatarLarge{
- height:180px;
- display:grid;
- place-items:center;
- font-size:65px;
- font-weight:bold;
- background:
- radial-gradient(circle,#52666d,#17262d);
- border:1px solid #52676e;
-}
-
-.profileName{
- font-size:25px;
- font-weight:bold;
-}
-
-.profileMuted{
- color:#71868e;
- font-size:10px;
- margin-top:5px;
-}
-
-.profileStats{
- margin-top:20px;
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:9px;
-}
-
-.profileStat{
- padding:15px;
- background:#0a151b;
- border:1px solid #2e424a;
-}
-
-.profileStat small{
- color:#6e828a;
- font-size:8px;
-}
-
-.profileStat b{
- display:block;
- margin-top:6px;
- font-size:21px;
-}
-
-/* =========================================================
-   SETTINGS
-========================================================= */
-
-.setting{
- min-height:56px;
- display:flex;
- align-items:center;
- justify-content:space-between;
- border-bottom:1px solid #283a41;
- font-size:10px;
-}
-
-/* =========================================================
-   MAP LOADING
-========================================================= */
-
-#mapLoading{
- background:#060c10;
-}
-
-.loadingScene{
- position:absolute;
- inset:0;
- background:
- radial-gradient(
-  ellipse at center,
-  #4c605f 0,
-  #263b3b 40%,
-  #080e11 100%
- );
-}
-
-.loadingScene:after{
- content:"";
- position:absolute;
- inset:0;
- background:
- linear-gradient(
-  90deg,
-  rgba(0,0,0,.5),
-  transparent 35%,
-  transparent 65%,
-  rgba(0,0,0,.5)
- );
-}
-
-.loadingBuilding{
- position:absolute;
- background:#33443f;
- border:2px solid #53625d;
- box-shadow:0 20px 20px #0006;
-}
-
-.lb1{
- left:8%;
- bottom:24%;
- width:220px;
- height:150px;
-}
-
-.lb2{
- right:7%;
- bottom:20%;
- width:270px;
- height:180px;
-}
-
-.loadingBridge{
- position:absolute;
- left:20%;
- right:20%;
- bottom:30%;
- height:45px;
- background:#6b7771;
- border:2px solid #89928d;
- transform:perspective(500px) rotateX(45deg);
-}
-
-.loadingCenter{
- position:absolute;
- z-index:10;
- left:50%;
- top:50%;
- transform:translate(-50%,-50%);
- width:620px;
- max-width:90%;
- text-align:center;
-}
-
-.loadingSmall{
- color:#84989d;
- font-size:10px;
- letter-spacing:5px;
-}
-
-.loadingMapName{
- font-size:53px;
- font-weight:900;
- letter-spacing:7px;
- margin:10px 0;
- text-shadow:0 5px 8px #000;
-}
-
-.loadingInfo{
- color:#81959b;
- font-size:10px;
- letter-spacing:2px;
-}
-
-.loadingBar{
- height:9px;
- margin:27px auto 10px;
- background:#081014;
- border:1px solid #52636a;
-}
-
-.loadingBar i{
- display:block;
- width:0;
- height:100%;
- background:linear-gradient(90deg,#087aa7,#4dc8ed);
-}
-
-.loadingPercent{
- font-size:10px;
- color:#70868e;
-}
-
-.loadingTip{
- position:absolute;
- z-index:10;
- left:0;
- right:0;
- bottom:25px;
- text-align:center;
- color:#596e76;
- font-size:9px;
-}
-
-/* =========================================================
-   BATTLE WORLD
-========================================================= */
-
-#battle{
- background:#263a32;
-}
-
-.world{
- position:absolute;
- inset:0;
- overflow:hidden;
- background:
- radial-gradient(
-  ellipse at 50% 40%,
-  #718277,
-  #4b5d50 45%,
-  #26372e 100%
- );
-}
-
-.worldGround{
- position:absolute;
- inset:-20%;
- background:
- radial-gradient(
-  ellipse at center,
-  rgba(126,146,130,.4),
-  transparent 60%
- );
-}
-
-.worldGrid{
- position:absolute;
- left:-30%;
- right:-30%;
- bottom:-40%;
- height:90%;
- transform:
-  perspective(700px)
-  rotateX(60deg);
- background:
- linear-gradient(
-  90deg,
-  transparent 49.5%,
-  rgba(170,185,172,.23) 50%,
-  transparent 50.5%
- ),
- linear-gradient(
-  0deg,
-  transparent 49.5%,
-  rgba(170,185,172,.23) 50%,
-  transparent 50.5%
- );
- background-size:100px 100px;
- opacity:.28;
-}
-
-/* =========================================================
-   MAP OBJECTS
-========================================================= */
-
-.mapObject{
- position:absolute;
- transform-style:preserve-3d;
-}
-
-.wall{
- background:
- linear-gradient(90deg,#414f4a,#68756e,#37443f);
- border:2px solid #7d8982;
- box-shadow:0 13px 10px #0006;
-}
-
-.house{
- background:
- linear-gradient(
-  #5d6860,
-  #39453f
- );
- border:2px solid #7a827b;
- box-shadow:0 15px 15px #0008;
-}
-
-.houseRoof{
- position:absolute;
- left:-8px;
- right:-8px;
- top:-28px;
- height:30px;
- background:#35413c;
- border:2px solid #6b756f;
- clip-path:polygon(8% 100%,50% 0,92% 100%);
-}
-
-.houseDoor{
- position:absolute;
- bottom:0;
- left:35%;
- width:25%;
- height:45%;
- background:#202c29;
- border:2px solid #68726c;
-}
-
-.houseWindow{
- position:absolute;
- width:23%;
- height:24%;
- background:#263b3e;
- border:2px solid #89918a;
- top:27%;
-}
-
-.hw1{left:12%}
-.hw2{right:12%}
-
-.crate{
- width:60px;
- height:60px;
- background:
- repeating-linear-gradient(
-  45deg,
-  #7b6542 0 8px,
-  #5b472e 9px 16px
- );
- border:3px solid #493720;
- box-shadow:0 10px 10px #0007;
-}
-
-.bridge{
- position:absolute;
- width:480px;
- height:100px;
- background:
- linear-gradient(#78827c,#454e49);
- border:3px solid #8c9690;
- box-shadow:0 20px 20px #0008;
- transform:
-  perspective(500px)
-  rotateX(52deg)
-  rotateZ(-3deg);
-}
-
-.bridgeRail{
- position:absolute;
- top:-18px;
- left:0;
- right:0;
- height:18px;
- border-top:5px solid #303b37;
- border-bottom:3px solid #59645e;
-}
-
-.bridgeRail.bottom{
- top:auto;
- bottom:-18px;
-}
-
-.rock{
- background:#35453c;
- border:2px solid #59675f;
- box-shadow:0 14px 12px #0007;
- clip-path:
- polygon(
-  0 88%,
-  12% 38%,
-  31% 20%,
-  47% 35%,
-  66% 4%,
-  82% 30%,
-  100% 88%
- );
-}
-
-/* =========================================================
-   PLAYER TANK 3D-LIKE
-========================================================= */
-
-.playerTank{
- position:absolute;
- z-index:50;
- width:300px;
- height:220px;
- left:50%;
- top:58%;
- transform:translate(-50%,-50%);
- filter:drop-shadow(0 25px 12px #000b);
-}
-
-.playerBody{
- position:absolute;
- left:48px;
- top:100px;
- width:205px;
- height:82px;
- background:
- linear-gradient(
-  #667a7e,
-  #26383d
- );
- clip-path:
- polygon(
-  7% 0,
-  93% 0,
-  100% 35%,
-  92% 100%,
-  8% 100%,
-  0 35%
- );
-}
-
-.playerTrack{
- position:absolute;
- top:125px;
- width:190px;
- height:48px;
- border:6px solid #58686b;
- background:#10191c;
- border-radius:30px;
-}
-
-.playerTrack.left{
- left:15px;
-}
-
-.playerTrack.right{
- right:15px;
-}
-
-.playerTurret{
- position:absolute;
- z-index:4;
- left:88px;
- top:58px;
- width:125px;
- height:70px;
- background:
- linear-gradient(#74868a,#293b40);
- clip-path:
- polygon(
-  14% 0,
-  86% 0,
-  100% 58%,
-  83% 100%,
-  17% 100%,
-  0 58%
- );
- transform-origin:45% 80%;
-}
-
-.playerBarrel{
- position:absolute;
- z-index:3;
- left:190px;
- top:76px;
- width:130px;
- height:14px;
- background:
- linear-gradient(#859398,#2c3c41);
- transform-origin:0 50%;
-}
-
-/* =========================================================
-   ENEMY TANK
-========================================================= */
-
-.enemy{
- position:absolute;
- z-index:40;
- width:170px;
- height:130px;
- filter:drop-shadow(0 13px 9px #0008);
-}
-
-.enemyBody{
- position:absolute;
- left:25px;
- top:60px;
- width:120px;
- height:45px;
- background:linear-gradient(#813f3f,#48272a);
- clip-path:polygon(5% 0,95% 0,100% 100%,0 100%);
-}
-
-.enemyTurret{
- position:absolute;
- left:58px;
- top:35px;
- width:75px;
- height:45px;
- background:linear-gradient(#9b5252,#4b292c);
- clip-path:polygon(12% 0,88% 0,100% 65%,84% 100%,16% 100%,0 65%);
-}
-
-.enemyBarrel{
- position:absolute;
- left:120px;
- top:49px;
- width:75px;
- height:9px;
- background:#a25a5a;
-}
-
-.enemyName{
- position:absolute;
- top:10px;
- left:0;
- right:0;
- text-align:center;
- color:#ef8b8b;
- font-size:9px;
- text-shadow:0 2px #000;
-}
-
-/* =========================================================
-   BATTLE HUD
-========================================================= */
-
-.battleTop{
- position:absolute;
- z-index:100;
- top:10px;
- left:12px;
- right:12px;
- display:flex;
- justify-content:space-between;
- align-items:flex-start;
- pointer-events:none;
-}
-
-.score{
- min-width:170px;
- padding:8px 15px;
- background:rgba(4,10,13,.85);
- border:1px solid #425861;
- text-align:center;
- font-size:8px;
- color:#84999f;
-}
-
-.score b{
- display:block;
- font-size:18px;
- color:#e1eaed;
- margin-top:3px;
-}
-
-.score.blue{
- border-color:#326d84;
-}
-
-.score.red{
- border-color:#754646;
-}
-
-.battleTimer{
- font-size:20px;
- font-weight:bold;
- text-shadow:0 3px 5px #000;
-}
-
-/* =========================================================
-   CROSSHAIR
-========================================================= */
-
-.crosshair{
- position:absolute;
- z-index:80;
- left:50%;
- top:50%;
- width:52px;
- height:52px;
- transform:translate(-50%,-50%);
- border:1px solid rgba(255,255,255,.8);
- border-radius:50%;
- pointer-events:none;
-}
-
-.crosshair:before,
-.crosshair:after{
- content:"";
- position:absolute;
- background:rgba(255,255,255,.8);
-}
-
-.crosshair:before{
- width:1px;
- height:72px;
- left:25px;
- top:-11px;
-}
-
-.crosshair:after{
- height:1px;
- width:72px;
- top:25px;
- left:-11px;
-}
-
-/* =========================================================
-   HUD BOTTOM
-========================================================= */
-
-.battleHealth{
- position:absolute;
- z-index:90;
- left:50%;
- bottom:18px;
- transform:translateX(-50%);
- width:370px;
- max-width:42vw;
- height:22px;
- background:#050a0c;
- border:1px solid #697b80;
-}
-
-.battleHealth i{
- display:block;
- height:100%;
- width:100%;
- background:linear-gradient(#63d46c,#267b32);
-}
-
-.battleHealth span{
- position:absolute;
- inset:0;
- display:grid;
- place-items:center;
- color:#fff;
- font-size:9px;
- text-shadow:0 1px 3px #000;
-}
-
-.weaponHud{
- position:absolute;
- z-index:90;
- left:15px;
- bottom:15px;
- width:155px;
- height:68px;
- padding:9px;
- background:rgba(4,10,13,.9);
- border:1px solid #465b63;
-}
-
-.weaponHud b{
- font-size:12px;
-}
-
-.weaponHud small{
- display:block;
- color:#71868e;
- margin-top:5px;
- font-size:8px;
-}
-
-.ammoHud{
- position:absolute;
- z-index:90;
- right:15px;
- bottom:15px;
- width:110px;
- height:68px;
- padding:7px;
- text-align:center;
- background:rgba(4,10,13,.9);
- border:1px solid #465b63;
-}
-
-.ammoHud small{
- color:#70868d;
- font-size:7px;
-}
-
-.ammoHud b{
- display:block;
- font-size:27px;
- color:#58c9ee;
-}
-
-/* =========================================================
-   MOBILE CONTROLS
-========================================================= */
-
-.mobileControls{
- position:absolute;
- z-index:150;
- inset:0;
- display:none;
- pointer-events:none;
-}
-
-.joy{
- position:absolute;
- left:25px;
- bottom:35px;
- width:135px;
- height:135px;
- border-radius:50%;
- border:2px solid rgba(255,255,255,.15);
- background:rgba(0,0,0,.15);
- pointer-events:auto;
-}
-
-.joyKnob{
- position:absolute;
- left:50%;
- top:50%;
- width:58px;
- height:58px;
- margin:-29px;
- border-radius:50%;
- background:rgba(60,130,155,.5);
- border:2px solid rgba(255,255,255,.25);
-}
-
-.actionButtons{
- position:absolute;
- right:22px;
- bottom:30px;
- display:flex;
- gap:12px;
- align-items:flex-end;
- pointer-events:auto;
-}
-
-.actionButton{
- width:72px;
- height:72px;
- border-radius:50%;
- background:rgba(10,30,38,.72);
- border:2px solid rgba(120,170,185,.4);
- color:#d9eef4;
- display:grid;
- place-items:center;
- font-size:10px;
- font-weight:bold;
- box-shadow:0 5px 20px #0008;
-}
-
-.actionButton.fire{
- width:92px;
- height:92px;
- border-color:rgba(70,190,235,.65);
-}
-
-.actionButton:active{
- background:rgba(38,119,150,.8);
-}
-
-.cameraTouch{
- position:absolute;
- right:0;
- top:100px;
- bottom:150px;
- width:55%;
- pointer-events:auto;
-}
-
-/* =========================================================
-   SCOREBOARD
-========================================================= */
-
-.scoreboard{
- position:absolute;
- z-index:600;
- left:50%;
- top:50%;
- transform:translate(-50%,-50%);
- width:720px;
- max-width:92%;
- background:#081218ee;
- border:1px solid #50656e;
- box-shadow:0 30px 100px #000;
- display:none;
-}
-
-.scoreboard.active{
- display:block;
-}
-
-.scoreRow{
- display:grid;
- grid-template-columns:45px 1fr 100px 100px;
- min-height:48px;
- align-items:center;
- padding:0 10px;
- border-bottom:1px solid #24363e;
- font-size:10px;
-}
-
-/* =========================================================
-   ESC MENU
-========================================================= */
-
-.esc{
- position:absolute;
- z-index:700;
- inset:0;
- background:rgba(0,0,0,.7);
- display:none;
- align-items:center;
- justify-content:center;
-}
-
-.esc.active{
- display:flex;
-}
-
-.escBox{
- width:340px;
- max-width:90%;
+ background:linear-gradient(#1d2529,#0b1013);
+ border:1px solid #5b666a;box-shadow:0 12px 45px #000;
  padding:22px;
- text-align:center;
- background:#0c171d;
- border:1px solid #526770;
- box-shadow:0 30px 100px #000;
 }
-
-.escBox h2{
- letter-spacing:4px;
+.authTitle{font-size:25px;font-weight:bold;text-align:center;letter-spacing:3px}
+.authSub{text-align:center;color:#89969b;font-size:11px;margin:5px 0 20px}
+.input{
+ width:100%;background:#070a0c;border:1px solid #39454a;
+ padding:13px;color:white;outline:none;margin-bottom:10px;
 }
-
-/* =========================================================
-   NOTIFY
-========================================================= */
-
-.notify{
- position:absolute;
- z-index:900;
- left:50%;
- top:18px;
- transform:translate(-50%,-90px);
- min-width:280px;
- padding:12px 18px;
- text-align:center;
- background:rgba(6,17,22,.96);
- border:1px solid #4d6872;
- box-shadow:0 8px 30px #000;
- font-size:10px;
- transition:.25s;
+.btn{
+ border:1px solid #7d898d;background:linear-gradient(#59666a,#252d30);
+ padding:11px 18px;cursor:pointer;text-transform:uppercase;font-weight:bold;
 }
+.btn:hover{filter:brightness(1.18)}
+.btn.green{background:linear-gradient(#748f69,#34462f)}
+.btn.red{background:linear-gradient(#8b5656,#482727)}
+.authHint{text-align:center;color:#667278;font-size:10px;margin-top:16px}
 
-.notify.active{
- transform:translate(-50%,0);
-}
-
-/* =========================================================
-   MAP SELECT VISUAL
-========================================================= */
-
-.mapPreviewLarge{
- height:150px;
- position:relative;
- overflow:hidden;
+/* LOBBY */
+#lobby{
  background:
- linear-gradient(
-  135deg,
-  #5c6e64,
-  #28382f
- );
- border:1px solid #52665e;
+ radial-gradient(circle at 70% 35%,rgba(88,99,105,.25),transparent 30%),
+ linear-gradient(110deg,#0b1114,#20292d 48%,#080b0d);
+}
+.top{
+ height:54px;background:linear-gradient(#20282c,#0c1114);
+ border-bottom:1px solid #566166;display:flex;align-items:center;
+ padding:0 12px;gap:12px;position:absolute;left:0;right:0;top:0;z-index:5;
+}
+.brand{font-weight:900;letter-spacing:2px;font-size:18px}
+.rank{font-size:11px;color:#9da8ac}
+.currency{margin-left:auto;display:flex;gap:18px;font-size:12px}
+.cur{padding:6px 10px;background:#090d0f;border:1px solid #313b3f}
+.main{
+ position:absolute;inset:54px 0 0;display:grid;
+ grid-template-columns:minmax(360px,1fr) 430px;
+}
+.chat{
+ background:rgba(5,8,10,.93);border-right:1px solid #4d585c;
+ display:flex;flex-direction:column;min-width:0;
+}
+.chatHead{
+ padding:12px 15px;border-bottom:1px solid #3c464a;
+ font-weight:bold;letter-spacing:1px;
+}
+.chatMsgs{flex:1;overflow:auto;padding:10px 14px;font-size:12px}
+.msg{margin:7px 0}.msg b{color:#d0d9dc}.msg span{color:#758287}
+.chatInput{display:flex;padding:10px;border-top:1px solid #3c464a;gap:8px}
+.chatInput input{flex:1}
+.lobbyRight{position:relative;padding:18px;background:rgba(15,20,23,.78);overflow:auto}
+.profile{
+ display:flex;gap:15px;padding:15px;background:rgba(0,0,0,.28);
+ border:1px solid #394348;margin-bottom:15px;
+}
+.avatar{width:65px;height:65px;border-radius:50%;background:radial-gradient(circle,#b9c4c7 0 20%,#49545a 21% 55%,#151a1c 56%);border:2px solid #788388}
+.profile h2{margin:2px 0;font-size:18px}.profile small{color:#829096}
+.menuGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.menuBtn{min-height:75px;background:linear-gradient(#252f34,#11171a);border:1px solid #4c595e;cursor:pointer;text-align:left;padding:14px}
+.menuBtn strong{display:block;font-size:14px}.menuBtn small{color:#738087}
+.news{
+ margin-top:14px;border:1px solid #3c474b;background:#090d0f;padding:12px;
+ color:#8d989d;font-size:11px;line-height:1.5;
 }
 
-.mapPreviewRoad{
- position:absolute;
- left:15%;
- right:15%;
- top:48%;
- height:20px;
- background:#8b918a;
- transform:rotate(-8deg);
+/* GARAGE */
+#garage{background:radial-gradient(circle at 50% 40%,#354047,#0b0f11 70%)}
+.garageScene{position:absolute;inset:54px 0 0;display:flex}
+.garageLeft{width:280px;background:rgba(5,8,9,.82);border-right:1px solid #596469;padding:15px;overflow:auto}
+.garageCenter{flex:1;position:relative;overflow:hidden}
+.garageRight{width:300px;background:rgba(6,9,11,.86);border-left:1px solid #596469;padding:15px;overflow:auto}
+.garTitle{font-size:20px;font-weight:bold;margin-bottom:15px}
+.item{
+ padding:12px;margin-bottom:8px;border:1px solid #3b464a;background:#101619;cursor:pointer;
 }
+.item.sel{border-color:#b4c1c4;background:#263136}
+.item small{display:block;color:#758287;margin-top:5px}
+.stat{margin:10px 0}.stat label{font-size:10px;color:#78858a}.bar{height:6px;background:#252e32;margin-top:4px}.bar i{display:block;height:100%;background:#aeb9bc}
+#garageCanvas{width:100%;height:100%}
 
-.mapPreviewHouse{
- position:absolute;
- width:75px;
- height:50px;
- background:#4a554e;
- border:2px solid #7a827c;
+/* MAP SELECT */
+#maps{background:linear-gradient(#151d21,#070a0c);overflow:auto}
+.mapHeader{height:58px;border-bottom:1px solid #4c575b;display:flex;align-items:center;padding:0 14px}
+.mapGrid{
+ padding:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;
 }
-
-.mph1{
- left:8%;
- top:20%;
+.mapCard{
+ min-height:165px;background:#0c1113;border:1px solid #394448;cursor:pointer;position:relative;overflow:hidden;
 }
-
-.mph2{
- right:8%;
- bottom:12%;
+.mapCard:hover{border-color:#b5c0c3;transform:translateY(-1px)}
+.mapPreview{
+ height:105px;position:relative;overflow:hidden;
+ background:linear-gradient(#637176,#313b3e);
 }
-
-.mapPreviewBridge{
- position:absolute;
- left:20%;
- right:20%;
- bottom:30%;
- height:22px;
- background:#68746d;
- border:2px solid #8d9690;
+.mapPreview:after{
+ content:"";position:absolute;inset:0;
+ background:radial-gradient(circle at 50% 40%,transparent 0 35%,rgba(0,0,0,.25) 100%);
 }
+.mapName{font-weight:bold;font-size:14px;padding:9px 10px 2px}.mapInfo{padding:0 10px 9px;color:#728086;font-size:10px}
+.previewRoad{position:absolute;background:#555d5e}.previewWall{position:absolute;background:#2a3031;border:2px solid #707879}
+.previewBridge{position:absolute;background:#7e8585;border:2px solid #373d3e}
+.previewHouse{position:absolute;background:#343b3d;border:2px solid #858b8b}
+.previewWater{position:absolute;background:#314d58}
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width:950px){
-
- .garage{
-  grid-template-columns:190px 1fr;
- }
-
- .sidebar.right{
-  display:none;
- }
-
- .gTank{
-  transform:translate(-50%,-50%) scale(.82);
- }
-
+/* BATTLE */
+#battle{background:#111}
+#gameCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+.hudTop{
+ position:absolute;top:0;left:0;right:0;height:58px;pointer-events:none;
+ display:flex;justify-content:center;align-items:flex-start;padding-top:8px;
 }
-
-@media(max-width:700px){
-
- .top{
-  height:55px;
-  padding:0 10px;
-  gap:10px;
- }
-
- .logo{
-  font-size:14px;
- }
-
- .topSection{
-  display:none;
- }
-
- .topPlayer{
-  gap:5px;
- }
-
- .garage{
-  top:55px;
-  grid-template-columns:1fr;
- }
-
- .sidebar{
-  display:none;
- }
-
- .gTank{
-  transform:translate(-50%,-50%) scale(.63);
- }
-
- .garageName{
-  top:calc(43% + 130px);
- }
-
- .garageSub{
-  top:calc(43% + 151px);
- }
-
- .garageBottom{
-  height:65px;
- }
-
- .garageBottom .btn{
-  min-width:0;
-  flex:1;
-  padding:0 5px;
-  font-size:8px;
- }
-
- .chat{
-  left:10px;
-  right:10px;
-  width:auto;
-  bottom:76px;
-  height:150px;
- }
-
- .chatBody{
-  height:86px;
- }
-
- .modal{
-  max-height:94%;
-  width:96%;
- }
-
- .modalContent{
-  max-height:calc(94vh - 46px);
-  padding:10px;
- }
-
- .battleRow{
-  grid-template-columns:35px 1fr 70px;
- }
-
- .battleRow .hideMobile{
-  display:none;
- }
-
- .loadingMapName{
-  font-size:35px;
- }
-
- .score{
-  min-width:95px;
-  padding:7px;
- }
-
- .score b{
-  font-size:14px;
- }
-
- .battleTimer{
-  font-size:16px;
- }
-
- .battleHealth{
-  width:45vw;
-  bottom:105px;
- }
-
- .weaponHud{
-  bottom:105px;
-  left:10px;
-  width:130px;
- }
-
- .ammoHud{
-  bottom:105px;
-  right:10px;
- }
-
- .mobileControls{
-  display:block;
- }
-
- .profileGrid{
-  grid-template-columns:1fr;
- }
-
- .avatarLarge{
-  height:130px;
- }
-
- .shopItem{
-  grid-template-columns:80px 1fr;
- }
-
- .shopPrice{
-  grid-column:2;
-  text-align:left;
- }
-
+.scoreBox{background:rgba(5,8,9,.75);border:1px solid #697477;padding:8px 18px;font-size:12px;text-align:center}
+.scoreBox b{font-size:17px}
+.timer{color:#c7d0d2;margin-top:2px}
+.hudLeft{position:absolute;left:12px;bottom:12px;width:250px;pointer-events:none}
+.hpOuter{height:15px;background:#111;border:1px solid #798286}.hpInner{height:100%;background:#b7c0c2;width:100%}
+.energy{height:7px;background:#101416;border:1px solid #525d60;margin-top:4px}.energy i{display:block;height:100%;background:#727f84;width:100%}
+.weaponName{margin-top:6px;font-size:12px;text-shadow:0 2px 4px #000}
+.supplies{
+ position:absolute;right:12px;bottom:12px;display:flex;gap:7px;pointer-events:auto;
 }
-
-@media(min-width:701px){
- .mobileControls{
-  display:none!important;
- }
+.sup{
+ width:52px;height:52px;border:1px solid #747f83;background:rgba(8,11,12,.8);
+ display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;
 }
-
-/* =========================================================
-   TOUCH HIGHLIGHT
-========================================================= */
-
-.touch{
- touch-action:none;
+.sup small{position:absolute;margin:34px 0 0;font-size:8px}
+.minimap{
+ position:absolute;right:12px;top:70px;width:150px;height:100px;
+ background:rgba(5,8,9,.65);border:1px solid #677276;pointer-events:none;
 }
-
-/* =========================================================
-   MAP TRANSITION
-========================================================= */
-
-.fade{
- animation:fade .4s ease;
-}
-
-@keyframes fade{
- from{opacity:0}
- to{opacity:1}
-}
-
-.flash{
- animation:flash .16s;
-}
-
-@keyframes flash{
- 0%{filter:brightness(3)}
- 100%{filter:brightness(1)}
-}
-
-/* =========================================================
-   DAMAGE FLASH
-========================================================= */
-
-.damageFlash{
- position:absolute;
- inset:0;
- z-index:300;
+.cross{
+ position:absolute;left:50%;top:50%;width:26px;height:26px;transform:translate(-50%,-50%);
  pointer-events:none;
- background:rgba(255,0,0,.25);
- opacity:0;
 }
-
-.damageFlash.active{
- animation:damage .35s;
+.cross:before,.cross:after{content:"";position:absolute;background:rgba(255,255,255,.8)}
+.cross:before{width:26px;height:1px;top:12px}.cross:after{height:26px;width:1px;left:12px}
+.battleInfo{
+ position:absolute;left:50%;top:75px;transform:translateX(-50%);
+ background:rgba(0,0,0,.65);padding:6px 14px;font-size:11px;opacity:0;transition:.3s;
 }
+.battleInfo.show{opacity:1}
 
-@keyframes damage{
- 0%{opacity:1}
- 100%{opacity:0}
+/* MOBILE */
+.mobileControls{display:none}
+.joy{
+ position:absolute;left:25px;bottom:25px;width:145px;height:145px;border-radius:50%;
+ background:rgba(25,31,34,.55);border:2px solid rgba(190,200,202,.45);
 }
-
-/* =========================================================
-   DEATH
-========================================================= */
-
-.deathOverlay{
- position:absolute;
- z-index:400;
- inset:0;
- display:none;
- background:rgba(20,0,0,.55);
- align-items:center;
- justify-content:center;
- text-align:center;
+.joyKnob{
+ position:absolute;left:50%;top:50%;width:65px;height:65px;margin:-32px;
+ border-radius:50%;background:rgba(180,190,192,.38);border:1px solid #aeb8ba;
 }
-
-.deathOverlay.active{
- display:flex;
+.fire{
+ position:absolute;right:30px;bottom:35px;width:90px;height:90px;border-radius:50%;
+ background:rgba(120,35,35,.7);border:2px solid #bd9999;font-weight:bold;
 }
-
-.deathBox{
- background:rgba(5,9,11,.92);
- border:1px solid #7a4747;
- padding:30px 50px;
- box-shadow:0 20px 80px #000;
+.mobileBtn{
+ position:absolute;width:55px;height:55px;border-radius:50%;background:rgba(20,25,27,.72);
+ border:1px solid #899396;font-size:19px;
 }
-
-.deathBox h2{
- color:#df6666;
- letter-spacing:4px;
-}
-
-/* =========================================================
-   EXTRA OLD UI DETAILS
-========================================================= */
-
-.corner{
- position:absolute;
- width:18px;
- height:18px;
- border-color:#5d737c;
- opacity:.55;
-}
-
-.corner.tl{
- left:8px;
- top:8px;
- border-left:1px solid;
- border-top:1px solid;
-}
-
-.corner.tr{
- right:8px;
- top:8px;
- border-right:1px solid;
- border-top:1px solid;
-}
-
-.corner.bl{
- left:8px;
- bottom:8px;
- border-left:1px solid;
- border-bottom:1px solid;
-}
-
-.corner.br{
- right:8px;
- bottom:8px;
- border-right:1px solid;
- border-bottom:1px solid;
+#mbJump{right:140px;bottom:120px}
+#mbCenter{right:75px;bottom:145px}
+#mbMine{right:145px;bottom:45px}
+#mbRepair{right:210px;bottom:45px}
+@media(max-width:800px){
+ .main{display:block}
+ .chat{position:absolute;inset:0 0 0 0;z-index:2;transform:translateX(-100%);transition:.25s}
+ .chat.mobileOpen{transform:none}
+ .lobbyRight{height:100%;padding-top:12px}
+ .top .currency{display:none}
+ .garageLeft{width:105px;padding:7px}.garageRight{width:155px;padding:8px}
+ .garageCenter{min-width:0}
+ .mapGrid{grid-template-columns:repeat(2,1fr);padding:9px;gap:8px}
+ .mapCard{min-height:135px}.mapPreview{height:80px}
+ .mobileControls{display:block}
+ .supplies{right:8px;bottom:8px}.sup{width:45px;height:45px}
+ .minimap{width:115px;height:77px;right:7px;top:65px}
+ .hudLeft{width:180px;left:7px;bottom:8px}
+ .authPanel{width:350px}
 }
 </style>
 </head>
+<body>
+<div id="app">
 
-<body class="crt vignette">
-
-<!-- =========================================================
- BOOT
-========================================================= -->
-
-<section id="boot" class="screen active">
- <div class="bootNoise"></div>
-
- <div class="bootCenter">
-
-  <div class="bootLogo">
-   TANK <span>ARENA</span>
-  </div>
-
-  <div class="bootSubtitle">
-   RETRO ARCADE TANK BATTLE
-  </div>
-
-  <div class="bootProgress">
-   <i id="bootBar"></i>
-  </div>
-
-  <div id="bootStatus" class="bootStatus">
-   ИНИЦИАЛИЗАЦИЯ КЛИЕНТА...
-  </div>
-
- </div>
-
- <div class="bootBottom">
-  <span>CLIENT BUILD 2012.15</span>
-  <span>PLEASE WAIT...</span>
+<section id="boot" class="screen on">
+ <div class="bootLogo">
+  <div class="tank">TANKI</div>
+  <div class="classic">CLASSIC ARCHIVE • 2012 — 2015</div>
+  <div class="loadbar"><i id="bootBar"></i></div>
+  <div class="bootText" id="bootText">ИНИЦИАЛИЗАЦИЯ...</div>
  </div>
 </section>
 
-<!-- =========================================================
- LOGIN
-========================================================= -->
-
-<section id="login" class="screen">
-
- <div class="loginFloor"></div>
-
- <div class="loginTank">
-  <div class="loginTankHull"></div>
-  <div class="loginTankTurret"></div>
-  <div class="loginTankBarrel"></div>
+<section id="auth" class="screen">
+ <div class="authPanel">
+  <div class="authTitle">TANKI ONLINE</div>
+  <div class="authSub">АРХИВНЫЙ СЕРВЕР • КЛАССИЧЕСКИЙ РЕЖИМ</div>
+  <input id="loginName" class="input" placeholder="Никнейм" value="Танкист">
+  <input class="input" placeholder="Пароль" type="password" value="123456">
+  <button class="btn green" style="width:100%" onclick="login()">ВОЙТИ В ИГРУ</button>
+  <div class="authHint">Фанатская реконструкция • прогресс сохраняется локально</div>
  </div>
-
- <div class="loginBox">
-
-  <div class="loginBrand">
-   TANK <span>ARENA</span>
-  </div>
-
-  <div class="loginDescription">
-   ВХОД В ИГРОВОЙ КЛИЕНТ
-  </div>
-
-  <div class="loginField">
-   <label>Имя танкиста</label>
-   <input
-    id="loginNick"
-    maxlength="18"
-    value="TankCommander"
-    autocomplete="off">
-  </div>
-
-  <div class="loginField">
-   <label>Пароль</label>
-   <input
-    type="password"
-    value="123456">
-  </div>
-
-  <button
-   class="btn blue"
-   style="width:100%;height:46px"
-   onclick="login()">
-   ВОЙТИ
-  </button>
-
-  <div
-   style="
-    display:flex;
-    justify-content:space-between;
-    margin-top:14px;
-    color:#536b74;
-    font-size:9px">
-   <span>РЕГИСТРАЦИЯ</span>
-   <span>ВОССТАНОВЛЕНИЕ</span>
-  </div>
-
-  <div class="loginFoot">
-   RETRO CLIENT EDITION<br>
-   Локальный игровой прототип<br>
-   PC / MOBILE
-  </div>
-
- </div>
-
 </section>
 
-<!-- =========================================================
- GARAGE
-========================================================= -->
+<section id="lobby" class="screen">
+ <div class="top">
+  <div class="brand">TANKI</div><div class="rank">BRIGADIER</div>
+  <div class="currency"><div class="cur">💎 <span id="crystals">1250</span></div><div class="cur">★ <span id="xp">340</span></div></div>
+ </div>
+ <div class="main">
+  <div class="chat" id="chatPanel">
+   <div class="chatHead">ЧАТ • ОБЩИЙ КАНАЛ</div>
+   <div class="chatMsgs" id="chatMsgs"></div>
+   <div class="chatInput"><input id="chatInput" class="input" style="margin:0" placeholder="Сообщение..." onkeydown="if(event.key==='Enter')sendChat()"><button class="btn" onclick="sendChat()">OK</button></div>
+  </div>
+  <div class="lobbyRight">
+   <div class="profile">
+    <div class="avatar"></div><div><h2 id="playerName">Танкист</h2><small>Бригадир • уровень 7</small><div style="margin-top:9px;color:#aab5b8;font-size:11px">Опыт: <span id="profileXp">340</span> / 500</div></div>
+   </div>
+   <div class="menuGrid">
+    <button class="menuBtn" onclick="show('maps')"><strong>⚔ БИТВЫ</strong><small>Выбрать карту и режим</small></button>
+    <button class="menuBtn" onclick="show('garage')"><strong>🔧 ГАРАЖ</strong><small>Корпус и пушка</small></button>
+    <button class="menuBtn" onclick="randomBattle()"><strong>▶ БЫСТРЫЙ БОЙ</strong><small>Случайная карта</small></button>
+    <button class="menuBtn" onclick="toggleChat()"><strong>💬 ЧАТ</strong><small>Открыть канал</small></button>
+    <button class="menuBtn" onclick="settings()"><strong>⚙ НАСТРОЙКИ</strong><small>Качество и управление</small></button>
+    <button class="menuBtn" onclick="aboutGame()"><strong>ℹ АРХИВ</strong><small>2012–2015</small></button>
+   </div>
+   <div class="news"><b style="color:#c8d1d4">НОВОСТИ</b><br>Классический сервер готов. Выберите карту. На поле могут появляться припасы и редкий Gold Box. Ночью ящики подсвечиваются.</div>
+  </div>
+ </div>
+</section>
 
 <section id="garage" class="screen">
-
- <header class="top">
-
-  <div class="logo">
-   TANK <span>ARENA</span>
-  </div>
-
-  <div class="topSection">
-   ГАРАЖ
-  </div>
-
-  <div class="topPlayer">
-
-   <span id="topNick">
-    TankCommander
-   </span>
-
-   <div class="rankBox">
-    3
-   </div>
-
-   <span class="balance">
-    💎 <b id="moneyValue">12450</b>
-   </span>
-
-   <span class="balance gold">
-    ★ <b id="goldValue">125</b>
-   </span>
-
-  </div>
-
- </header>
-
- <div class="garage">
-
-  <!-- LEFT -->
-
-  <aside class="sidebar">
-
-   <div class="sideCaption">
-    Главное меню
-   </div>
-
-   <div
-    class="nav active"
-    onclick="notify('Вы уже в гараже')">
-    <span class="navIcon">▣</span>
-    Гараж
-   </div>
-
-   <div
-    class="nav"
-    onclick="openBattleList()">
-    <span class="navIcon">⚔</span>
-    Битвы
-   </div>
-
-   <div
-    class="nav"
-    onclick="openShop()">
-    <span class="navIcon">▤</span>
-    Магазин
-   </div>
-
-   <div
-    class="nav"
-    onclick="openProfile()">
-    <span class="navIcon">●</span>
-    Профиль
-   </div>
-
-   <div
-    class="nav"
-    onclick="openSettings()">
-    <span class="navIcon">⚙</span>
-    Настройки
-   </div>
-
-   <div class="sideCaption">
-    Танковая техника
-   </div>
-
-   <div
-    class="nav"
-    onclick="openShop('hulls')">
-    <span class="navIcon">▰</span>
-    Корпуса
-   </div>
-
-   <div
-    class="nav"
-    onclick="openShop('turrets')">
-    <span class="navIcon">◈</span>
-    Пушки
-   </div>
-
-   <div
-    class="nav"
-    onclick="openShop('paints')">
-    <span class="navIcon">◆</span>
-    Краски
-   </div>
-
-   <div class="sideCaption">
-    Сервисы
-   </div>
-
-   <div
-    class="nav"
-    onclick="repairTank()">
-    <span class="navIcon">🔧</span>
-    Ремонт
-   </div>
-
-   <div
-    class="nav"
-    onclick="refillSupplies()">
-    <span class="navIcon">▣</span>
-    Боеприпасы
-   </div>
-
-  </aside>
-
-  <!-- CENTER -->
-
-  <main class="garageCenter">
-
-   <div class="garageFloor"></div>
-
-   <div class="garagePlatform"></div>
-
-   <div class="gTank">
-
-    <div class="tTrack left"></div>
-    <div class="tTrack right"></div>
-
-    <div class="tHull"></div>
-
-    <div
-     class="turret"
-     id="garageTurret">
-    </div>
-
-    <div
-     class="barrel"
-     id="garageBarrel">
-    </div>
-
-   </div>
-
-   <div class="garageName">
-    WASP M1
-   </div>
-
-   <div class="garageSub">
-    SMOKY M1 • GREEN PAINT
-   </div>
-
-   <!-- CHAT -->
-
-   <div class="chat">
-
-    <div class="chatHead">
-     ОБЩИЙ ЧАТ
-    </div>
-
-    <div
-     class="chatBody"
-     id="garageChat">
-
-     <div class="chatSystem">
-      [Система] Добро пожаловать на арену.
-     </div>
-
-     <div class="chatMessage">
-      <b>ProTank:</b> всем привет!
-     </div>
-
-     <div class="chatMessage">
-      <b>Raptor:</b> кто в Sandbox?
-     </div>
-
-     <div class="chatMessage">
-      <b>SteelFox:</b> сейчас зайду.
-     </div>
-
-     <div class="chatMessage">
-      <b>Viking:</b> кто на мост?
-     </div>
-
-     <div class="chatMessage red">
-      <b>RedWolf:</b> собираемся в CTF.
-     </div>
-
-    </div>
-
-    <div class="chatInput">
-
-     <input
-      id="garageChatInput"
-      placeholder="Введите сообщение..."
-      maxlength="100"
-      onkeydown="
-       if(event.key==='Enter')
-       sendGarageChat()
-      ">
-
-     <button onclick="sendGarageChat()">
-      ОТПР.
-     </button>
-
-    </div>
-
-   </div>
-
-   <!-- BOTTOM -->
-
-   <div class="garageBottom">
-
-    <button
-     class="btn blue"
-     onclick="openBattleList()">
-     ⚔ БИТЬСЯ
-    </button>
-
-    <button
-     class="btn dark"
-     onclick="openShop()">
-     ▤ ГАРАЖ
-    </button>
-
-    <button
-     class="btn dark"
-     onclick="openShop()">
-     🛒 МАГАЗИН
-    </button>
-
-    <button
-     class="btn dark"
-     onclick="openProfile()">
-     ● ПРОФИЛЬ
-    </button>
-
-   </div>
-
-  </main>
-
-  <!-- RIGHT -->
-
-  <aside class="sidebar right">
-
-   <div class="statHeader">
-    ТЕКУЩИЙ КОРПУС
-   </div>
-
-   <div class="itemTitle">
-    WASP M1
-   </div>
-
-   <div class="itemDesc">
-    Лёгкий быстрый корпус
-   </div>
-
-   <div class="stat">
-
-    <div class="statLine">
-     <span>БРОНЯ</span>
-     <b>42</b>
-    </div>
-
-    <div class="statBar">
-     <i style="width:42%"></i>
-    </div>
-
-   </div>
-
-   <div class="stat">
-
-    <div class="statLine">
-     <span>СКОРОСТЬ</span>
-     <b>86</b>
-    </div>
-
-    <div class="statBar">
-     <i style="width:86%"></i>
-    </div>
-
-   </div>
-
-   <div class="stat">
-
-    <div class="statLine">
-     <span>ПОВОРОТ</span>
-     <b>73</b>
-    </div>
-
-    <div class="statBar">
-     <i style="width:73%"></i>
-    </div>
-
-   </div>
-
-   <div class="statHeader" style="margin-top:20px">
-    ТЕКУЩАЯ ПУШКА
-   </div>
-
-   <div class="itemTitle">
-    SMOKY M1
-   </div>
-
-   <div class="itemDesc">
-    Универсальная пушка
-   </div>
-
-   <div class="stat">
-
-    <div class="statLine">
-     <span>УРОН</span>
-     <b>68</b>
-    </div>
-
-    <div class="statBar">
-     <i style="width:68%"></i>
-    </div>
-
-   </div>
-
-   <div class="stat">
-
-    <div class="statLine">
-     <span>СКОРОСТРЕЛЬНОСТЬ</span>
-     <b>55</b>
-    </div>
-
-    <div class="statBar">
-     <i style="width:55%"></i>
-    </div>
-
-   </div>
-
-   <div class="equipment">
-    ★ МОДИФИКАЦИЯ M1<br>
-    <span style="color:#617a84">
-     Улучшение доступно
-    </span>
-   </div>
-
-  </aside>
-
+ <div class="top">
+  <button class="btn" onclick="show('lobby')">← НАЗАД</button>
+  <div class="brand">ГАРАЖ</div>
+  <div class="currency"><div class="cur">💎 <span id="garageMoney">1250</span></div></div>
  </div>
-
+ <div class="garageScene">
+  <div class="garageLeft">
+   <div class="garTitle">КОРПУС</div>
+   <div id="hulls"></div>
+   <div class="garTitle" style="margin-top:18px">ПУШКА</div>
+   <div id="turrets"></div>
+  </div>
+  <div class="garageCenter"><canvas id="garageCanvas"></canvas></div>
+  <div class="garageRight">
+   <div class="garTitle">ПАРАМЕТРЫ</div>
+   <div id="garageStats"></div>
+   <button class="btn green" style="width:100%;margin-top:15px" onclick="upgrade()">УЛУЧШИТЬ</button>
+   <button class="btn" style="width:100%;margin-top:8px" onclick="paintCycle()">СМЕНИТЬ ПОКРАСКУ</button>
+  </div>
+ </div>
 </section>
 
-<!-- =========================================================
- MODAL SHADE
-========================================================= -->
-
-<div
- id="modalShade"
- class="modalShade"
- onclick="closeAllModals()">
-</div>
-
-<!-- =========================================================
- BATTLE LIST
-========================================================= -->
-
-<div
- id="battleModal"
- class="modal hidden">
-
- <div class="modalHeader">
-
-  СПИСОК БИТВ
-
-  <button
-   class="modalClose"
-   onclick="closeAllModals()">
-   ×
-  </button>
-
+<section id="maps" class="screen">
+ <div class="mapHeader">
+  <button class="btn" onclick="show('lobby')">←</button>
+  <div style="margin-left:12px;font-weight:bold">БИТВЫ</div>
+  <div style="margin-left:auto;font-size:11px;color:#7d898d">АРХИВНЫЕ КАРТЫ</div>
  </div>
-
- <div class="modalContent">
-
-  <div class="tabs">
-
-   <div class="tab active">
-    ВСЕ
-   </div>
-
-   <div class="tab">
-    DM
-   </div>
-
-   <div class="tab">
-    TDM
-   </div>
-
-   <div class="tab">
-    CTF
-   </div>
-
-  </div>
-
-  <div class="battleRow">
-
-   <div class="mapThumb"></div>
-
-   <div>
-    <div class="mapName">
-     SANDBOX
-    </div>
-    <div class="mapType">
-     DM • 10 игроков
-    </div>
-   </div>
-
-   <div class="playersGreen">
-    7 / 10
-   </div>
-
-   <div class="hideMobile">
-    08:42
-   </div>
-
-   <button
-    class="btn blue"
-    onclick="startMap('SANDBOX','DM',10)">
-    ВОЙТИ
-   </button>
-
-  </div>
-
-  <div class="battleRow">
-
-   <div class="mapThumb"></div>
-
-   <div>
-    <div class="mapName">
-     BARDA
-    </div>
-    <div class="mapType">
-     CTF • 14 игроков
-    </div>
-   </div>
-
-   <div class="playersGreen">
-    11 / 14
-   </div>
-
-   <div class="hideMobile">
-    06:12
-   </div>
-
-   <button
-    class="btn blue"
-    onclick="startMap('BARDA','CTF',14)">
-    ВОЙТИ
-   </button>
-
-  </div>
-
-  <div class="battleRow">
-
-   <div class="mapThumb"></div>
-
-   <div>
-    <div class="mapName">
-     BERLIN
-    </div>
-    <div class="mapType">
-     TDM • 18 игроков
-    </div>
-   </div>
-
-   <div class="playersGreen">
-    13 / 18
-   </div>
-
-   <div class="hideMobile">
-    12:31
-   </div>
-
-   <button
-    class="btn blue"
-    onclick="startMap('BERLIN','TDM',18)">
-    ВОЙТИ
-   </button>
-
-  </div>
-
-  <div class="battleRow">
-
-   <div class="mapThumb"></div>
-
-   <div>
-    <div class="mapName">
-     BRIDGE
-    </div>
-    <div class="mapType">
-     TDM • 12 игроков
-    </div>
-   </div>
-
-   <div class="playersGreen">
-    8 / 12
-   </div>
-
-   <div class="hideMobile">
-    05:17
-   </div>
-
-   <button
-    class="btn blue"
-    onclick="startMap('BRIDGE','TDM',12)">
-    ВОЙТИ
-   </button>
-
-  </div>
-
-  <div class="battleRow">
-
-   <div class="mapThumb"></div>
-
-   <div>
-    <div class="mapName">
-     FORT KNOX
-    </div>
-    <div class="mapType">
-     CTF • 18 игроков
-    </div>
-   </div>
-
-   <div class="playersGreen">
-    16 / 18
-   </div>
-
-   <div class="hideMobile">
-    09:48
-   </div>
-
-   <button
-    class="btn blue"
-    onclick="startMap('FORT KNOX','CTF',18)">
-    ВОЙТИ
-   </button>
-
-  </div>
-
-  <div class="battleRow">
-
-   <div class="mapThumb"></div>
-
-   <div>
-    <div class="mapName">
-     BOBRUISK
-    </div>
-    <div class="mapType">
-     DM • 8 игроков
-    </div>
-   </div>
-
-   <div class="playersGreen">
-    5 / 8
-   </div>
-
-   <div class="hideMobile">
-    04:31
-   </div>
-
-   <button
-    class="btn blue"
-    onclick="startMap('BOBRUISK','DM',8)">
-    ВОЙТИ
-   </button>
-
-  </div>
-
-  <div class="battleRow">
-
-   <div class="mapThumb"></div>
-
-   <div>
-    <div class="mapName">
-     RIO
-    </div>
-    <div class="mapType">
-     TDM • 14 игроков
-    </div>
-   </div>
-
-   <div class="playersGreen">
-    9 / 14
-   </div>
-
-   <div class="hideMobile">
-    07:25
-   </div>
-
-   <button
-    class="btn blue"
-    onclick="startMap('RIO','TDM',14)">
-    ВОЙТИ
-   </button>
-
-  </div>
-
-  <div class="battleRow">
-
-   <div class="mapThumb"></div>
-
-   <div>
-    <div class="mapName">
-     POLYGON
-    </div>
-    <div class="mapType">
-     DM • 10 игроков
-    </div>
-   </div>
-
-   <div class="playersGreen">
-    6 / 10
-   </div>
-
-   <div class="hideMobile">
-    03:54
-   </div>
-
-   <button
-    class="btn blue"
-    onclick="startMap('POLYGON','DM',10)">
-    ВОЙТИ
-   </button>
-
-  </div>
-
- </div>
-
-</div>
-
-<!-- =========================================================
- SHOP
-========================================================= -->
-
-<div
- id="shopModal"
- class="modal hidden">
-
- <div class="modalHeader">
-
-  ГАРАЖ / МАГАЗИН
-
-  <button
-   class="modalClose"
-   onclick="closeAllModals()">
-   ×
-  </button>
-
- </div>
-
- <div class="modalContent">
-
-  <div class="tabs">
-
-   <div class="tab active">
-    КОРПУСА
-   </div>
-
-   <div class="tab">
-    ПУШКИ
-   </div>
-
-   <div class="tab">
-    КРАСКИ
-   </div>
-
-   <div class="tab">
-    ПРИПАСЫ
-   </div>
-
-  </div>
-
-  <div class="shopItem">
-
-   <div class="shopPreview"></div>
-
-   <div class="shopInfo">
-
-    <b>WASP M1</b>
-
-    <small>
-     Лёгкий корпус.<br>
-     Высокая скорость и манёвренность.
-    </small>
-
-   </div>
-
-   <div class="shopPrice">
-    УСТАНОВЛЕН
-    <br>
-    <button
-     class="btn dark"
-     onclick="notify('WASP уже установлен')">
-     ВЫБРАТЬ
-    </button>
-   </div>
-
-  </div>
-
-  <div class="shopItem">
-
-   <div class="shopPreview"></div>
-
-   <div class="shopInfo">
-
-    <b>HUNTER M1</b>
-
-    <small>
-     Средний корпус.<br>
-     Баланс скорости и брони.
-    </small>
-
-   </div>
-
-   <div class="shopPrice">
-
-    5 500 💎
-
-    <br>
-
-    <button
-     class="btn"
-     onclick="buyItem(5500,'HUNTER M1')">
-     КУПИТЬ
-    </button>
-
-   </div>
-
-  </div>
-
-  <div class="shopItem">
-
-   <div class="shopPreview"></div>
-
-   <div class="shopInfo">
-
-    <b>VIKING M1</b>
-
-    <small>
-     Универсальный корпус.<br>
-     Хорошая скорость и прочность.
-    </small>
-
-   </div>
-
-   <div class="shopPrice">
-
-    7 500 💎
-
-    <br>
-
-    <button
-     class="btn"
-     onclick="buyItem(7500,'VIKING M1')">
-     КУПИТЬ
-    </button>
-
-   </div>
-
-  </div>
-
-  <div class="shopItem">
-
-   <div class="shopPreview"></div>
-
-   <div class="shopInfo">
-
-    <b>TITAN M1</b>
-
-    <small>
-     Тяжёлый корпус.<br>
-     Огромный запас прочности.
-    </small>
-
-   </div>
-
-   <div class="shopPrice">
-
-    12 000 💎
-
-    <br>
-
-    <button
-     class="btn"
-     onclick="buyItem(12000,'TITAN M1')">
-     КУПИТЬ
-    </button>
-
-   </div>
-
-  </div>
-
-  <div class="shopItem">
-
-   <div class="shopPreview"></div>
-
-   <div class="shopInfo">
-
-    <b>SMOKY M1</b>
-
-    <small>
-     Базовая пушка.<br>
-     Универсальная дальность и урон.
-    </small>
-
-   </div>
-
-   <div class="shopPrice">
-
-    УСТАНОВЛЕН
-
-    <br>
-
-    <button
-     class="btn dark"
-     onclick="notify('SMOKY уже установлен')">
-     ВЫБРАТЬ
-    </button>
-
-   </div>
-
-  </div>
-
-  <div class="shopItem">
-
-   <div class="shopPreview"></div>
-
-   <div class="shopInfo">
-
-    <b>THUNDER M1</b>
-
-    <small>
-     Мощная пушка ближнего боя.<br>
-     Большой урон по площади.
-    </small>
-
-   </div>
-
-   <div class="shopPrice">
-
-    8 000 💎
-
-    <br>
-
-    <button
-     class="btn"
-     onclick="buyItem(8000,'THUNDER M1')">
-     КУПИТЬ
-    </button>
-
-   </div>
-
-  </div>
-
-  <div class="shopItem">
-
-   <div class="shopPreview"></div>
-
-   <div class="shopInfo">
-
-    <b>RAILGUN M1</b>
-
-    <small>
-     Точная дальнобойная пушка.<br>
-     Требует правильного позиционирования.
-    </small>
-
-   </div>
-
-   <div class="shopPrice">
-
-    10 500 💎
-
-    <br>
-
-    <button
-     class="btn"
-     onclick="buyItem(10500,'RAILGUN M1')">
-     КУПИТЬ
-    </button>
-
-   </div>
-
-  </div>
-
- </div>
-
-</div>
-
-<!-- =========================================================
- PROFILE
-========================================================= -->
-
-<div
- id="profileModal"
- class="modal hidden">
-
- <div class="modalHeader">
-
-  ПРОФИЛЬ ТАНКИСТА
-
-  <button
-   class="modalClose"
-   onclick="closeAllModals()">
-   ×
-  </button>
-
- </div>
-
- <div class="modalContent">
-
-  <div class="profileGrid">
-
-   <div>
-
-    <div class="avatarLarge">
-     3
-    </div>
-
-   </div>
-
-   <div>
-
-    <div
-     class="profileName"
-     id="profileName">
-     TankCommander
-    </div>
-
-    <div class="profileMuted">
-     Новобранец III • Ретро-танкист
-    </div>
-
-    <div style="margin-top:20px">
-
-     <div class="statLine">
-      <span>ОПЫТ</span>
-      <b>1240 / 2000</b>
-     </div>
-
-     <div class="statBar">
-      <i style="width:62%"></i>
-     </div>
-
-    </div>
-
-    <div class="profileStats">
-
-     <div class="profileStat">
-      <small>ПОБЕДЫ</small>
-      <b>38</b>
-     </div>
-
-     <div class="profileStat">
-      <small>ПОРАЖЕНИЯ</small>
-      <b>21</b>
-     </div>
-
-     <div class="profileStat">
-      <small>УНИЧТОЖЕНО</small>
-      <b>146</b>
-     </div>
-
-     <div class="profileStat">
-      <small>БОЕВ</small>
-      <b>59</b>
-     </div>
-
-    </div>
-
-   </div>
-
-  </div>
-
- </div>
-
-</div>
-
-<!-- =========================================================
- SETTINGS
-========================================================= -->
-
-<div
- id="settingsModal"
- class="modal hidden">
-
- <div class="modalHeader">
-
-  НАСТРОЙКИ
-
-  <button
-   class="modalClose"
-   onclick="closeAllModals()">
-   ×
-  </button>
-
- </div>
-
- <div class="modalContent">
-
-  <div class="setting">
-
-   <span>
-    ЗВУКОВЫЕ ЭФФЕКТЫ
-   </span>
-
-   <button
-    id="soundButton"
-    class="btn dark"
-    onclick="toggleSound()">
-    ВКЛЮЧЕНЫ
-   </button>
-
-  </div>
-
-  <div class="setting">
-
-   <span>
-    МУЗЫКА
-   </span>
-
-   <button
-    id="musicButton"
-    class="btn dark"
-    onclick="toggleMusic()">
-    ВКЛЮЧЕНА
-   </button>
-
-  </div>
-
-  <div class="setting">
-
-   <span>
-    ПОЛНЫЙ ЭКРАН
-   </span>
-
-   <button
-    class="btn dark"
-    onclick="fullscreen()">
-    ВКЛЮЧИТЬ
-   </button>
-
-  </div>
-
-  <div class="setting">
-
-   <span>
-    УПРАВЛЕНИЕ
-   </span>
-
-   <span style="color:#71858e">
-    WASD / сенсор
-   </span>
-
-  </div>
-
-  <div class="setting">
-
-   <span>
-    КАЧЕСТВО
-   </span>
-
-   <span style="color:#55bd62">
-    HIGH
-   </span>
-
-  </div>
-
-  <div class="setting">
-
-   <span>
-    СБРОСИТЬ ПРОГРЕСС
-   </span>
-
-   <button
-    class="btn red"
-    onclick="resetGame()">
-    СБРОС
-   </button>
-
-  </div>
-
- </div>
-
-</div>
-
-<!-- =========================================================
- MAP LOADING
-========================================================= -->
-
-<section id="mapLoading" class="screen">
-
- <div class="loadingScene">
-
-  <div class="loadingBuilding lb1"></div>
-
-  <div class="loadingBuilding lb2"></div>
-
-  <div class="loadingBridge">
-   <div class="bridgeRail"></div>
-   <div class="bridgeRail bottom"></div>
-  </div>
-
- </div>
-
- <div class="loadingCenter">
-
-  <div class="loadingSmall">
-   ПОДКЛЮЧЕНИЕ К БИТВЕ
-  </div>
-
-  <div
-   id="loadingMapName"
-   class="loadingMapName">
-   SANDBOX
-  </div>
-
-  <div
-   id="loadingMapInfo"
-   class="loadingInfo">
-   DM • 10 ИГРОКОВ
-  </div>
-
-  <div class="loadingBar">
-   <i id="mapLoadBar"></i>
-  </div>
-
-  <div
-   id="mapLoadPercent"
-   class="loadingPercent">
-   0%
-  </div>
-
-  <div
-   id="mapLoadText"
-   style="
-    margin-top:17px;
-    color:#60777f;
-    font-size:9px">
-   Загрузка карты...
-  </div>
-
- </div>
-
- <div class="loadingTip">
-  СОВЕТ: ИСПОЛЬЗУЙТЕ ДОМА, СТЕНЫ И МОСТЫ КАК УКРЫТИЕ.
- </div>
-
+ <div class="mapGrid" id="mapGrid"></div>
 </section>
-
-<!-- =========================================================
- BATTLE
-========================================================= -->
 
 <section id="battle" class="screen">
-
- <div class="world">
-
-  <div class="worldGround"></div>
-  <div class="worldGrid"></div>
-
-  <!-- HOUSES -->
-
-  <div
-   class="mapObject house"
-   style="
-    left:7%;
-    top:27%;
-    width:160px;
-    height:105px">
-
-   <div class="houseRoof"></div>
-
-   <div class="houseDoor"></div>
-
-   <div class="houseWindow hw1"></div>
-   <div class="houseWindow hw2"></div>
-
-  </div>
-
-  <div
-   class="mapObject house"
-   style="
-    right:7%;
-    top:32%;
-    width:190px;
-    height:120px">
-
-   <div class="houseRoof"></div>
-
-   <div class="houseDoor"></div>
-
-   <div class="houseWindow hw1"></div>
-   <div class="houseWindow hw2"></div>
-
-  </div>
-
-  <!-- WALLS -->
-
-  <div
-   class="mapObject wall"
-   style="
-    left:26%;
-    top:30%;
-    width:210px;
-    height:35px">
-  </div>
-
-  <div
-   class="mapObject wall"
-   style="
-    right:25%;
-    top:57%;
-    width:240px;
-    height:38px">
-  </div>
-
-  <div
-   class="mapObject wall"
-   style="
-    left:11%;
-    bottom:20%;
-    width:260px;
-    height:40px">
-  </div>
-
-  <!-- BRIDGE -->
-
-  <div
-   class="bridge"
-   style="
-    left:50%;
-    top:24%;
-    transform:
-     translateX(-50%)
-     perspective(500px)
-     rotateX(52deg)
-     rotateZ(-3deg)">
-
-   <div class="bridgeRail"></div>
-   <div class="bridgeRail bottom"></div>
-
-  </div>
-
-  <!-- CRATES -->
-
-  <div
-   class="crate mapObject"
-   style="
-    left:39%;
-    top:42%">
-  </div>
-
-  <div
-   class="crate mapObject"
-   style="
-    left:43%;
-    top:43%">
-  </div>
-
-  <div
-   class="crate mapObject"
-   style="
-    right:31%;
-    top:39%">
-  </div>
-
-  <div
-   class="crate mapObject"
-   style="
-    right:29%;
-    top:41%">
-  </div>
-
-  <!-- ROCKS -->
-
-  <div
-   class="rock mapObject"
-   style="
-    left:34%;
-    bottom:24%;
-    width:130px;
-    height:70px">
-  </div>
-
-  <div
-   class="rock mapObject"
-   style="
-    right:15%;
-    bottom:26%;
-    width:150px;
-    height:80px">
-  </div>
-
-  <!-- ENEMIES -->
-
-  <div
-   id="enemy1"
-   class="enemy"
-   style="
-    left:18%;
-    top:30%">
-
-   <div class="enemyName">
-    Raptor
-   </div>
-
-   <div class="enemyBody"></div>
-   <div class="enemyTurret"></div>
-   <div class="enemyBarrel"></div>
-
-  </div>
-
-  <div
-   id="enemy2"
-   class="enemy"
-   style="
-    right:16%;
-    top:26%;
-    transform:scale(.8)">
-
-   <div class="enemyName">
-    SteelFox
-   </div>
-
-   <div class="enemyBody"></div>
-   <div class="enemyTurret"></div>
-   <div class="enemyBarrel"></div>
-
-  </div>
-
-  <div
-   id="enemy3"
-   class="enemy"
-   style="
-    right:30%;
-    top:48%;
-    transform:scale(.65)">
-
-   <div class="enemyName">
-    Viking
-   </div>
-
-   <div class="enemyBody"></div>
-   <div class="enemyTurret"></div>
-   <div class="enemyBarrel"></div>
-
-  </div>
-
-  <!-- PLAYER -->
-
-  <div
-   id="playerTank"
-   class="playerTank">
-
-   <div class="playerTrack left"></div>
-   <div class="playerTrack right"></div>
-
-   <div class="playerBody"></div>
-
-   <div
-    id="battleTurret"
-    class="playerTurret">
-   </div>
-
-   <div
-    id="battleBarrel"
-    class="playerBarrel">
-   </div>
-
-  </div>
-
+ <canvas id="gameCanvas"></canvas>
+ <div class="hudTop">
+  <div class="scoreBox"><b id="score">0 : 0</b><div class="timer" id="timer">10:00</div></div>
  </div>
-
- <!-- TOP HUD -->
-
- <div class="battleTop">
-
-  <div class="score blue">
-   СИНИЕ
-   <b id="blueScore">
-    12
-   </b>
-  </div>
-
-  <div
-   id="battleTimer"
-   class="battleTimer">
-   10:00
-  </div>
-
-  <div class="score red">
-   КРАСНЫЕ
-   <b id="redScore">
-    8
-   </b>
-  </div>
-
+ <div class="hudLeft">
+  <div class="hpOuter"><div class="hpInner" id="hp"></div></div>
+  <div class="energy"><i id="energy"></i></div>
+  <div class="weaponName" id="weaponHud">SMOKY M0</div>
  </div>
-
- <!-- CROSSHAIR -->
-
- <div class="crosshair"></div>
-
- <!-- CHAT -->
-
- <div
-  class="chat"
-  style="
-   bottom:102px;
-   height:165px">
-
-  <div class="chatHead">
-   КОМАНДНЫЙ ЧАТ
-  </div>
-
-  <div
-   class="chatBody"
-   id="battleChat"
-   style="height:101px">
-
-   <div class="chatSystem">
-    [Система] Бой начался.
-   </div>
-
-   <div class="chatMessage">
-    <b>ProTank:</b> всем на центр!
-   </div>
-
-   <div class="chatMessage red">
-    <b>Raptor:</b> уже там.
-   </div>
-
-  </div>
-
-  <div class="chatInput">
-
-   <input
-    id="battleChatInput"
-    placeholder="Сообщение..."
-    maxlength="100"
-    onkeydown="
-     if(event.key==='Enter')
-     sendBattleChat()
-    ">
-
-   <button onclick="sendBattleChat()">
-    ОТПР.
-   </button>
-
-  </div>
-
+ <div class="minimap"><canvas id="miniCanvas" width="150" height="100"></canvas></div>
+ <div class="cross"></div>
+ <div class="battleInfo" id="battleInfo"></div>
+ <div class="supplies">
+  <button class="sup" onclick="useSupply('repair')">🔧<small>REPAIR</small></button>
+  <button class="sup" onclick="useSupply('armor')">🛡️<small>ARMOR</small></button>
+  <button class="sup" onclick="useSupply('damage')">💥<small>DAMAGE</small></button>
+  <button class="sup" onclick="useSupply('speed')">🚀<small>SPEED</small></button>
+  <button class="sup" onclick="dropMine()">💣<small>MINE</small></button>
  </div>
-
- <!-- HUD -->
-
- <div class="weaponHud">
-
-  <b>
-   SMOKY M1
-  </b>
-
-  <small>
-   SPACE — ОГОНЬ
-  </small>
-
-  <small>
-   R — ПЕРЕЗАРЯДКА
-  </small>
-
- </div>
-
- <div class="ammoHud">
-
-  <small>
-   БОЕПРИПАСЫ
-  </small>
-
-  <b id="ammoValue">
-   99
-  </b>
-
-  <small id="reloadLabel">
-   ГОТОВ
-  </small>
-
- </div>
-
- <div class="battleHealth">
-
-  <i id="healthBar"></i>
-
-  <span id="healthText">
-   1000 / 1000
-  </span>
-
- </div>
-
- <!-- MOBILE -->
-
  <div class="mobileControls">
-
-  <div
-   id="joystick"
-   class="joy">
-
-   <div
-    id="joyKnob"
-    class="joyKnob">
-   </div>
-
-  </div>
-
-  <div
-   id="cameraTouch"
-   class="cameraTouch">
-  </div>
-
-  <div class="actionButtons">
-
-   <button
-    class="actionButton"
-    onclick="reload()">
-    R
-   </button>
-
-   <button
-    class="actionButton fire"
-    onclick="fire()">
-    ОГОНЬ
-   </button>
-
-  </div>
-
+  <div class="joy" id="joy"><div class="joyKnob" id="joyKnob"></div></div>
+  <button class="fire" id="fireBtn">ОГОНЬ</button>
+  <button class="mobileBtn" id="mbJump">↑</button>
+  <button class="mobileBtn" id="mbCenter">C</button>
+  <button class="mobileBtn" id="mbMine">💣</button>
+  <button class="mobileBtn" id="mbRepair">🔧</button>
  </div>
-
- <div
-  id="damageFlash"
-  class="damageFlash">
- </div>
-
- <div
-  id="deathOverlay"
-  class="deathOverlay">
-
-  <div class="deathBox">
-
-   <h2>
-    ТАНК УНИЧТОЖЕН
-   </h2>
-
-   <div
-    id="deathTimer"
-    style="
-     color:#71858e;
-     font-size:10px">
-    ВОЗРОЖДЕНИЕ...
-   </div>
-
-  </div>
-
- </div>
-
 </section>
 
-<!-- =========================================================
- SCOREBOARD
-========================================================= -->
-
-<div
- id="scoreboard"
- class="scoreboard">
-
- <div class="modalHeader">
-
-  ТАБЛИЦА БОЯ
-
-  <button
-   class="modalClose"
-   onclick="hideScoreboard()">
-   ×
-  </button>
-
- </div>
-
- <div style="padding:10px">
-
-  <div class="scoreRow">
-   <b>1</b>
-   <span><b id="boardNick">TankCommander</b></span>
-   <b>1240</b>
-   <span style="color:#55c566">18 / 4</span>
-  </div>
-
-  <div class="scoreRow">
-   <b>2</b>
-   <span>Raptor</span>
-   <b>980</b>
-   <span style="color:#db6868">13 / 7</span>
-  </div>
-
-  <div class="scoreRow">
-   <b>3</b>
-   <span>SteelFox</span>
-   <b>810</b>
-   <span style="color:#db6868">10 / 8</span>
-  </div>
-
-  <div class="scoreRow">
-   <b>4</b>
-   <span>Viking</span>
-   <b>620</b>
-   <span style="color:#db6868">8 / 9</span>
-  </div>
-
-  <div class="scoreRow">
-   <b>5</b>
-   <span>Hunter</span>
-   <b>510</b>
-   <span style="color:#55c566">7 / 5</span>
-  </div>
-
- </div>
-
 </div>
-
-<!-- =========================================================
- ESC
-========================================================= -->
-
-<div
- id="esc"
- class="esc">
-
- <div class="escBox">
-
-  <h2>
-   ПАУЗА
-  </h2>
-
-  <p
-   style="
-    color:#70858d;
-    font-size:10px">
-   Бой продолжается.
-  </p>
-
-  <button
-   class="btn blue"
-   style="width:100%;margin:5px 0"
-   onclick="closeEsc()">
-   ПРОДОЛЖИТЬ
-  </button>
-
-  <button
-   class="btn dark"
-   style="width:100%;margin:5px 0"
-   onclick="leaveBattle()">
-   В ГАРАЖ
-  </button>
-
- </div>
-
-</div>
-
-<!-- =========================================================
- NOTIFY
-========================================================= -->
-
-<div
- id="notify"
- class="notify">
- Готово
-</div>
-
-<!-- =========================================================
- JAVASCRIPT
-========================================================= -->
 
 <script>
-
 /* =========================================================
- STATE
+   TANKI CLASSIC 2012–2015
+   Самодостаточный фанатский прототип.
 ========================================================= */
 
-const state={
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rnd=(a,b)=>Math.random()*(b-a)+a;
+const rndi=(a,b)=>Math.floor(rnd(a,b+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
 
- nick:
-  localStorage.getItem("tankNick")
-  ||"TankCommander",
-
- money:
-  Number(
-   localStorage.getItem("tankMoney")
-   ||12450
-  ),
-
- gold:
-  Number(
-   localStorage.getItem("tankGold")
-   ||125
-  ),
-
- sound:true,
- music:true,
-
- map:"SANDBOX",
- mode:"DM",
- players:10,
-
- hp:1000,
- maxHp:1000,
-
- ammo:99,
- maxAmmo:99,
-
- reloading:false,
-
- game:false,
-
- time:600,
-
- tankX:0,
- tankY:0,
-
- turretAngle:0,
-
- joyActive:false,
-
- lastFire:0
-
+let save=JSON.parse(localStorage.getItem('tankiClassicSave')||'null')||{
+ name:'Танкист',crystals:1250,xp:340,hull:'hunter',turret:'smoky',paint:0,
+ upgrades:{},wins:0,losses:0
 };
 
-/* =========================================================
- HELPERS
-========================================================= */
+const HULLS={
+ wasp:{name:'WASP',speed:7,hp:650,turn:2.6,weight:1},
+ hornet:{name:'HORNET',speed:7.5,hp:760,turn:2.5,weight:1},
+ hunter:{name:'HUNTER',speed:6.2,hp:950,turn:2.2,weight:1.2},
+ viking:{name:'VIKING',speed:5.2,hp:1250,turn:1.8,weight:1.5},
+ dictator:{name:'DICTATOR',speed:4.7,hp:1500,turn:1.5,weight:1.8},
+ titan:{name:'TITAN',speed:3.8,hp:1850,turn:1.2,weight:2},
+ mammoth:{name:'MAMMOTH',speed:3.2,hp:2300,turn:1,weight:2.5}
+};
 
-function $(id){
- return document.getElementById(id);
+const TURRETS={
+ smoky:{name:'SMOKY',damage:180,rate:600,range:900,color:'#8b989b'},
+ twins:{name:'TWINS',damage:105,rate:220,range:760,color:'#9ca8aa'},
+ firebird:{name:'FIREBIRD',damage:75,rate:100,range:430,color:'#c58a58'},
+ freeze:{name:'FREEZE',damage:65,rate:100,range:400,color:'#8ba9b9'},
+ isida:{name:'ISIDA',damage:70,rate:130,range:420,color:'#92a98d'},
+ thunder:{name:'THUNDER',damage:260,rate:950,range:850,color:'#9a8e84'},
+ railgun:{name:'RAILGUN',damage:520,rate:1800,range:1250,color:'#b0b7bb'},
+ shaft:{name:'SHAFT',damage:800,rate:2600,range:1600,color:'#c5c9ca'}
+};
+
+const MAPS={
+ sandbox:{name:'SANDBOX',players:8,modes:'DM • TDM • CTF',env:'day',type:'sandbox',music:'sandbox.mp3',desc:'Классическая небольшая арена с центральной зоной, укрытиями и перепадами.'},
+ barda:{name:'BARDA',players:16,modes:'DM • TDM • CTF • CP',env:'day',type:'barda',music:'barda.mp3',desc:'Большая карта с высотами, открытыми маршрутами и позициями для дальних пушек.'},
+ arena:{name:'ARENA',players:8,modes:'DM • TDM • CP',env:'day',type:'arena',music:'arena.mp3',desc:'Много мостов, верхний и нижний уровни, рампы.'},
+ berlin:{name:'BERLIN',players:36,modes:'DM • TDM • CTF',env:'night',type:'berlin',music:'berlin.mp3',desc:'Большая городская арена с улицами, домами, мостами и нижними маршрутами.'},
+ bridges:{name:'BRIDGES',players:16,modes:'DM • TDM • CTF • CP',env:'day',type:'bridges',music:'bridges.mp3',desc:'Мостовая карта с верхним и нижним уровнями.'},
+ platform:{name:'ПЛАТО',players:16,modes:'DM • TDM • CTF • CP',env:'night',type:'platform',music:'platform.mp3',desc:'Высокая платформа, нижняя пустота и центральная зона.'},
+ '2042':{name:'2042',players:16,modes:'DM • TDM • CTF • CP',env:'day',type:'2042',music:'2042.mp3',desc:'Смешанные высоты, стены и маршруты.'},
+ atra:{name:'ATRA',players:12,modes:'DM • TDM • CTF',env:'day',type:'atra',music:'atra.mp3',desc:'Компактная техническая карта.'},
+ bobruisk:{name:'BOBRUISK',players:16,modes:'DM • TDM • CTF',env:'day',type:'bobruisk',music:'bobruisk.mp3',desc:'Промышленная карта с бетонными объектами.'},
+ boombox:{name:'BOOMBOX',players:12,modes:'DM • TDM • CTF',env:'night',type:'boombox',music:'boombox.mp3',desc:'Вертикальная арена с укрытиями.'},
+ brest:{name:'BREST',players:16,modes:'DM • TDM • CTF',env:'winter',type:'brest',music:'winter.mp3',desc:'Зимняя карта с узкими проходами.'},
+ camp:{name:'CAMP',players:12,modes:'DM • TDM • CTF',env:'day',type:'camp',music:'camp.mp3',desc:'Открытая местность с лагерными объектами.'},
+ chernobyl:{name:'CHERNOBYL',players:16,modes:'DM • TDM • CTF',env:'night',type:'chernobyl',music:'night.mp3',desc:'Тёмная промышленная арена.'},
+ cologne:{name:'COLOGNE',players:16,modes:'DM • TDM • CTF',env:'day',type:'cologne',music:'cologne.mp3',desc:'Городская карта.'},
+ combe:{name:'COMBE',players:12,modes:'DM • TDM',env:'day',type:'combe',music:'combe.mp3',desc:'Средняя арена.'},
+ courage:{name:'COURAGE',players:16,modes:'DM • TDM • CTF',env:'day',type:'courage',music:'courage.mp3',desc:'Боевая карта с множеством маршрутов.'},
+ cross:{name:'CROSS',players:12,modes:'DM • TDM • CTF',env:'day',type:'cross',music:'cross.mp3',desc:'Перекрёстные маршруты.'},
+ deathtrack:{name:'DEATHTRACK',players:16,modes:'DM • TDM • CTF',env:'night',type:'deathtrack',music:'night.mp3',desc:'Длинные боевые линии.'},
+ desert:{name:'DESERT',players:16,modes:'DM • TDM • CTF',env:'day',type:'desert',music:'desert.mp3',desc:'Пустынная арена.'},
+ duality:{name:'DUALITY',players:8,modes:'DM • TDM',env:'day',type:'duality',music:'duality.mp3',desc:'Компактная дуальная карта.'},
+ duel:{name:'DUEL',players:2,modes:'DM',env:'day',type:'duel',music:'duel.mp3',desc:'Минимальная карта для двух танков.'},
+ dusseldorf:{name:'DUSSELDORF',players:16,modes:'DM • TDM • CTF',env:'night',type:'dusseldorf',music:'night.mp3',desc:'Городские маршруты.'},
+ edinburgh:{name:'EDINBURGH',players:16,modes:'DM • TDM • CTF',env:'day',type:'edinburgh',music:'edinburgh.mp3',desc:'Городская арена.'},
+ esplanade:{name:'ESPLANADE',players:16,modes:'DM • TDM • CTF',env:'day',type:'esplanade',music:'esplanade.mp3',desc:'Широкая открытая площадь.'},
+ factory:{name:'FACTORY',players:12,modes:'DM • TDM • CTF',env:'night',type:'factory',music:'factory.mp3',desc:'Промышленная карта с центральными проходами.'},
+ farm:{name:'FARM',players:12,modes:'DM • TDM • CTF',env:'day',type:'farm',music:'farm.mp3',desc:'Открытые поля и здания.'},
+ forest:{name:'FOREST',players:16,modes:'DM • TDM • CTF',env:'winter',type:'forest',music:'winter.mp3',desc:'Лесная зимняя арена.'},
+ fort_knox:{name:'FORT KNOX',players:16,modes:'DM • TDM • CTF',env:'day',type:'fort',music:'fort_knox.mp3',desc:'Укреплённая карта с защитными позициями.'},
+ future:{name:'FUTURE',players:16,modes:'DM • TDM • CTF',env:'night',type:'future',music:'future.mp3',desc:'Высотные платформы.'},
+ garder:{name:'GARDER',players:12,modes:'DM • TDM • CTF',env:'winter',type:'garder',music:'winter.mp3',desc:'Классическая карта и зимний вариант.'},
+ gravity:{name:'GRAVITY',players:12,modes:'DM • TDM',env:'night',type:'gravity',music:'night.mp3',desc:'Вертикальная арена.'},
+ gubakha:{name:'GUBAKHA',players:16,modes:'DM • TDM • CTF',env:'day',type:'gubakha',music:'gubakha.mp3',desc:'Рельефная карта.'},
+ pingpong:{name:'PING-PONG',players:8,modes:'DM • TDM',env:'day',type:'pingpong',music:'pingpong.mp3',desc:'Небольшая симметричная арена.'},
+ polygon:{name:'POLYGON',players:12,modes:'DM • TDM • CTF • CP',env:'day',type:'polygon',music:'polygon.mp3',desc:'Компактная карта с большим количеством укрытий.'},
+ redalert:{name:'RED ALERT',players:16,modes:'DM • TDM • CTF • CP',env:'night',type:'redalert',music:'redalert.mp3',desc:'Много маршрутов, укрытий и сильных оборонительных позиций.'},
+ rift:{name:'RIFT',players:16,modes:'DM • TDM • CTF',env:'night',type:'rift',music:'rift.mp3',desc:'Разломы и разные уровни.'},
+ rio:{name:'RIO',players:20,modes:'DM • TDM • CTF',env:'day',type:'rio',music:'rio.mp3',desc:'Большая карта для дальних дистанций.'},
+ sandal:{name:'SANDAL',players:12,modes:'DM • TDM • CTF',env:'day',type:'sandal',music:'sandal.mp3',desc:'Песчаная карта.'},
+ scope:{name:'SCOPE',players:16,modes:'DM • TDM',env:'night',type:'scope',music:'night.mp3',desc:'Карта для дальних перестрелок.'},
+ serpuhov:{name:'SERPUHOV',players:16,modes:'DM • TDM • CTF',env:'day',type:'serpuhov',music:'serpuhov.mp3',desc:'Большая смешанная арена.'},
+ shortbridge:{name:'SHORT BRIDGE',players:8,modes:'DM • TDM • CTF',env:'day',type:'shortbridge',music:'bridges.mp3',desc:'Компактная мостовая карта.'},
+ siege:{name:'SIEGE',players:16,modes:'DM • TDM • CTF',env:'day',type:'siege',music:'siege.mp3',desc:'Укрепления и осадные маршруты.'},
+ silence:{name:'SILENCE',players:16,modes:'DM • TDM • CTF • CP',env:'night',type:'silence',music:'silence.mp3',desc:'Тёмная карта с закрытыми маршрутами и центральными проходами.'},
+ skylark:{name:'SKYLARK',players:12,modes:'DM • TDM • CTF',env:'day',type:'skylark',music:'skylark.mp3',desc:'Многоуровневая арена.'},
+ skyscrapers:{name:'SKYSCRAPERS',players:20,modes:'DM • TDM • CTF',env:'night',type:'skyscrapers',music:'night.mp3',desc:'Высотная городская карта.'},
+ solikamsk:{name:'SOLIKAMSK',players:16,modes:'DM • TDM • CTF',env:'winter',type:'solikamsk',music:'winter.mp3',desc:'Зимняя рельефная карта.'},
+ stadium:{name:'STADIUM',players:16,modes:'DM • TDM • CTF • CP',env:'day',type:'stadium',music:'stadium.mp3',desc:'Большая открытая арена.'},
+ station:{name:'STATION',players:12,modes:'DM • TDM • CTF',env:'night',type:'station',music:'station.mp3',desc:'Станционные сооружения.'},
+ subway:{name:'SUBWAY',players:16,modes:'DM • TDM • CTF',env:'night',type:'subway',music:'subway.mp3',desc:'Нижние тоннельные маршруты.'},
+ tribute:{name:'TRIBUTE',players:16,modes:'DM • TDM • CTF • CP',env:'day',type:'tribute',music:'tribute.mp3',desc:'Старейшая классическая схема с двумя разными базами.'},
+ valley:{name:'VALLEY',players:16,modes:'DM • TDM • CTF',env:'day',type:'valley',music:'valley.mp3',desc:'Долина и высоты.'},
+ wave:{name:'WAVE',players:12,modes:'DM • TDM',env:'day',type:'wave',music:'wave.mp3',desc:'Волнообразный рельеф.'},
+ wolfenstein:{name:'WOLFENSTEIN',players:16,modes:'DM • TDM • CTF',env:'night',type:'wolfenstein',music:'night.mp3',desc:'Тёмная закрытая карта.'},
+ zone:{name:'ZONE',players:16,modes:'DM • TDM • CTF',env:'day',type:'zone',music:'zone.mp3',desc:'Средняя арена.'}
+};
+
+let currentMap='sandbox';
+let currentMode='DM';
+let battle=null;
+let keys={};
+let mouse={x:0,y:0,down:false};
+let mobile={x:0,y:0};
+let last=performance.now();
+
+function saveGame(){localStorage.setItem('tankiClassicSave',JSON.stringify(save))}
+function show(id){
+ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+ $(id).classList.add('on');
+ if(id==='garage')initGarage();
+ if(id==='maps')renderMaps();
+ if(id==='lobby')updateLobby();
 }
-
-function showScreen(id){
-
- document
-  .querySelectorAll(".screen")
-  .forEach(
-   s=>s.classList.remove("active")
-  );
-
- $(id).classList.add("active");
-
-}
-
-function save(){
-
- localStorage.setItem(
-  "tankNick",
-  state.nick
- );
-
- localStorage.setItem(
-  "tankMoney",
-  state.money
- );
-
- localStorage.setItem(
-  "tankGold",
-  state.gold
- );
-
-}
-
-function safe(text){
-
- return String(text)
-  .replace(/[&<>"']/g,function(c){
-
-   return {
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
-   }[c];
-
-  });
-
-}
-
-function notify(text){
-
- const n=$("notify");
-
- n.textContent=text;
-
- n.classList.add("active");
-
- clearTimeout(window.notifyTimer);
-
- window.notifyTimer=setTimeout(
-  ()=>{
-   n.classList.remove("active");
-  },
-  2200
- );
-
-}
-
-function updateMoney(){
-
- $("moneyValue").textContent=
-  state.money.toLocaleString("ru-RU");
-
- $("goldValue").textContent=
-  state.gold.toLocaleString("ru-RU");
-
-}
-
-function updateProfile(){
-
- $("topNick").textContent=
-  state.nick;
-
- $("profileName").textContent=
-  state.nick;
-
- $("boardNick").textContent=
-  state.nick;
-
- $("loginNick").value=
-  state.nick;
-
-}
-
-/* =========================================================
- AUDIO
-========================================================= */
-
-let audioContext=null;
-
-function beep(
- frequency=440,
- duration=.06,
- type="square"
-){
-
- if(!state.sound)
-  return;
-
- try{
-
-  audioContext=
-   audioContext
-   ||new(
-    window.AudioContext
-    ||window.webkitAudioContext
-   )();
-
-  const oscillator=
-   audioContext.createOscillator();
-
-  const gain=
-   audioContext.createGain();
-
-  oscillator.type=type;
-
-  oscillator.frequency.value=
-   frequency;
-
-  gain.gain.setValueAtTime(
-   .025,
-   audioContext.currentTime
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-   .001,
-   audioContext.currentTime+duration
-  );
-
-  oscillator.connect(gain);
-
-  gain.connect(
-   audioContext.destination
-  );
-
-  oscillator.start();
-
-  oscillator.stop(
-   audioContext.currentTime+duration
-  );
-
- }catch(e){}
-
-}
-
-/* =========================================================
- BOOT
-========================================================= */
-
-let bootProgress=0;
-
-const bootMessages=[
- "ИНИЦИАЛИЗАЦИЯ КЛИЕНТА...",
- "ПРОВЕРКА ГРАФИЧЕСКОГО МОДУЛЯ...",
- "ЗАГРУЗКА ИНТЕРФЕЙСА...",
- "ЗАГРУЗКА ГАРАЖА...",
- "ПОДГОТОВКА КАРТ...",
- "ПОДКЛЮЧЕНИЕ К СЕРВЕРУ...",
- "СИНХРОНИЗАЦИЯ ПРОФИЛЯ...",
- "ГОТОВО."
-];
-
-const bootInterval=
- setInterval(()=>{
-
-  bootProgress+=
-   Math.floor(
-    Math.random()*7
-   )+2;
-
-  if(bootProgress>100)
-   bootProgress=100;
-
-  $("bootBar").style.width=
-   bootProgress+"%";
-
-  $("bootStatus").textContent=
-   bootMessages[
-    Math.min(
-     7,
-     Math.floor(
-      bootProgress/14
-     )
-    )
-   ];
-
-  if(bootProgress>=100){
-
-   clearInterval(bootInterval);
-
-   setTimeout(
-    ()=>{
-     showScreen("login");
-     beep(500,.08);
-    },
-    700
-   );
-
-  }
-
- },100);
-
-/* =========================================================
- LOGIN
-========================================================= */
-
 function login(){
-
- const nick=
-  $("loginNick")
-   .value
-   .trim()
-   .slice(0,18);
-
- state.nick=
-  nick
-  ||"TankCommander";
-
- save();
-
- updateProfile();
- updateMoney();
-
- showScreen("garage");
-
- notify(
-  "Добро пожаловать, "
-  +state.nick+"!"
- );
-
- beep(650,.1);
-
+ save.name=$('loginName').value.trim()||'Танкист';
+ saveGame();$('playerName').textContent=save.name;$('playerName').textContent=save.name;show('lobby');
+ addChat('SYSTEM','Добро пожаловать, '+save.name+'!');
 }
-
-/* =========================================================
- MODALS
-========================================================= */
-
-function openModal(id){
-
- $("modalShade")
-  .classList.add("active");
-
- [
-  "battleModal",
-  "shopModal",
-  "profileModal",
-  "settingsModal"
- ]
- .forEach(x=>{
-
-  $(x).classList.add("hidden");
-
+function updateLobby(){
+ $('playerName').textContent=save.name;$('crystals').textContent=save.crystals;$('xp').textContent=save.xp;$('profileXp').textContent=save.xp;$('garageMoney').textContent=save.crystals;
+}
+function addChat(name,text){
+ const d=document.createElement('div');d.className='msg';
+ d.innerHTML='<b>'+name+'</b> <span>• сейчас</span><br>'+escapeHtml(text);
+ $('chatMsgs').appendChild(d);$('chatMsgs').scrollTop=99999;
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function sendChat(){
+ const v=$('chatInput').value.trim();if(!v)return;
+ addChat(save.name,v);$('chatInput').value='';
+}
+function toggleChat(){$('chatPanel').classList.toggle('mobileOpen')}
+function settings(){alert('Управление ПК: WASD — корпус, мышь — башня, ЛКМ/Space — огонь, C — центрирование, Z/X — башня, Tab — таблица.\\nТелефон: левый джойстик — движение, правая зона — прицеливание, ОГОНЬ — стрельба.')}
+function aboutGame(){alert('TANKI CLASSIC 2012–2015\\nФанатская реконструкция. Карты и геометрия сделаны процедурно, без оригинальных игровых файлов.')}
+function randomBattle(){const k=pick(Object.keys(MAPS));startBattle(k)}
+function startBattle(k){
+ currentMap=k;currentMode=pick(MAPS[k].modes.split(' • '));show('battle');setTimeout(()=>initBattle(),80)
+}
+function renderMaps(){
+ const grid=$('mapGrid');grid.innerHTML='';
+ Object.entries(MAPS).forEach(([id,m])=>{
+  const c=document.createElement('div');c.className='mapCard';c.onclick=()=>startBattle(id);
+  c.innerHTML='<div class="mapPreview" id="pv_'+id+'"></div><div class="mapName">'+m.name+'</div><div class="mapInfo">'+m.modes+' • '+m.players+' игроков • '+m.env.toUpperCase()+'</div>';
+  grid.appendChild(c);drawPreview('pv_'+id,id,m);
  });
-
- $(id).classList.remove("hidden");
-
+}
+function drawPreview(id,key,m){
+ const e=$(id);if(!e)return;
+ const c=document.createElement('canvas');c.width=360;c.height=210;c.style.width='100%';c.style.height='100%';e.appendChild(c);
+ const x=c.getContext('2d');
+ x.fillStyle=m.env==='night'?'#18242b':m.env==='winter'?'#aeb8bb':'#77736b';x.fillRect(0,0,c.width,c.height);
+ x.fillStyle=m.env==='night'?'#233841':m.env==='winter'?'#d6dcdd':'#6b665e';x.fillRect(25,20,310,170);
+ const n=key==='arena'?12:key==='bridges'?8:key==='berlin'?15:key==='sandbox'?7:10;
+ for(let i=0;i<n;i++){
+  let xx=rndi(35,300),yy=rndi(35,165),w=rndi(18,55),h=rndi(10,30);
+  x.fillStyle=i%3===0?'#454b4d':'#31383a';x.fillRect(xx,yy,w,h);
+ }
+ if(key==='arena'||key==='bridges'||key==='shortbridge'){
+  x.fillStyle='#8b9090';for(let i=0;i<5;i++)x.fillRect(40+i*58,75+(i%2)*35,75,14);
+ }
+ if(key==='berlin'||key==='skyscrapers'){
+  x.fillStyle='#44494b';for(let i=0;i<8;i++)x.fillRect(45+i*36,35,25,35);
+ }
+ if(m.env==='night'){x.fillStyle='rgba(255,220,130,.75)';for(let i=0;i<7;i++){x.beginPath();x.arc(rndi(40,320),rndi(30,180),2,0,7);x.fill()}}
+ if(m.env==='winter'){x.fillStyle='#edf2f2';for(let i=0;i<18;i++)x.fillRect(rndi(25,330),rndi(20,190),rndi(2,5),rndi(2,5))}
 }
 
-function closeAllModals(){
-
- $("modalShade")
-  .classList.remove("active");
-
- [
-  "battleModal",
-  "shopModal",
-  "profileModal",
-  "settingsModal"
- ]
- .forEach(x=>{
-  $(x).classList.add("hidden");
+/* GARAGE */
+let garageCtx;
+function initGarage(){
+ const c=$('garageCanvas');garageCtx=c.getContext('2d');resizeCanvas(c);
+ renderGarageItems();drawGarage();
+}
+function renderGarageItems(){
+ $('hulls').innerHTML='';$('turrets').innerHTML='';
+ Object.entries(HULLS).forEach(([id,h])=>{
+  const d=document.createElement('div');d.className='item '+(save.hull===id?'sel':'');d.onclick=()=>{save.hull=id;saveGame();renderGarageItems();drawGarage();};
+  d.innerHTML='<b>'+h.name+'</b><small>HP '+h.hp+' • SPEED '+h.speed+'</small>'; $('hulls').appendChild(d);
  });
-
+ Object.entries(TURRETS).forEach(([id,t])=>{
+  const d=document.createElement('div');d.className='item '+(save.turret===id?'sel':'');d.onclick=()=>{save.turret=id;saveGame();renderGarageItems();drawGarage();};
+  d.innerHTML='<b>'+t.name+'</b><small>DAMAGE '+t.damage+' • RATE '+t.rate+'ms</small>'; $('turrets').appendChild(d);
+ });
+ const h=HULLS[save.hull],t=TURRETS[save.turret];
+ $('garageStats').innerHTML=
+ '<div class="stat"><label>ЗДОРОВЬЕ '+h.hp+'</label><div class="bar"><i style="width:'+clamp(h.hp/23,0,100)+'%"></i></div></div>'+
+ '<div class="stat"><label>СКОРОСТЬ '+h.speed+'</label><div class="bar"><i style="width:'+h.speed/8*100+'%"></i></div></div>'+
+ '<div class="stat"><label>УРОН '+t.damage+'</label><div class="bar"><i style="width:'+clamp(t.damage/8,0,100)+'%"></i></div></div>'+
+ '<div class="stat"><label>ДАЛЬНОСТЬ '+t.range+'</label><div class="bar"><i style="width:'+t.range/16+'%"></i></div></div>';
 }
-
-function openBattleList(){
- openModal("battleModal");
+function resizeCanvas(c){const r=c.getBoundingClientRect();c.width=Math.max(1,r.width*devicePixelRatio);c.height=Math.max(1,r.height*devicePixelRatio);c.getContext('2d').setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+function drawGarage(){
+ const c=$('garageCanvas'),ctx=garageCtx,w=c.clientWidth,h=c.clientHeight;
+ ctx.clearRect(0,0,w,h);
+ ctx.fillStyle='#161d20';ctx.fillRect(0,0,w,h);
+ for(let i=0;i<10;i++){ctx.strokeStyle='rgba(180,190,190,.05)';ctx.beginPath();ctx.moveTo(0,i*h/10);ctx.lineTo(w,i*h/10);ctx.stroke()}
+ const cx=w/2,cy=h*.57;
+ ctx.save();ctx.translate(cx,cy);ctx.rotate(-.08);
+ ctx.fillStyle='#232a2d';ctx.strokeStyle='#b2babb';ctx.lineWidth=3;
+ ctx.beginPath();ctx.ellipse(0,40,130,48,0,0,7);ctx.fill();ctx.stroke();
+ ctx.fillStyle='#424c50';ctx.fillRect(-100,25,200,35);
+ for(let i=-75;i<=75;i+=25){ctx.strokeStyle='#151a1c';ctx.beginPath();ctx.moveTo(i,27);ctx.lineTo(i,58);ctx.stroke()}
+ ctx.fillStyle='#606a6d';ctx.beginPath();ctx.ellipse(0,5,78,50,0,0,7);ctx.fill();ctx.stroke();
+ ctx.fillStyle='#414a4d';ctx.beginPath();ctx.arc(0,0,45,0,7);ctx.fill();ctx.stroke();
+ ctx.fillStyle='#747e80';ctx.fillRect(-13,-105,26,105);
+ ctx.fillStyle='#c4cdce';ctx.fillRect(-7,-142,14,40);
+ ctx.restore();
+ ctx.fillStyle='#899498';ctx.textAlign='center';ctx.font='bold 18px Arial';ctx.fillText(HULLS[save.hull].name+' • '+TURRETS[save.turret].name,cx,h-35);
 }
-
-function openShop(){
- openModal("shopModal");
+function upgrade(){
+ if(save.crystals<100){alert('Недостаточно кристаллов');return}
+ save.crystals-=100;save.xp+=25;saveGame();updateLobby();renderGarageItems();
 }
+function paintCycle(){save.paint=(save.paint+1)%6;saveGame();drawGarage()}
 
-function openProfile(){
- openModal("profileModal");
+/* BATTLE ENGINE */
+const gc=$('gameCanvas'),ctx=gc.getContext('2d');
+let world={w:2200,h:1600,objects:[],supplies:[],mines:[],bullets:[],particles:[],bots:[],gold:null};
+let player={x:1100,y:1250,z:0,a:0,turret:0,hp:1000,maxhp:1000,speed:0,armor:1,damage:1,nitro:1,fire:0,respawn:0,score:0};
+let camera={x:0,y:0,zoom:1};
+let gameTime=600,gameLast=0;
+let fireLock=false;
+
+function initBattle(){
+ resizeGame();
+ const m=MAPS[currentMap];
+ world.w=currentMap==='berlin'||currentMap==='rio'||currentMap==='barda'?2800:2200;
+ world.h=currentMap==='arena'||currentMap==='bridges'?1900:1600;
+ world.objects=[];world.supplies=[];world.mines=[];world.bullets=[];world.particles=[];world.bots=[];world.gold=null;
+ const h=HULLS[save.hull];player={x:world.w/2,y:world.h-250,z:0,a:-Math.PI/2,turret:-Math.PI/2,hp:h.hp,maxhp:h.hp,speed:0,armor:1,damage:1,nitro:1,fire:0,respawn:0,score:0};
+ buildMap(currentMap);
+ spawnBots();
+ gameTime=600;gameLast=performance.now();
+ $('weaponHud').textContent=TURRETS[save.turret].name+' M0';
+ showInfo(m.name+' • '+currentMode);
+ requestAnimationFrame(loop);
 }
+function resizeGame(){gc.width=innerWidth*devicePixelRatio;gc.height=innerHeight*devicePixelRatio;gc.style.width='100%';gc.style.height='100%';ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+addEventListener('resize',()=>{if($('battle').classList.contains('on'))resizeGame()});
 
-function openSettings(){
- openModal("settingsModal");
+function obj(type,x,y,w,h,extra={}){
+ world.objects.push({type,x,y,w,h,z:extra.z||0,rot:extra.rot||0,color:extra.color||null});
 }
-
-/* =========================================================
- CHAT
-========================================================= */
-
-function addChat(
- container,
- nick,
- message,
- red=false
-){
-
- const div=
-  document.createElement("div");
-
- div.className=
-  "chatMessage"
-  +(red?" red":"");
-
- div.innerHTML=
-  "<b>"+
-  safe(nick)+
-  ":</b> "+
-  safe(message);
-
- container.appendChild(div);
-
- container.scrollTop=
-  container.scrollHeight;
-
-}
-
-function sendGarageChat(){
-
- const input=
-  $("garageChatInput");
-
- const text=
-  input.value.trim();
-
- if(!text)
-  return;
-
- addChat(
-  $("garageChat"),
-  state.nick,
-  text
- );
-
- input.value="";
-
- beep(330,.04);
-
-}
-
-function sendBattleChat(){
-
- const input=
-  $("battleChatInput");
-
- const text=
-  input.value.trim();
-
- if(!text)
-  return;
-
- addChat(
-  $("battleChat"),
-  state.nick,
-  text
- );
-
- input.value="";
-
- beep(330,.04);
-
-}
-
-/* =========================================================
- SHOP
-========================================================= */
-
-function buyItem(
- price,
- name
-){
-
- if(state.money<price){
-
-  notify(
-   "Недостаточно кристаллов"
-  );
-
-  beep(120,.1);
-
-  return;
-
- }
-
- state.money-=price;
-
- save();
-
- updateMoney();
-
- notify(
-  name+" куплен!"
- );
-
- beep(700,.1);
-
-}
-
-function repairTank(){
-
- notify(
-  "Танк полностью отремонтирован"
- );
-
- beep(550,.06);
-
-}
-
-function refillSupplies(){
-
- state.ammo=
-  state.maxAmmo;
-
- notify(
-  "Боеприпасы пополнены"
- );
-
- beep(450,.06);
-
-}
-
-/* =========================================================
- SETTINGS
-========================================================= */
-
-function toggleSound(){
-
- state.sound=
-  !state.sound;
-
- $("soundButton").textContent=
-  state.sound
-   ?"ВКЛЮЧЕНЫ"
-   :"ВЫКЛЮЧЕНЫ";
-
- if(state.sound)
-  beep(500,.08);
-
-}
-
-function toggleMusic(){
-
- state.music=
-  !state.music;
-
- $("musicButton").textContent=
-  state.music
-   ?"ВКЛЮЧЕНА"
-   :"ВЫКЛЮЧЕНА";
-
- notify(
-  state.music
-   ?"Музыка включена"
-   :"Музыка выключена"
- );
-
-}
-
-function fullscreen(){
-
- if(
-  document.documentElement.requestFullscreen
- ){
-
-  document
-   .documentElement
-   .requestFullscreen();
-
- }
-
-}
-
-/* =========================================================
- RESET
-========================================================= */
-
-function resetGame(){
-
- if(
-  !confirm(
-   "Сбросить локальный прогресс?"
-  )
- )
-  return;
-
- localStorage.clear();
-
- location.reload();
-
-}
-
-/* =========================================================
- MAP LOADING
-========================================================= */
-
-let mapLoadingTimer=null;
-
-function startMap(
- map,
- mode,
- players
-){
-
- closeAllModals();
-
- state.map=map;
- state.mode=mode;
- state.players=players;
-
- $("loadingMapName")
-  .textContent=map;
-
- $("loadingMapInfo")
-  .textContent=
-   mode+
-   " • "+
-   players+
-   " ИГРОКОВ";
-
- $("mapLoadBar")
-  .style.width="0%";
-
- $("mapLoadPercent")
-  .textContent="0%";
-
- showScreen("mapLoading");
-
- let progress=0;
-
- const messages=[
-  "Загрузка карты...",
-  "Загрузка геометрии...",
-  "Создание зданий...",
-  "Создание мостов...",
-  "Расстановка объектов...",
-  "Подключение игроков...",
-  "Подготовка боеприпасов...",
-  "Готово!"
- ];
-
- clearInterval(
-  mapLoadingTimer
- );
-
- mapLoadingTimer=
-  setInterval(()=>{
-
-   progress+=
-    Math.floor(
-     Math.random()*8
-    )+4;
-
-   if(progress>100)
-    progress=100;
-
-   $("mapLoadBar")
-    .style.width=
-     progress+"%";
-
-   $("mapLoadPercent")
-    .textContent=
-     progress+"%";
-
-   $("mapLoadText")
-    .textContent=
-     messages[
-      Math.min(
-       7,
-       Math.floor(
-        progress/14
-       )
-      )
-     ];
-
-   if(progress>=100){
-
-    clearInterval(
-     mapLoadingTimer
-    );
-
-    setTimeout(
-     startBattle,
-     600
-    );
-
+function wall(x,y,w,h){obj('wall',x,y,w,h)}
+function house(x,y,w,h){obj('house',x,y,w,h)}
+function bridge(x,y,w,h,z=1){obj('bridge',x,y,w,h,{z})}
+function ramp(x,y,w,h,rot=0){obj('ramp',x,y,w,h,{rot})}
+function barrier(x,y,w,h){obj('barrier',x,y,w,h)}
+function crate(x,y){obj('crate',x,y,45,45)}
+function platform(x,y,w,h){obj('platform',x,y,w,h,{z:2})}
+
+function buildMap(k){
+ const W=world.w,H=world.h;
+ /* outer boundaries */
+ wall(0,0,W,35);wall(0,H-35,W,35);wall(0,0,35,H);wall(W-35,0,35,H);
+
+ if(k==='sandbox'){
+  house(170,180,240,170);barrier(520,300,150,30);barrier(760,260,170,30);
+  wall(940,160,260,35);wall(1000,1400,250,35);
+  crate(430,520);crate(480,520);crate(1600,500);crate(1650,500);
+  barrier(930,650,120,28);barrier(1150,650,120,28);
+  platform(930,720,340,180);ramp(850,820,100,100);ramp(1250,820,100,100);
+  house(1720,1120,230,150);barrier(1450,1200,180,30);
+  wall(650,1080,280,35);wall(1270,1080,280,35);
+  for(let i=0;i<5;i++)crate(850+i*65,1050);
+ }else if(k==='barda'){
+  platform(800,500,800,400);ramp(700,650,120,160);ramp(1580,650,120,160);
+  house(130,170,300,210);house(2370,170,300,210);
+  wall(450,500,260,40);wall(2090,500,260,40);
+  wall(400,1100,350,45);wall(2050,1100,350,45);
+  barrier(950,1100,260,35);barrier(1590,1100,260,35);
+  crate(820,1030);crate(875,1030);crate(1920,1030);
+  bridge(1180,250,440,70,1);
+ }else if(k==='arena'){
+  /* множество мостов и верх/низ */
+  bridge(250,330,650,90,2);bridge(1300,330,650,90,2);
+  bridge(700,560,800,90,2);bridge(350,850,650,90,1);bridge(1200,850,650,90,1);
+  bridge(650,1120,900,90,2);bridge(250,1380,650,90,1);bridge(1300,1380,650,90,1);
+  ramp(820,420,120,150);ramp(1260,420,120,150);
+  ramp(520,930,130,150);ramp(1550,930,130,150);
+  ramp(820,1200,120,150);ramp(1260,1200,120,150);
+  wall(950,680,300,45);barrier(900,1000,400,30);
+  house(90,700,180,160);house(W-270,700,180,160);
+ }else if(k==='bridges'){
+  bridge(220,250,550,80,2);bridge(1430,250,550,80,2);
+  bridge(470,540,1500,90,2);
+  bridge(220,850,550,80,1);bridge(1430,850,550,80,1);
+  bridge(650,1120,900,90,2);
+  bridge(300,1400,600,80,1);bridge(1900,1400,600,80,1);
+  for(let i=0;i<6;i++)ramp(350+i*380,400+(i%2)*520,90,130);
+  platform(1030,650,180,300);house(1010,1050,220,170);
+ }else if(k==='platform'){
+  platform(380,260,2040,1100);platform(850,500,1100,650);
+  barrier(900,650,100,25);barrier(1200,650,100,25);barrier(1500,650,100,25);
+  barrier(1000,1100,170,25);barrier(1450,1100,170,25);
+  ramp(500,1350,170,160);ramp(2030,1350,170,160);
+  bridge(1080,300,640,55,2);
+ }else if(k==='berlin'||k==='dusseldorf'||k==='cologne'||k==='edinburgh'||k==='skyscrapers'){
+  for(let yy=160;yy<H-250;yy+=300){
+   for(let xx=140;xx<W-300;xx+=430){
+    if(Math.random()>.2)house(xx,yy,rndi(150,260),rndi(110,190));
    }
-
-  },120);
-
-}
-
-/* =========================================================
- START BATTLE
-========================================================= */
-
-let battleTimerInterval=null;
-let botTimerInterval=null;
-
-function startBattle(){
-
- showScreen("battle");
-
- state.game=true;
- state.hp=1000;
- state.ammo=99;
- state.time=600;
- state.tankX=0;
- state.tankY=0;
-
- updateBattleHud();
- updateBattleTimer();
-
- $("blueScore")
-  .textContent=12;
-
- $("redScore")
-  .textContent=8;
-
- $("battleChat").innerHTML=
-  "<div class='chatSystem'>"+
-  "[Система] Карта "+
-  safe(state.map)+
-  " загружена.</div>"+
-  "<div class='chatSystem'>"+
-  "[Система] Бой начался!</div>";
-
- $("deathOverlay")
-  .classList.remove("active");
-
- movePlayerTank();
-
- clearInterval(
-  battleTimerInterval
- );
-
- battleTimerInterval=
-  setInterval(()=>{
-
-   if(!state.game)
-    return;
-
-   state.time--;
-
-   updateBattleTimer();
-
-   if(
-    Math.random()<.035
-   ){
-
-    botAttack();
-
-   }
-
-   if(state.time<=0){
-
-    finishBattle();
-
-   }
-
-  },1000);
-
- clearInterval(
-  botTimerInterval
- );
-
- botTimerInterval=
-  setInterval(
-   botMovement,
-   100
-  );
-
- notify(
-  "Бой начался: "+
-  state.map
- );
-
- beep(520,.12);
-
-}
-
-/* =========================================================
- TIMER
-========================================================= */
-
-function updateBattleTimer(){
-
- const minutes=
-  Math.floor(
-   state.time/60
-  );
-
- const seconds=
-  state.time%60;
-
- $("battleTimer")
-  .textContent=
-   String(minutes)
-   .padStart(2,"0")
-   +":"+
-   String(seconds)
-   .padStart(2,"0");
-
-}
-
-/* =========================================================
- HUD
-========================================================= */
-
-function updateBattleHud(){
-
- const hp=
-  Math.max(
-   0,
-   state.hp
-  );
-
- $("healthBar")
-  .style.width=
-   hp/state.maxHp*100+
-   "%";
-
- $("healthText")
-  .textContent=
-   hp+
-   " / "+
-   state.maxHp;
-
- $("ammoValue")
-  .textContent=
-   state.ammo;
-
-}
-
-/* =========================================================
- TANK MOVEMENT
-========================================================= */
-
-function movePlayerTank(){
-
- const tank=
-  $("playerTank");
-
- tank.style.transform=
-  "translate("+
-  (
-   -50+
-   state.tankX*.05
-  )+"%, "+
-  (
-   -50+
-   state.tankY*.03
-  )+"%)";
-
-}
-
-/* =========================================================
- KEYBOARD
-========================================================= */
-
-const keys={};
-
-document.addEventListener(
- "keydown",
- e=>{
-
-  keys[e.key.toLowerCase()]=true;
-
-  if(
-   $("battle").classList.contains("active")
-  ){
-
-   if(e.code==="Space"){
-
-    e.preventDefault();
-
-    fire();
-
-   }
-
-   if(
-    e.key.toLowerCase()==="r"
-   ){
-
-    reload();
-
-   }
-
-   if(
-    e.key==="Escape"
-   ){
-
-    toggleEsc();
-
-   }
-
   }
-
- }
-);
-
-document.addEventListener(
- "keyup",
- e=>{
-
-  keys[e.key.toLowerCase()]=false;
-
- }
-);
-
-/* =========================================================
- MOVEMENT LOOP
-========================================================= */
-
-setInterval(()=>{
-
- if(
-  !$("battle").classList.contains("active")
- )
-  return;
-
- let changed=false;
-
- if(
-  keys["w"]||
-  keys["arrowup"]
- ){
-
-  state.tankY=
-   Math.max(
-    -230,
-    state.tankY-4
-   );
-
-  changed=true;
-
- }
-
- if(
-  keys["s"]||
-  keys["arrowdown"]
- ){
-
-  state.tankY=
-   Math.min(
-    230,
-    state.tankY+4
-   );
-
-  changed=true;
-
- }
-
- if(
-  keys["a"]||
-  keys["arrowleft"]
- ){
-
-  state.tankX=
-   Math.max(
-    -280,
-    state.tankX-5
-   );
-
-  changed=true;
-
- }
-
- if(
-  keys["d"]||
-  keys["arrowright"]
- ){
-
-  state.tankX=
-   Math.min(
-    280,
-    state.tankX+5
-   );
-
-  changed=true;
-
- }
-
- if(changed)
-  movePlayerTank();
-
-},16);
-
-/* =========================================================
- MOUSE TURRET
-========================================================= */
-
-document.addEventListener(
- "mousemove",
- e=>{
-
-  if(
-   !$("battle").classList.contains("active")
-  )
-   return;
-
-  const rect=
-   $("battle").getBoundingClientRect();
-
-  const centerX=
-   rect.left+
-   rect.width/2;
-
-  const centerY=
-   rect.top+
-   rect.height/2;
-
-  let angle=
-   Math.atan2(
-    e.clientY-centerY,
-    e.clientX-centerX
-   )*
-   180/Math.PI;
-
-  angle=
-   Math.max(
-    -42,
-    Math.min(
-     42,
-     angle
-    )
-   );
-
-  state.turretAngle=
-   angle;
-
-  updateTurret();
-
- }
-);
-
-/* =========================================================
- TOUCH CAMERA
-========================================================= */
-
-let cameraTouchActive=false;
-let lastTouchX=0;
-
-$("cameraTouch")
- .addEventListener(
-  "touchstart",
-  e=>{
-
-   if(!e.touches[0])
-    return;
-
-   cameraTouchActive=true;
-
-   lastTouchX=
-    e.touches[0].clientX;
-
-  },
-  {passive:false}
- );
-
-$("cameraTouch")
- .addEventListener(
-  "touchmove",
-  e=>{
-
-   e.preventDefault();
-
-   if(
-    !cameraTouchActive
-    ||
-    !e.touches[0]
-   )
-    return;
-
-   const x=
-    e.touches[0].clientX;
-
-   const delta=
-    x-lastTouchX;
-
-   lastTouchX=x;
-
-   state.turretAngle=
-    Math.max(
-     -42,
-     Math.min(
-      42,
-      state.turretAngle+
-      delta*.35
-     )
-    );
-
-   updateTurret();
-
-  },
-  {passive:false}
- );
-
-$("cameraTouch")
- .addEventListener(
-  "touchend",
-  ()=>{
-   cameraTouchActive=false;
-  }
- );
-
-/* =========================================================
- TURRET
-========================================================= */
-
-function updateTurret(){
-
- const a=
-  state.turretAngle;
-
- $("battleTurret")
-  .style.transform=
-   "rotate("+a+"deg)";
-
- $("battleBarrel")
-  .style.transform=
-   "rotate("+a+"deg)";
-
-}
-
-/* =========================================================
- MOBILE JOYSTICK
-========================================================= */
-
-const joystick=
- $("joystick");
-
-const knob=
- $("joyKnob");
-
-joystick.addEventListener(
- "touchstart",
- e=>{
-
-  e.preventDefault();
-
-  state.joyActive=true;
-
- },
- {passive:false}
-);
-
-joystick.addEventListener(
- "touchmove",
- e=>{
-
-  e.preventDefault();
-
-  if(
-   !state.joyActive
-   ||
-   !e.touches[0]
-  )
-   return;
-
-  const rect=
-   joystick.getBoundingClientRect();
-
-  const x=
-   e.touches[0].clientX-
-   (
-    rect.left+
-    rect.width/2
-   );
-
-  const y=
-   e.touches[0].clientY-
-   (
-    rect.top+
-    rect.height/2
-   );
-
-  const distance=
-   Math.sqrt(
-    x*x+y*y
-   );
-
-  const max=
-   rect.width/2-29;
-
-  const ratio=
-   Math.min(
-    1,
-    max/distance
-   );
-
-  const nx=
-   x*ratio;
-
-  const ny=
-   y*ratio;
-
-  knob.style.transform=
-   "translate("+nx+"px,"+ny+"px)";
-
-  state.tankX+=
-   nx*.055;
-
-  state.tankY+=
-   ny*.055;
-
-  state.tankX=
-   Math.max(
-    -280,
-    Math.min(
-     280,
-     state.tankX
-    )
-   );
-
-  state.tankY=
-   Math.max(
-    -230,
-    Math.min(
-     230,
-     state.tankY
-    )
-   );
-
-  movePlayerTank();
-
- },
- {passive:false}
-);
-
-function endJoystick(){
-
- state.joyActive=false;
-
- knob.style.transform=
-  "translate(0,0)";
-
-}
-
-joystick.addEventListener(
- "touchend",
- endJoystick
-);
-
-joystick.addEventListener(
- "touchcancel",
- endJoystick
-);
-
-/* =========================================================
- FIRE
-========================================================= */
-
-function fire(){
-
- if(!state.game)
-  return;
-
- if(state.reloading){
-
-  notify("Перезарядка");
-
-  return;
-
- }
-
- if(state.ammo<=0){
-
-  reload();
-
-  return;
-
- }
-
- const now=
-  Date.now();
-
- if(
-  now-state.lastFire<
-  500
- )
-  return;
-
- state.lastFire=
-  now;
-
- state.ammo--;
-
- updateBattleHud();
-
- beep(
-  145,
-  .07,
-  "sawtooth"
- );
-
- const barrel=
-  $("battleBarrel");
-
- barrel.animate(
-  [
-   {
-    transform:
-     "rotate("+state.turretAngle+"deg) translateX(0)"
-   },
-   {
-    transform:
-     "rotate("+state.turretAngle+"deg) translateX(-18px)"
-   },
-   {
-    transform:
-     "rotate("+state.turretAngle+"deg) translateX(0)"
-   }
-  ],
-  {
-   duration:140
-  }
- );
-
- createProjectile();
-
- if(
-  Math.random()<.72
- ){
-
-  const red=
-   Math.max(
-    0,
-    Number(
-     $("redScore")
-      .textContent
-    )-1
-   );
-
-  $("redScore")
-   .textContent=red;
-
-  notify(
-   "Попадание! +45 XP"
-  );
-
- }
-
- if(state.ammo<=0)
-  reload();
-
-}
-
-/* =========================================================
- PROJECTILE
-========================================================= */
-
-function createProjectile(){
-
- const world=
-  $("battle");
-
- const bullet=
-  document.createElement("div");
-
- bullet.style.position=
-  "absolute";
-
- bullet.style.zIndex=
-  "100";
-
- bullet.style.width=
-  "12px";
-
- bullet.style.height=
-  "12px";
-
- bullet.style.borderRadius=
-  "50%";
-
- bullet.style.background=
-  "#fff2a5";
-
- bullet.style.boxShadow=
-  "0 0 22px #ffe66d";
-
- bullet.style.left=
-  "50%";
-
- bullet.style.top=
-  "58%";
-
- bullet.style.pointerEvents=
-  "none";
-
- world.appendChild(
-  bullet
- );
-
- const angle=
-  state.turretAngle*
-  Math.PI/180;
-
- let x=0;
- let y=0;
-
- const timer=
-  setInterval(()=>{
-
-   x+=
-    Math.cos(angle)*18;
-
-   y+=
-    Math.sin(angle)*18;
-
-   bullet.style.transform=
-    "translate("+
-    x+
-    "px,"+
-    y+
-    "px)";
-
-   if(
-    Math.abs(x)>900
-    ||
-    Math.abs(y)>700
-   ){
-
-    clearInterval(timer);
-
-    bullet.remove();
-
-   }
-
-  },16);
-
-}
-
-/* =========================================================
- RELOAD
-========================================================= */
-
-function reload(){
-
- if(
-  state.reloading
-  ||
-  state.ammo>=state.maxAmmo
- )
-  return;
-
- state.reloading=true;
-
- $("reloadLabel")
-  .textContent=
-   "ПЕРЕЗАРЯДКА";
-
- let seconds=3;
-
- const interval=
-  setInterval(()=>{
-
-   seconds--;
-
-   $("reloadLabel")
-    .textContent=
-     "ПЕРЕЗАРЯДКА "+
-     seconds;
-
-   if(seconds<=0){
-
-    clearInterval(interval);
-
-    state.ammo=
-     state.maxAmmo;
-
-    state.reloading=false;
-
-    $("reloadLabel")
-     .textContent=
-      "ГОТОВ";
-
-    updateBattleHud();
-
-    beep(510,.06);
-
-   }
-
-  },700);
-
-}
-
-/* =========================================================
- BOT ATTACK
-========================================================= */
-
-function botAttack(){
-
- if(!state.game)
-  return;
-
- const damage=
-  Math.floor(
-   Math.random()*75
-  )+25;
-
- state.hp=
-  Math.max(
-   0,
-   state.hp-damage
-  );
-
- updateBattleHud();
-
- damageEffect();
-
- beep(90,.05);
-
- if(state.hp<=0)
-  playerDestroyed();
-
-}
-
-/* =========================================================
- DAMAGE EFFECT
-========================================================= */
-
-function damageEffect(){
-
- const f=
-  $("damageFlash");
-
- f.classList.remove("active");
-
- void f.offsetWidth;
-
- f.classList.add("active");
-
-}
-
-/* =========================================================
- BOT MOVEMENT
-========================================================= */
-
-function botMovement(){
-
- if(
-  !$("battle")
-   .classList
-   .contains("active")
- )
-  return;
-
- const bots=[
-  $("enemy1"),
-  $("enemy2"),
-  $("enemy3")
- ];
-
- bots.forEach(
-  (bot,index)=>{
-
-   const t=
-    Date.now()/1000;
-
-   const x=
-    Math.sin(
-     t*.35+
-     index
-    )*
-    30;
-
-   const y=
-    Math.cos(
-     t*.28+
-     index
-    )*
-    18;
-
-   bot.style.transform=
-    "translate("+
-    x+
-    "px,"+
-    y+
-    "px) "+
-    "scale("+
-    (
-     index===0
-      ?1
-      :.8-index*.08
-    )+
-    ")";
-
-  }
- );
-
-}
-
-/* =========================================================
- DESTROY
-========================================================= */
-
-function playerDestroyed(){
-
- if(!state.game)
-  return;
-
- state.game=false;
-
- $("deathOverlay")
-  .classList.add("active");
-
- $("deathTimer")
-  .textContent=
-   "ВОЗРОЖДЕНИЕ ЧЕРЕЗ 3";
-
- let t=3;
-
- const interval=
-  setInterval(()=>{
-
-   t--;
-
-   $("deathTimer")
-    .textContent=
-     "ВОЗРОЖДЕНИЕ ЧЕРЕЗ "+
-     Math.max(t,0);
-
-   if(t<=0){
-
-    clearInterval(interval);
-
-    state.hp=
-     state.maxHp;
-
-    state.ammo=
-     state.maxAmmo;
-
-    state.game=true;
-
-    $("deathOverlay")
-     .classList
-     .remove("active");
-
-    updateBattleHud();
-
-    notify(
-     "Возрождение!"
-    );
-
-   }
-
-  },1000);
-
-}
-
-/* =========================================================
- SCOREBOARD
-========================================================= */
-
-function showScoreboard(){
-
- $("scoreboard")
-  .classList
-  .add("active");
-
-}
-
-function hideScoreboard(){
-
- $("scoreboard")
-  .classList
-  .remove("active");
-
-}
-
-/* =========================================================
- ESC
-========================================================= */
-
-function toggleEsc(){
-
- $("esc")
-  .classList
-  .toggle("active");
-
-}
-
-function closeEsc(){
-
- $("esc")
-  .classList
-  .remove("active");
-
-}
-
-/* =========================================================
- LEAVE BATTLE
-========================================================= */
-
-function leaveBattle(){
-
- state.game=false;
-
- clearInterval(
-  battleTimerInterval
- );
-
- clearInterval(
-  botTimerInterval
- );
-
- hideScoreboard();
- closeEsc();
-
- showScreen("garage");
-
- notify(
-  "Вы вернулись в гараж"
- );
-
- beep(300,.07);
-
-}
-
-/* =========================================================
- FINISH
-========================================================= */
-
-function finishBattle(){
-
- if(!state.game)
-  return;
-
- state.game=false;
-
- clearInterval(
-  battleTimerInterval
- );
-
- const win=
-  Math.random()>.35;
-
- if(win){
-
-  state.money+=750;
-  state.gold+=5;
-
-  save();
-  updateMoney();
-
-  notify(
-   "ПОБЕДА! +750 💎 +5 ★"
-  );
-
+  for(let i=0;i<5;i++)bridge(450+i*430,450+(i%2)*500,330,65,1);
+  for(let i=0;i<8;i++)barrier(rndi(250,W-350),rndi(250,H-300),rndi(80,180),28);
+ }else if(k==='2042'){
+  platform(500,420,1200,350);ramp(430,500,100,160);ramp(1670,500,100,160);
+  wall(300,250,500,40);wall(1700,250,500,40);
+  barrier(800,950,600,35);crate(650,1100);crate(1550,1100);
+ }else if(k==='bobruisk'||k==='factory'||k==='station'){
+  for(let i=0;i<10;i++)house(rndi(100,W-400),rndi(120,H-400),rndi(140,260),rndi(100,180));
+  for(let i=0;i<12;i++)crate(rndi(100,W-100),rndi(100,H-100));
+  for(let i=0;i<5;i++)barrier(rndi(300,W-500),rndi(300,H-400),rndi(120,260),30);
+ }else if(k==='polygon'||k==='duality'||k==='pingpong'||k==='duel'||k==='combe'){
+  for(let i=0;i<12;i++)barrier(rndi(250,W-400),rndi(220,H-300),rndi(90,180),30);
+  house(120,600,220,170);house(W-340,H-770,220,170);
+  platform(900,650,400,300);
+ }else if(k==='fort'){
+  wall(400,300,1400,55);wall(400,1250,1400,55);
+  wall(450,350,55,900);wall(1695,350,55,900);
+  house(700,550,300,220);house(1200,800,300,220);
+  bridge(950,300,300,60,2);ramp(850,1050,120,150);ramp(1230,1050,120,150);
+ }else if(k==='silence'||k==='subway'||k==='wolfenstein'){
+  for(let y=250;y<H-250;y+=300)wall(180,y,W-360,45);
+  for(let y=400;y<H-350;y+=600)barrier(500,y,1200,35);
+  house(250,550,300,180);house(W-550,900,300,180);
+  for(let i=0;i<5;i++)bridge(400+i*400,900,260,55,1);
+ }else if(k==='redalert'||k==='tribute'){
+  house(160,220,350,220);house(W-510,H-440,350,220);
+  wall(600,250,500,45);wall(1100,H-300,500,45);
+  bridge(800,650,600,70,2);ramp(730,720,120,140);ramp(1350,720,120,140);
+  for(let i=0;i<7;i++)barrier(rndi(300,W-400),rndi(450,H-500),rndi(80,200),30);
  }else{
-
-  notify(
-   "Бой завершён"
-  );
-
+  for(let i=0;i<18;i++){
+   const type=Math.random()>.5?'barrier':'house';
+   if(type==='barrier')barrier(rndi(120,W-300),rndi(120,H-250),rndi(80,240),rndi(25,45));
+   else house(rndi(100,W-350),rndi(100,H-350),rndi(120,240),rndi(90,170));
+  }
+  if(['forest','brest','garder','solikamsk'].includes(k)){
+   for(let i=0;i<25;i++)crate(rndi(100,W-100),rndi(100,H-100));
+  }
  }
-
- setTimeout(
-  leaveBattle,
-  3000
- );
-
+ /* predictable-like supply points */
+ const pts=[
+  [W*.25,H*.25],[W*.5,H*.22],[W*.75,H*.25],
+  [W*.25,H*.5],[W*.5,H*.5],[W*.75,H*.5],
+  [W*.25,H*.75],[W*.5,H*.78],[W*.75,H*.75]
+ ];
+ pts.forEach((p,i)=>world.supplies.push({x:p[0],y:p[1],type:['repair','armor','damage','speed'][i%4],cool:0,drop:false}));
 }
 
-/* =========================================================
- TOUCH FIRE PREVENT
-========================================================= */
+function spawnBots(){
+ const n=MAPS[currentMap].players<=8?4:7;
+ for(let i=0;i<n;i++){
+  let h=HULLS[pick(Object.keys(HULLS))],t=TURRETS[pick(Object.keys(TURRETS))];
+  world.bots.push({x:rnd(180,world.w-180),y:rnd(180,world.h-180),a:rnd(-3.14,3.14),turret:rnd(-3.14,3.14),hp:h.hp,maxhp:h.hp,hull:h,tur:t,fire:rnd(0,1000),color:pick(['#6c777a','#8a6e62','#626f65','#77706b']),respawn:0,name:pick(['Hunter','Smoky','Barda','Tankist','Ranger','Wolf','Pilot'])});
+ }
+}
+function worldToScreen(x,y){
+ return {x:(x-camera.x)*camera.zoom+innerWidth/2,y:(y-camera.y)*camera.zoom+innerHeight/2};
+}
+function screenToWorld(x,y){
+ return {x:(x-innerWidth/2)/camera.zoom+camera.x,y:(y-innerHeight/2)/camera.zoom+camera.y};
+}
+function collides(x,y,r=22){
+ for(const o of world.objects){
+  if(o.type==='bridge'||o.type==='platform'||o.type==='ramp')continue;
+  if(x+r>o.x&&x-r<o.x+o.w&&y+r>o.y&&y-r<o.y+o.h)return true;
+ }
+ return x<55||y<55||x>world.w-55||y>world.h-55;
+}
+function moveEntity(e,dx,dy){
+ let nx=e.x+dx,ny=e.y+dy;
+ if(!collides(nx,e.y,22))e.x=nx;
+ if(!collides(e.x,ny,22))e.y=ny;
+}
+function aimPlayer(){
+ const p=screenToWorld(mouse.x,mouse.y);
+ player.turret=Math.atan2(p.y-player.y,p.x-player.x);
+}
+function shoot(owner,isPlayer=true){
+ const now=performance.now();
+ if(isPlayer){
+  const t=TURRETS[save.turret];
+  if(now-player.fire<t.rate)return;
+  player.fire=now;
+  const a=player.turret;
+  world.bullets.push({x:player.x+Math.cos(a)*45,y:player.y+Math.sin(a)*45,a,spd:13,damage:t.damage*player.damage,life:130,owner:'player',r:5});
+  muzzle(player.x,player.y,a);
+ }else{
+  if(now-owner.fire<owner.tur.rate)return;
+  owner.fire=now;
+  const a=Math.atan2(player.y-owner.y,player.x-owner.x);
+  owner.turret=a;
+  world.bullets.push({x:owner.x+Math.cos(a)*42,y:owner.y+Math.sin(a)*42,a,spd:10,damage:owner.tur.damage,life:110,owner:'bot',r:4});
+  muzzle(owner.x,owner.y,a);
+ }
+}
+function muzzle(x,y,a){
+ for(let i=0;i<8;i++)world.particles.push({x:x+Math.cos(a)*35,y:y+Math.sin(a)*35,vx:Math.cos(a)*rnd(1,4)+rnd(-1,1),vy:Math.sin(a)*rnd(1,4)+rnd(-1,1),life:15,type:'muzzle'});
+}
+function explosion(x,y){
+ for(let i=0;i<28;i++)world.particles.push({x,y,vx:rnd(-4,4),vy:rnd(-4,4),life:rndi(20,45),type:'explosion'});
+}
+function damagePlayer(d){
+ let final=d/player.armor;player.hp-=final;explosion(player.x,player.y);
+ if(player.hp<=0)respawnPlayer();
+}
+function respawnPlayer(){
+ player.respawn=1800;player.hp=0;showInfo('УНИЧТОЖЕН');save.losses++;
+}
+function useSupply(type){
+ if(type==='repair')player.hp=Math.min(player.maxhp,player.hp+player.maxhp*.4);
+ if(type==='armor')player.armor=1.8;
+ if(type==='damage')player.damage=1.7;
+ if(type==='speed')player.nitro=1.7;
+ showInfo(type.toUpperCase());
+}
+function dropMine(){
+ world.mines.push({x:player.x,y:player.y,owner:'player',life:9000});showInfo('МИНА УСТАНОВЛЕНА');
+}
+function collectSupply(s){
+ if(s.type==='repair')useSupply('repair');
+ if(s.type==='armor')useSupply('armor');
+ if(s.type==='damage')useSupply('damage');
+ if(s.type==='speed')useSupply('speed');
+ s.cool=6000;
+}
+function maybeGold(dt){
+ if(world.gold)return;
+ /* намеренно очень редкий Gold Box */
+ const probabilityPerSecond=0.000055;
+ if(Math.random()<probabilityPerSecond*dt/1000){
+  world.gold={x:rnd(180,world.w-180),y:rnd(180,world.h-180),life:25000,warning:5000};
+  showInfo('⚠ GOLD BOX БУДЕТ СБРОШЕН');
+ }
+}
+function collectGold(){
+ if(!world.gold)return;
+ if(Math.hypot(player.x-world.gold.x,player.y-world.gold.y)<55){
+  const amount=rndi(1,10);
+  save.crystals+=amount*100;save.xp+=amount*10;saveGame();updateLobby();
+  showInfo('💰 GOLD BOX +'+amount*100);
+  world.gold=null;
+ }
+}
 
-document.addEventListener(
- "touchstart",
- e=>{
-
-  if(
-   e.target.closest(
-    "button,input"
-   )
-  )
-   return;
-
- },
- {passive:false}
-);
-
-/* =========================================================
- INITIALIZE
-========================================================= */
-
-updateProfile();
-updateMoney();
-
-window.addEventListener(
- "beforeunload",
- save
-);
-
-/* =========================================================
- MOBILE SWIPE PREVENT
-========================================================= */
-
-document.addEventListener(
- "touchmove",
- e=>{
-  if(
-   e.target.closest(
-    ".chatBody,input"
-   )
-  )
-   return;
-
-  e.preventDefault();
-
- },
- {passive:false}
-);
-
-/* =========================================================
- EXTRA: DOUBLE CLICK FIRE
-========================================================= */
-
-document.addEventListener(
- "dblclick",
- e=>{
-
-  if(
-   $("battle")
-    .classList
-    .contains("active")
-  ){
-
-   fire();
-
+function update(dt){
+ if(player.respawn>0){
+  player.respawn-=dt;
+  if(player.respawn<=0){player.x=world.w/2;player.y=world.h-250;player.hp=player.maxhp;player.armor=1;player.damage=1;player.nitro=1}
+  return;
+ }
+ const h=HULLS[save.hull];
+ let fx=0,fy=0;
+ if(keys.w||keys.ArrowUp)fy-=1;if(keys.s||keys.ArrowDown)fy+=1;
+ if(keys.a||keys.ArrowLeft)fx-=1;if(keys.d||keys.ArrowRight)fx+=1;
+ if(mobile.x||mobile.y){fx=mobile.x;fy=mobile.y}
+ const len=Math.hypot(fx,fy)||1;
+ let sp=h.speed*(keys.Shift?1.45:1)*player.nitro;
+ moveEntity(player,fx/len*sp*dt/16,fy/len*sp*dt/16);
+ if(fx||fy)player.a=Math.atan2(fy,fx);
+ player.nitro=1+(player.nitro-1)*Math.pow(.985,dt);
+ aimPlayer();
+ if(mouse.down||keys[' '])shoot(player,true);
+ for(const b of world.bots)updateBot(b,dt);
+ updateBullets(dt);
+ updateParticles(dt);
+ world.supplies.forEach(s=>{
+  if(s.cool>0)s.cool-=dt;
+  if(s.cool<=0&&Math.hypot(player.x-s.x,player.y-s.y)<50){collectSupply(s);s.cool=6500}
+ });
+ world.mines.forEach(m=>{m.life-=dt;if(m.life<=0)m.dead=true;else if(Math.hypot(player.x-m.x,player.y-m.y)<45&&m.owner!=='player'){damagePlayer(350);m.dead=true}});
+ world.mines=world.mines.filter(m=>!m.dead);
+ maybeGold(dt);if(world.gold){world.gold.life-=dt;if(world.gold.life<=0)world.gold=null;else collectGold()}
+ gameTime-=dt/1000;if(gameTime<=0)endBattle();
+ camera.x+=(player.x-camera.x)*.14;camera.y+=(player.y-camera.y)*.14;
+ updateHUD();
+}
+function updateBot(b,dt){
+ if(b.respawn>0){b.respawn-=dt;if(b.respawn<=0){b.x=rnd(100,world.w-100);b.y=rnd(100,world.h-100);b.hp=b.maxhp}return}
+ const dx=player.x-b.x,dy=player.y-b.y,d=Math.hypot(dx,dy);
+ b.turret=Math.atan2(dy,dx);
+ if(d>300){
+  let vx=dx/d,vy=dy/d;moveEntity(b,vx*b.hull.speed*.35*dt/16,vy*b.hull.speed*.35*dt/16);
+ }else{
+  let s=Math.sin(performance.now()/700+b.x)*.6;
+  moveEntity(b,-dy/d*s*b.hull.speed*.3*dt/16,dx/d*s*b.hull.speed*.3*dt/16);
+ }
+ if(d<1100)shoot(b,false);
+}
+function updateBullets(dt){
+ for(const b of world.bullets){
+  b.x+=Math.cos(b.a)*b.spd*dt/16;b.y+=Math.sin(b.a)*b.spd*dt/16;b.life-=dt;
+  if(b.life<=0||collides(b.x,b.y,3)){b.dead=true;explosion(b.x,b.y);continue}
+  if(b.owner==='player'){
+   for(const bot of world.bots){
+    if(bot.respawn>0)continue;
+    if(Math.hypot(bot.x-b.x,bot.y-b.y)<30){
+     bot.hp-=b.damage;explosion(b.x,b.y);b.dead=true;
+     if(bot.hp<=0){bot.respawn=1800;player.score++;save.xp+=5;saveGame()}
+     break;
+    }
+   }
+  }else if(Math.hypot(player.x-b.x,player.y-b.y)<30){
+   damagePlayer(b.damage);b.dead=true;
   }
-
  }
-);
-
-/* =========================================================
- GAMEPAD-LIKE MOBILE FIRE
-========================================================= */
-
-document.addEventListener(
- "contextmenu",
- e=>{
-  e.preventDefault();
+ world.bullets=world.bullets.filter(b=>!b.dead);
+}
+function updateParticles(dt){
+ for(const p of world.particles){
+  p.x+=p.vx*dt/16;p.y+=p.vy*dt/16;p.life-=dt/16;
  }
-);
+ world.particles=world.particles.filter(p=>p.life>0);
+}
+function updateHUD(){
+ $('hp').style.width=clamp(player.hp/player.maxhp*100,0,100)+'%';
+ $('energy').style.width=clamp(player.nitro/1.7*100,0,100)+'%';
+ $('score').textContent=player.score+' : '+world.bots.filter(b=>b.respawn<=0).length;
+ let sec=Math.max(0,Math.floor(gameTime));$('timer').textContent=Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');
+ drawMini();
+}
 
-/* =========================================================
- OLD CLIENT RANDOM CHAT
-========================================================= */
+/* 3RD PERSON RENDER */
+function drawWorld(){
+ const w=innerWidth,h=innerHeight;
+ ctx.clearRect(0,0,w,h);
+ const m=MAPS[currentMap];
+ let sky=m.env==='night'?'#0b151c':m.env==='winter'?'#b9c3c6':'#536168';
+ let ground=m.env==='night'?'#202b2d':m.env==='winter'?'#d7dddd':'#67645d';
+ ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+ ctx.fillStyle=ground;ctx.fillRect(0,h*.36,w,h*.64);
 
-const botMessages=[
- "кто на мост?",
- "есть место в CTF?",
- "кто с Smoky?",
- "идём на центр",
- "держим базу",
- "кто в Sandbox?",
- "поехали",
- "есть кто-нибудь?",
- "ахаха",
- "хороший выстрел"
-];
+ /* distant horizon */
+ ctx.fillStyle=m.env==='night'?'#17242a':m.env==='winter'?'#cbd2d3':'#3d4749';
+ ctx.fillRect(0,h*.33,w,h*.05);
 
+ /* grid/terrain perspective */
+ ctx.strokeStyle=m.env==='night'?'rgba(150,170,170,.06)':'rgba(0,0,0,.10)';
+ ctx.lineWidth=1;
+ for(let i=-20;i<30;i++){
+  const yy=h*.45+i*i*2;
+  ctx.beginPath();ctx.moveTo(0,yy);ctx.lineTo(w,yy);ctx.stroke();
+ }
+ drawObjects();
+ drawSupplies();
+ drawMines();
+ drawBots();
+ drawPlayer();
+ drawParticles();
+}
+function depthScale(y){return clamp(.55+(y-camera.y)/900,.55,1.25)}
+function drawObjects(){
+ const arr=[...world.objects].sort((a,b)=>a.y-b.y);
+ for(const o of arr){
+  const p=worldToScreen(o.x+o.w/2,o.y+o.h/2),s=depthScale(o.y);
+  const ww=o.w*camera.zoom*s,hh=o.h*camera.zoom*s;
+  if(p.x<-ww||p.x>innerWidth+ww||p.y<-hh||p.y>innerHeight+hh)continue;
+  ctx.save();ctx.translate(p.x,p.y);ctx.rotate(o.rot||0);
+  if(o.type==='house'){
+   ctx.fillStyle=mColor('house');ctx.fillRect(-ww/2,-hh/2,ww,hh);
+   ctx.fillStyle=mColor('roof');ctx.beginPath();ctx.moveTo(-ww*.55,-hh/2);ctx.lineTo(0,-hh*.82);ctx.lineTo(ww*.55,-hh/2);ctx.fill();
+   ctx.fillStyle=mColor('window');for(let x=-ww*.25;x<ww*.4;x+=ww*.5)ctx.fillRect(x,-hh*.15,ww*.18,hh*.2);
+  }else if(o.type==='wall'||o.type==='barrier'){
+   ctx.fillStyle=o.type==='barrier'?'#596164':'#373e40';ctx.fillRect(-ww/2,-hh/2,ww,hh);
+   ctx.fillStyle='rgba(255,255,255,.12)';ctx.fillRect(-ww/2,-hh/2,ww,3);
+  }else if(o.type==='crate'){
+   ctx.fillStyle='#62584d';ctx.fillRect(-ww/2,-hh/2,ww,hh);ctx.strokeStyle='#aaa08c';ctx.strokeRect(-ww/2,-hh/2,ww,hh);
+   ctx.beginPath();ctx.moveTo(-ww/2,-hh/2);ctx.lineTo(ww/2,hh/2);ctx.moveTo(ww/2,-hh/2);ctx.lineTo(-ww/2,hh/2);ctx.stroke();
+  }else if(o.type==='bridge'||o.type==='platform'){
+   ctx.fillStyle='#646b6c';ctx.fillRect(-ww/2,-hh/2,ww,hh);
+   ctx.fillStyle='#303738';ctx.fillRect(-ww/2,hh*.3,ww,hh*.18);
+   for(let x=-ww/2+10;x<ww/2;x+=30){ctx.fillStyle='#83898a';ctx.fillRect(x,-hh/2,8,hh)}
+   ctx.fillStyle='#202627';ctx.fillRect(-ww/2,-hh/2,ww,5);ctx.fillRect(-ww/2,hh/2-5,ww,5);
+  }else if(o.type==='ramp'){
+   ctx.fillStyle='#62696b';ctx.beginPath();ctx.moveTo(-ww/2,hh/2);ctx.lineTo(ww/2,hh/2);ctx.lineTo(ww/2,-hh/2);ctx.closePath();ctx.fill();
+   ctx.strokeStyle='#9da5a6';ctx.stroke();
+  }
+  ctx.restore();
+ }
+}
+function mColor(type){
+ const night=MAPS[currentMap].env==='night';
+ if(type==='house')return night?'#252f32':'#4c5354';
+ if(type==='roof')return night?'#141b1d':'#343b3c';
+ if(type==='window')return night?'#c5aa62':'#687679';
+ return '#555';
+}
+function drawTank(tank,playerTank=false){
+ const p=worldToScreen(tank.x,tank.y),s=depthScale(tank.y)*camera.zoom;
+ if(p.x<-100||p.x>innerWidth+100||p.y<-100||p.y>innerHeight+100)return;
+ ctx.save();ctx.translate(p.x,p.y);ctx.scale(s,s);
+ const a=tank.a;
+ ctx.rotate(a);
+ const col=playerTank?['#6f7b7d','#9ca6a7','#c1c8c9','#566164','#8a9495','#707a7c'][save.paint]:tank.color;
+ /* shadow */
+ ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(0,28,48,22,0,0,7);ctx.fill();
+ /* hull */
+ ctx.fillStyle='#252c2f';ctx.fillRect(-43,-19,86,38);
+ ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(-38,-17,76,34,8);ctx.fill();
+ ctx.strokeStyle='#c2c9ca';ctx.lineWidth=1.5;ctx.stroke();
+ /* turret */
+ ctx.rotate(playerTank?player.turret-a:tank.turret-a);
+ ctx.fillStyle=playerTank?col:tank.color;
+ ctx.beginPath();ctx.ellipse(0,0,28,22,0,0,7);ctx.fill();ctx.stroke();
+ ctx.fillStyle='#424a4d';ctx.fillRect(5,-5,48,10);
+ ctx.fillStyle='#aeb7b8';ctx.fillRect(43,-3,12,6);
+ ctx.restore();
+}
+function drawPlayer(){
+ drawTank({...player,color:'#768184'},true);
+ /* third-person reticle distance marker */
+}
+function drawBots(){world.bots.forEach(b=>{if(b.respawn<=0)drawTank(b,false)})}
+function drawSupplies(){
+ for(const s of world.supplies){
+  if(s.cool>0)continue;
+  const p=worldToScreen(s.x,s.y),sc=depthScale(s.y)*camera.zoom;
+  ctx.save();ctx.translate(p.x,p.y);ctx.scale(sc,sc);
+  const glow=MAPS[currentMap].env==='night';
+  if(glow){ctx.shadowBlur=22;ctx.shadowColor='#e7d27b'}
+  ctx.fillStyle='#c2c7c7';ctx.fillRect(-20,-18,40,36);ctx.strokeStyle='#303638';ctx.strokeRect(-20,-18,40,36);
+  ctx.fillStyle='#252b2d';ctx.font='bold 18px Arial';ctx.textAlign='center';ctx.fillText(s.type==='repair'?'R':s.type==='armor'?'A':s.type==='damage'?'D':'N',0,6);
+  ctx.restore();
+ }
+ if(world.gold){
+  const p=worldToScreen(world.gold.x,world.gold.y),sc=depthScale(world.gold.y)*camera.zoom;
+  ctx.save();ctx.translate(p.x,p.y);ctx.scale(sc,sc);ctx.shadowBlur=35;ctx.shadowColor='#ffd83d';
+  ctx.fillStyle='#e5bb35';ctx.fillRect(-25,-20,50,40);ctx.strokeStyle='#fff1a0';ctx.strokeRect(-25,-20,50,40);
+  ctx.fillStyle='#fff3a2';ctx.font='bold 22px Arial';ctx.textAlign='center';ctx.fillText('$',0,8);ctx.restore();
+ }
+}
+function drawMines(){
+ world.mines.forEach(m=>{
+  const p=worldToScreen(m.x,m.y),s=depthScale(m.y)*camera.zoom;
+  ctx.save();ctx.translate(p.x,p.y);ctx.scale(s,s);ctx.fillStyle='#161b1d';ctx.beginPath();ctx.arc(0,0,13,0,7);ctx.fill();
+  ctx.strokeStyle='#9ca5a6';ctx.stroke();ctx.restore();
+ });
+}
+function drawParticles(){
+ world.particles.forEach(p=>{
+  const q=worldToScreen(p.x,p.y);ctx.globalAlpha=clamp(p.life/20,0,1);
+  ctx.fillStyle=p.type==='explosion'?'#d9a15d':'#e2e7e7';ctx.fillRect(q.x-2,q.y-2,4,4);ctx.globalAlpha=1;
+ });
+}
+function drawMini(){
+ const c=$('miniCanvas'),x=c.getContext('2d'),w=c.width,h=c.height;
+ x.clearRect(0,0,w,h);x.fillStyle='#202a2d';x.fillRect(0,0,w,h);
+ x.strokeStyle='#677174';x.strokeRect(1,1,w-2,h-2);
+ world.objects.forEach(o=>{x.fillStyle=o.type==='house'?'#596466':o.type==='bridge'?'#888':'#424b4e';x.fillRect(o.x/world.w*w,o.y/world.h*h,Math.max(2,o.w/world.w*w),Math.max(2,o.h/world.h*h))});
+ world.bots.forEach(b=>{if(b.respawn<=0){x.fillStyle='#a86868';x.fillRect(b.x/world.w*w-2,b.y/world.h*h-2,4,4)}});
+ x.fillStyle='#d5dcdd';x.fillRect(player.x/world.w*w-3,player.y/world.h*h-3,6,6);
+ if(world.gold){x.fillStyle='#f0cf42';x.fillRect(world.gold.x/world.w*w-3,world.gold.y/world.h*h-3,6,6)}
+}
+function showInfo(t){
+ const e=$('battleInfo');e.textContent=t;e.classList.add('show');clearTimeout(showInfo.t);showInfo.t=setTimeout(()=>e.classList.remove('show'),1600);
+}
+function endBattle(){
+ save.wins++;save.crystals+=100+player.score*15;save.xp+=30+player.score*5;saveGame();
+ alert('Бой окончен!\\nСчёт: '+player.score+' : '+world.bots.filter(b=>b.respawn<=0).length);
+ show('lobby');
+}
+
+/* INPUT PC */
+addEventListener('keydown',e=>{
+ keys[e.key]=true;
+ if(e.key==='Escape'&&$('battle').classList.contains('on'))show('lobby');
+ if(e.key==='c'||e.key==='C')player.turret=player.a;
+ if(e.key==='z'||e.key==='Z')player.turret-=.12;
+ if(e.key==='x'||e.key==='X')player.turret+=.12;
+ if(e.key==='Enter'&&!$('battle').classList.contains('on'))toggleChat();
+});
+addEventListener('keyup',e=>keys[e.key]=false);
+gc.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+gc.addEventListener('mousedown',e=>{mouse.down=true});
+addEventListener('mouseup',()=>mouse.down=false);
+
+/* TOUCH */
+const joy=$('joy'),knob=$('joyKnob');
+function touchJoy(e){
+ const t=e.touches[0];if(!t)return;
+ const r=joy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+ let x=(t.clientX-cx)/(r.width/2),y=(t.clientY-cy)/(r.height/2),l=Math.hypot(x,y);
+ if(l>1){x/=l;y/=l}mobile.x=x;mobile.y=y;
+ knob.style.transform='translate('+x*42+'px,'+y*42+'px)';
+}
+joy.addEventListener('touchstart',e=>{e.preventDefault();touchJoy(e)},{passive:false});
+joy.addEventListener('touchmove',e=>{e.preventDefault();touchJoy(e)},{passive:false});
+joy.addEventListener('touchend',e=>{mobile.x=0;mobile.y=0;knob.style.transform='translate(0,0)'});
+$('fireBtn').addEventListener('touchstart',e=>{e.preventDefault();mouse.down=true},{passive:false});
+$('fireBtn').addEventListener('touchend',e=>{mouse.down=false});
+$('mbCenter').addEventListener('touchstart',()=>player.turret=player.a);
+$('mbMine').addEventListener('touchstart',dropMine);
+$('mbRepair').addEventListener('touchstart',()=>useSupply('repair'));
+
+/* right-side touch aiming */
+gc.addEventListener('touchmove',e=>{
+ if(e.touches.length){
+  const t=e.touches[e.touches.length-1];
+  if(t.clientX>innerWidth*.42){mouse.x=t.clientX;mouse.y=t.clientY}
+ }
+},{passive:true});
+gc.addEventListener('touchstart',e=>{
+ if(e.touches.length&&e.touches[0].clientX>innerWidth*.42){mouse.x=e.touches[0].clientX;mouse.y=e.touches[0].clientY}
+},{passive:true});
+
+/* GAME LOOP */
+function loop(now){
+ if(!$('battle').classList.contains('on'))return;
+ const dt=Math.min(40,now-last);last=now;
+ update(dt);drawWorld();requestAnimationFrame(loop);
+}
 setInterval(()=>{
-
- if(
-  !$("garage")
-   .classList
-   .contains("active")
- )
-  return;
-
- if(
-  Math.random()>.35
- )
-  return;
-
- const names=[
-  "Raptor",
-  "SteelFox",
-  "Viking",
-  "Hunter"
- ];
-
- const name=
-  names[
-   Math.floor(
-    Math.random()*
-    names.length
-   )
+ if($('battle').classList.contains('on')&&Math.random()<.15){
+  const lines=[
+   ['System','Supply boxes are falling.'],
+   ['Tanker','Кто видел Gold?'],
+   ['Veteran','Смотрите мост!'],
+   ['Newbie','Как тут стрелять?'],
+   ['System','Припасы готовы к подбору.']
   ];
-
- const msg=
-  botMessages[
-   Math.floor(
-    Math.random()*
-    botMessages.length
-   )
-  ];
-
- addChat(
-  $("garageChat"),
-  name,
-  msg
- );
-
-},6500);
-
-/* =========================================================
- KEYBOARD SHORTCUTS
-========================================================= */
-
-document.addEventListener(
- "keydown",
- e=>{
-
-  if(
-   e.key==="F1"
-  ){
-
-   e.preventDefault();
-
-   openBattleList();
-
-  }
-
-  if(
-   e.key==="Tab"
-   &&
-   $("battle")
-    .classList
-    .contains("active")
-  ){
-
-   e.preventDefault();
-
-   showScoreboard();
-
-  }
-
+  addChat(pick(lines)[0],pick(lines)[1]);
  }
-);
+},5000);
 
-/* =========================================================
- TAB RELEASE
-========================================================= */
+/* BOOT */
+let bp=0;
+const bootInt=setInterval(()=>{
+ bp+=rndi(5,13);bp=clamp(bp,0,100);$('bootBar').style.width=bp+'%';
+ $('bootText').textContent=pick(['ЗАГРУЗКА ТЕКСТУР...','ЗАГРУЗКА КАРТ...','ПОДГОТОВКА БОЕПРИПАСОВ...','ПРОВЕРКА АРЕН...','ЗАПУСК КЛАССИЧЕСКОГО КЛИЕНТА...']);
+ if(bp>=100){clearInterval(bootInt);setTimeout(()=>show('auth'),500)}
+},90);
 
-document.addEventListener(
- "keyup",
- e=>{
-
-  if(
-   e.key==="Tab"
-  ){
-
-   setTimeout(
-    hideScoreboard,
-    1200
-   );
-
-  }
-
- }
-);
-
+updateLobby();
+addChat('System','Классический чат подключён.');
+addChat('Veteran','Добро пожаловать на архивный сервер.');
+addChat('System','Дождя нет. Только день, ночь и зима.');
+addChat('System','Gold Box появляется редко и не гарантирован.');
 </script>
-
 </body>
 </html>
