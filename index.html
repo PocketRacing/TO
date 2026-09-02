@@ -1,350 +1,1093 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>TANK ARENA — Retro 2012</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:#071019;color:#eee}
-button,input{font:inherit}button{cursor:pointer}
-:root{--blue:#1595d0;--blue2:#0b5f8b;--dark:#071019;--panel:#101b23;--line:#344955;--gold:#e7bd43}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.025),transparent 30%,rgba(0,0,0,.2)),repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 1px,transparent 1px 4px);z-index:9999}
-
-/* LOADING */
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#060b0f;color:#dce5e8;font-family:Arial,Helvetica,sans-serif}
+body{user-select:none}
+button,input{font-family:inherit}
+button{cursor:pointer}
+:root{--a:#1b91c5;--a2:#0d526f;--p:#101b22;--p2:#17262e;--line:#40545e;--gold:#e7bb3e;--green:#50bd5e;--red:#c95353}
 .screen{position:absolute;inset:0;display:none}
-.screen.active{display:block}
-#boot{background:radial-gradient(circle at 50% 35%,#263943,#081016 70%);z-index:50}
-.bootLogo{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%);text-align:center}
-.logoTank{font-size:64px;font-weight:900;letter-spacing:8px;text-shadow:0 4px 0 #000,0 0 25px #258ec0}
-.logoTank span{color:#48b8ea}
-.logoSub{font-size:13px;letter-spacing:5px;color:#93a7b0;margin-top:8px}
-.loader{width:420px;max-width:80vw;height:8px;background:#101a20;border:1px solid #45555d;margin:35px auto 12px;box-shadow:inset 0 0 6px #000}
-.loader i{display:block;width:0;height:100%;background:linear-gradient(90deg,#0874a8,#64d3ff);box-shadow:0 0 12px #1595d0;transition:width .15s}
-.loadText{font-size:11px;color:#8fa2aa;text-transform:uppercase}
-.bootTip{position:absolute;bottom:35px;width:100%;text-align:center;color:#60747e;font-size:12px}
+.screen.on{display:block}
+.hide{display:none!important}
 
-/* LOGIN */
-#login{background:linear-gradient(#09131a,#101d24 50%,#060c10)}
-.loginBg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 70%,rgba(31,115,151,.25),transparent 55%)}
-.loginBox{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:430px;max-width:92vw;background:rgba(12,22,29,.96);border:1px solid #435761;box-shadow:0 20px 70px #000;padding:28px}
-.loginTitle{text-align:center;font-size:28px;font-weight:bold;letter-spacing:4px;margin-bottom:4px}
-.loginTitle b{color:#2da8dc}.loginHint{text-align:center;color:#70848c;font-size:11px;margin-bottom:25px}
-.field{margin:10px 0}.field label{display:block;font-size:10px;color:#80949d;text-transform:uppercase;margin-bottom:5px}
-.field input{width:100%;padding:12px;background:#071016;border:1px solid #344650;color:#fff;outline:none}
-.field input:focus{border-color:#1d9bd2}
-.btn{border:1px solid #4a6875;background:linear-gradient(#217da4,#0b4058);color:#fff;padding:12px 18px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;box-shadow:inset 0 1px rgba(255,255,255,.15)}
-.btn:hover{filter:brightness(1.2)}
-.btn.big{width:100%;font-size:16px;margin-top:12px}
-.loginFoot{text-align:center;color:#52666e;font-size:10px;margin-top:18px}
+/* =========================================================
+   COMMON
+========================================================= */
+.panel{background:linear-gradient(#17262e,#0b151b);border:1px solid #40545e;box-shadow:0 12px 40px #000b}
+.btn{
+ border:1px solid #52717d;
+ background:linear-gradient(#286f8c,#0e4055);
+ color:#eef8fb;
+ min-height:40px;
+ padding:0 18px;
+ font-size:11px;
+ font-weight:bold;
+ letter-spacing:1px;
+ text-transform:uppercase;
+ box-shadow:inset 0 1px #ffffff33,0 2px 3px #0008;
+ transition:.12s;
+}
+.btn:hover{filter:brightness(1.22)}
+.btn:active{transform:translateY(1px)}
+.btn.blue{background:linear-gradient(#24a4d5,#0b5878)}
+.btn.gold{background:linear-gradient(#9c7d27,#51400f);border-color:#b99a3e}
+.btn.red{background:linear-gradient(#8b3b3b,#4b2020);border-color:#9a5555}
+.btn.dark{background:linear-gradient(#33434b,#151f24)}
+.titlebar{
+ height:46px;
+ display:flex;
+ align-items:center;
+ padding:0 16px;
+ background:linear-gradient(#1c2c34,#0d171d);
+ border-bottom:1px solid #435760;
+}
+.titlebar b{letter-spacing:2px}
+.closeBtn{margin-left:auto;background:none;border:0;color:#a9b5b9;font-size:23px}
 
-/* GARAGE */
-#garage{background:#0a1218}
-.top{height:57px;background:linear-gradient(#1c2b34,#0c171e);border-bottom:1px solid #3b4e57;display:flex;align-items:center;padding:0 18px;gap:20px}
-.miniLogo{font-weight:900;letter-spacing:2px;font-size:18px}.miniLogo b{color:#35afe4}
-.player{margin-left:auto;display:flex;align-items:center;gap:13px;font-size:12px}
-.rank{width:32px;height:32px;border:1px solid #78909b;background:linear-gradient(#526873,#202e35);display:grid;place-items:center;font-weight:bold}
-.currency{color:#61c8ee}.currency.gold{color:var(--gold)}
-.layout{position:absolute;top:57px;bottom:0;left:0;right:0;display:grid;grid-template-columns:250px 1fr 280px}
-.left,.right{background:linear-gradient(90deg,#101c23,#0a1319);border-right:1px solid #33444d;padding:12px}
-.right{border-left:1px solid #33444d;border-right:0}
-.sectionTitle{font-size:10px;color:#68808b;text-transform:uppercase;letter-spacing:2px;padding:9px 5px;border-bottom:1px solid #293941;margin-bottom:5px}
-.menuItem{padding:13px 10px;color:#c5d1d6;border-bottom:1px solid #1d2a30;font-size:13px}
-.menuItem:hover,.menuItem.sel{background:linear-gradient(90deg,#164c64,#10232d);color:#fff;border-left:3px solid #28a9dc}
-.center{position:relative;background:radial-gradient(ellipse at center,#304047 0,#121d23 48%,#080e12 100%);overflow:hidden}
-.center:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(255,255,255,.015) 8px),linear-gradient(90deg,transparent,#0002,transparent);pointer-events:none}
-.floor{position:absolute;left:5%;right:5%;bottom:-8%;height:65%;transform:perspective(500px) rotateX(58deg);background:repeating-linear-gradient(90deg,#26363c 0 70px,#202e34 71px 72px),repeating-linear-gradient(0deg,transparent 0 70px,#1c292f 71px 72px);opacity:.65}
-.tankPlaceholder{position:absolute;z-index:3;left:50%;top:48%;transform:translate(-50%,-50%);width:330px;height:190px}
-.tbody{position:absolute;width:230px;height:90px;left:50px;top:75px;background:linear-gradient(#596b70,#27373d);clip-path:polygon(9% 10%,90% 10%,100% 38%,93% 85%,8% 85%,0 50%);border:1px solid #9aa7aa;box-shadow:0 25px 30px #0008}
-.turret{position:absolute;width:150px;height:75px;left:90px;top:35px;background:linear-gradient(#687b80,#293b40);clip-path:polygon(18% 10%,82% 10%,100% 60%,84% 90%,16% 90%,0 60%);z-index:2}
-.barrel{position:absolute;width:145px;height:20px;left:190px;top:53px;background:linear-gradient(#718187,#26373d);clip-path:polygon(0 20%,100% 0,100% 100%,0 80%);z-index:1}
-.track{position:absolute;width:220px;height:50px;top:110px;background:#10191d;border:5px solid #4c5b5f;border-radius:25px;z-index:0}
-.track.a{left:15px}.track.b{right:15px}
-.tankName{position:absolute;top:calc(50% + 125px);left:0;right:0;text-align:center;font-weight:bold;letter-spacing:2px}
-.stats{font-size:11px;color:#81959e}.stat{margin:15px 0}.stat div:first-child{display:flex;justify-content:space-between;margin-bottom:5px}.bar{height:7px;background:#17252c;border:1px solid #35464e}.bar i{display:block;height:100%;background:#269bc9}
-.bottomNav{position:absolute;bottom:0;left:0;right:0;height:78px;background:linear-gradient(#15242c,#091218);border-top:1px solid #41525a;z-index:8;display:flex;align-items:center;justify-content:center;gap:8px}
-.navBtn{min-width:135px;height:48px;background:linear-gradient(#34515d,#172a33);border:1px solid #526872;color:#dce7eb;font-weight:bold;text-transform:uppercase;font-size:11px}
-.navBtn.main{background:linear-gradient(#2198c6,#0c526f);border-color:#63c5e7;font-size:14px}
+/* =========================================================
+   BOOT
+========================================================= */
+#boot{
+ background:
+ radial-gradient(circle at 50% 42%,#2b4048 0,#111e25 35%,#050a0d 78%);
+}
+#boot:before,#login:before,#mapLoading:before{
+ content:"";position:absolute;inset:0;opacity:.16;
+ background:repeating-linear-gradient(0deg,transparent 0 3px,#fff 4px,#fff 5px);
+ pointer-events:none;
+}
+.bootLogo{
+ position:absolute;left:50%;top:43%;transform:translate(-50%,-50%);
+ text-align:center;width:min(650px,90%);
+}
+.bootLogo h1{
+ margin:0;font-size:68px;line-height:1;font-weight:900;letter-spacing:8px;
+ color:#e7edef;text-shadow:0 4px #000,0 0 35px #168bbb;
+}
+.bootLogo h1 span{color:#39b8e8}
+.bootLogo .sub{margin-top:10px;color:#80959e;letter-spacing:5px;font-size:12px}
+.bootBar{
+ margin:36px auto 10px;width:470px;max-width:85%;height:8px;
+ background:#071015;border:1px solid #46575e;box-shadow:inset 0 0 5px #000;
+}
+.bootBar i{display:block;width:0;height:100%;background:linear-gradient(90deg,#0b6d99,#57d3ff);box-shadow:0 0 13px #16a6dc}
+#bootStatus{font-size:11px;color:#71858d;text-transform:uppercase}
+.bootVersion{position:absolute;bottom:22px;left:25px;color:#42545b;font-size:10px}
+.bootHint{position:absolute;bottom:22px;right:25px;color:#42545b;font-size:10px}
 
-/* CHAT */
-.chat{position:absolute;left:12px;bottom:88px;width:390px;height:180px;background:rgba(5,11,15,.84);border:1px solid #3b4c54;z-index:20;box-shadow:0 5px 25px #000}
-.chatHead{height:29px;padding:7px 9px;background:#17272f;border-bottom:1px solid #3c515b;font-size:10px;color:#9eb2ba;text-transform:uppercase}
-.chatBody{height:116px;padding:7px;overflow:auto;font-size:11px;line-height:17px}
-.msg{color:#aab9be}.msg b{color:#4eb9e3}.msg.system{color:#758a93}.msg.enemy b{color:#db7373}
-.chatInput{height:34px;display:flex}.chatInput input{flex:1;background:#0a151b;border:0;border-top:1px solid #34454e;color:#ddd;padding:7px;font-size:11px;outline:none}.chatInput button{width:65px;border:0;border-top:1px solid #40535d;background:#1d5c75;color:#fff;font-size:10px}
+/* =========================================================
+   LOGIN
+========================================================= */
+#login{
+ background:
+ radial-gradient(ellipse at 50% 80%,#173b4a 0,transparent 45%),
+ linear-gradient(#081219,#101c23);
+}
+.loginScene{position:absolute;inset:0;overflow:hidden}
+.loginGrid{
+ position:absolute;left:-10%;right:-10%;bottom:-25%;height:65%;
+ transform:perspective(500px) rotateX(63deg);
+ background:
+ linear-gradient(90deg,transparent 49%,#30505c 50%,transparent 51%),
+ linear-gradient(0deg,transparent 49%,#30505c 50%,transparent 51%);
+ background-size:90px 90px;
+ opacity:.2;
+}
+.loginTank{
+ position:absolute;left:50%;bottom:17%;transform:translateX(-50%) scale(1.2);
+ width:400px;height:220px;opacity:.55;filter:drop-shadow(0 20px 18px #000);
+}
+.simpleHull{position:absolute;left:80px;top:105px;width:250px;height:85px;background:linear-gradient(#61737a,#25363c);clip-path:polygon(6% 5%,94% 5%,100% 42%,92% 95%,8% 95%,0 48%)}
+.simpleTurret{position:absolute;left:135px;top:65px;width:145px;height:70px;background:linear-gradient(#73858a,#2c3d43);clip-path:polygon(15% 5%,85% 5%,100% 62%,84% 95%,16% 95%,0 62%)}
+.simpleBarrel{position:absolute;left:260px;top:83px;width:175px;height:17px;background:linear-gradient(#809096,#2d3d42)}
+.loginBox{
+ position:absolute;z-index:3;left:50%;top:43%;transform:translate(-50%,-50%);
+ width:420px;max-width:92%;padding:28px;
+ background:rgba(8,16,21,.94);border:1px solid #4c6069;box-shadow:0 20px 80px #000;
+}
+.loginLogo{text-align:center;font-size:32px;font-weight:900;letter-spacing:5px;text-shadow:0 3px #000}
+.loginLogo span{color:#35b3e5}
+.loginSub{text-align:center;font-size:10px;color:#71858e;letter-spacing:3px;margin:5px 0 25px}
+.field{margin:11px 0}
+.field label{display:block;color:#71858e;font-size:9px;text-transform:uppercase;margin-bottom:5px}
+.field input{
+ width:100%;height:40px;background:#060e13;border:1px solid #344952;color:#fff;
+ padding:0 11px;outline:none;
+}
+.field input:focus{border-color:#219cd1}
+.loginLinks{display:flex;justify-content:space-between;color:#55717d;font-size:10px;margin-top:13px}
+.loginFoot{text-align:center;color:#3e525b;font-size:9px;margin-top:22px}
 
-/* MAP SELECT */
-.modal{position:absolute;inset:0;background:rgba(0,0,0,.72);z-index:30;display:none;align-items:center;justify-content:center}
-.modal.open{display:flex}
-.mapBox{width:800px;max-width:94vw;background:#101b22;border:1px solid #526872;box-shadow:0 20px 80px #000;padding:20px}
-.mapTitle{font-size:18px;font-weight:bold;margin-bottom:15px}
-.maps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.map{height:115px;border:1px solid #40545d;background:linear-gradient(135deg,#384d50,#111d22);position:relative;overflow:hidden;padding:9px;cursor:pointer}
-.map:hover{border-color:#37afe0}.map b{position:absolute;bottom:8px;left:10px}.map small{color:#8da0a7}
-.map.a{background:linear-gradient(135deg,#59624f,#19251f)}.map.b{background:linear-gradient(135deg,#59656a,#172027)}.map.c{background:linear-gradient(135deg,#735b42,#201814)}.map.d{background:linear-gradient(135deg,#284d5b,#101b22)}.map.e{background:linear-gradient(135deg,#696044,#1b1812)}.map.f{background:linear-gradient(135deg,#3e5260,#141b20)}
-.close{float:right;background:none;border:0;color:#aaa;font-size:20px}
+/* =========================================================
+   GARAGE
+========================================================= */
+#garage{background:#091218}
+.topbar{
+ position:absolute;left:0;right:0;top:0;height:59px;z-index:20;
+ display:flex;align-items:center;padding:0 16px;gap:22px;
+ background:linear-gradient(#1b2b33,#0b151b);border-bottom:1px solid #435760;
+}
+.brand{font-size:18px;font-weight:900;letter-spacing:2px}.brand span{color:#34afe0}
+.topSection{font-size:10px;color:#7e949d;letter-spacing:2px}
+.playerInfo{margin-left:auto;display:flex;align-items:center;gap:13px;font-size:11px}
+.avatar{width:33px;height:33px;display:grid;place-items:center;background:linear-gradient(#52656d,#202e34);border:1px solid #7b8c92;font-weight:bold}
+.money{color:#56c5ec}.crystals{color:var(--gold)}
+.garageLayout{
+ position:absolute;left:0;right:0;top:59px;bottom:0;
+ display:grid;grid-template-columns:235px 1fr 265px;
+}
+.side{
+ background:linear-gradient(90deg,#111e25,#091218);padding:10px;border-right:1px solid #354850;
+}
+.side.right{border-left:1px solid #354850;border-right:0}
+.sideTitle{
+ color:#617982;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+ padding:10px 6px;border-bottom:1px solid #26383f;
+}
+.sideItem{
+ height:41px;display:flex;align-items:center;padding:0 10px;border-bottom:1px solid #1b2a31;
+ color:#b6c4c9;font-size:11px;
+}
+.sideItem:hover,.sideItem.active{background:linear-gradient(90deg,#174b62,#0e252f);color:#fff;border-left:3px solid #2aa8db}
+.sideItem span{margin-right:9px;color:#72a5b8}
+.centerGarage{
+ position:relative;overflow:hidden;
+ background:radial-gradient(ellipse at 50% 45%,#43565b,#18252b 50%,#080e12 100%);
+}
+.centerGarage:after{
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background:linear-gradient(90deg,#0004,transparent 30%,transparent 70%,#0004),
+ repeating-linear-gradient(0deg,transparent 0 4px,#fff009 5px);
+ opacity:.06;
+}
+.garageFloor{
+ position:absolute;left:-10%;right:-10%;bottom:-18%;height:65%;
+ transform:perspective(600px) rotateX(58deg);
+ background:
+ linear-gradient(90deg,transparent 49.5%,#55666a 50%,transparent 50.5%),
+ linear-gradient(0deg,transparent 49.5%,#55666a 50%,transparent 50.5%);
+ background-size:110px 110px;opacity:.32;
+}
+.gTank{
+ position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);
+ width:420px;height:250px;z-index:4;filter:drop-shadow(0 25px 18px #000a);
+}
+.gTrack{
+ position:absolute;width:260px;height:60px;top:145px;border:7px solid #55656a;
+ background:#111a1e;border-radius:34px;
+}
+.gTrack.left{left:35px}.gTrack.right{right:35px}
+.gHull{
+ position:absolute;left:75px;top:112px;width:270px;height:105px;
+ background:linear-gradient(#66787d,#26373d);
+ clip-path:polygon(7% 4%,93% 4%,100% 42%,94% 92%,6% 92%,0 45%);
+}
+.gTurret{
+ position:absolute;left:135px;top:65px;width:160px;height:83px;
+ background:linear-gradient(#71848a,#2b3d43);
+ clip-path:polygon(14% 5%,86% 5%,100% 60%,83% 95%,17% 95%,0 60%);
+}
+.gBarrel{
+ position:absolute;left:275px;top:87px;width:190px;height:20px;
+ background:linear-gradient(#819196,#293a40);clip-path:polygon(0 15%,100% 0,100% 100%,0 85%);
+}
+.gTankName{
+ position:absolute;top:calc(50% + 137px);left:0;right:0;text-align:center;
+ font-size:13px;font-weight:bold;letter-spacing:2px;z-index:5;
+}
+.gTankSub{position:absolute;top:calc(50% + 160px);left:0;right:0;text-align:center;color:#71858d;font-size:9px;z-index:5}
+.gBottom{
+ position:absolute;left:0;right:0;bottom:0;height:72px;z-index:10;
+ background:linear-gradient(#16262e,#091218);border-top:1px solid #43565e;
+ display:flex;align-items:center;justify-content:center;gap:7px;padding:8px;
+}
+.gBottom .btn{min-width:125px}
+.statTitle{color:#617984;font-size:9px;letter-spacing:2px;border-bottom:1px solid #293a41;padding:9px 5px}
+.itemName{font-weight:bold;font-size:15px;margin:13px 5px 4px}
+.itemSub{font-size:10px;color:#70858e;margin:0 5px 14px}
+.stat{margin:13px 5px}.statLine{display:flex;justify-content:space-between;font-size:10px;margin-bottom:5px;color:#a7b7bc}
+.statBar{height:7px;background:#17242a;border:1px solid #34464e}.statBar i{display:block;height:100%;background:#2999c4}
+.equip{margin-top:20px;padding:12px;border:1px solid #33464e;background:#0a151b;font-size:10px;color:#aab8bc}
 
-/* BATTLE */
-#battle{background:#101719}
-.battleWorld{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,#60716a,#293b38 45%,#111b1c 100%)}
-.hill{position:absolute;bottom:15%;left:-5%;width:110%;height:35%;background:linear-gradient(#3e514b,#263530);clip-path:polygon(0 55%,10% 35%,20% 48%,30% 20%,43% 42%,55% 12%,70% 43%,82% 28%,100% 55%,100% 100%,0 100%);opacity:.8}
-.battleTank{position:absolute;left:50%;bottom:17%;transform:translateX(-50%);width:320px;height:180px}
-.battleTank .tbody{top:85px}.battleTank .turret{top:45px}.battleTank .barrel{top:62px}
-.crosshair{position:absolute;left:50%;top:50%;width:50px;height:50px;transform:translate(-50%,-50%);border:2px solid rgba(255,255,255,.7);border-radius:50%;z-index:10}.crosshair:before,.crosshair:after{content:"";position:absolute;background:#fff}.crosshair:before{width:2px;height:70px;left:22px;top:-12px}.crosshair:after{height:2px;width:70px;left:-12px;top:22px}
-.hudTop{position:absolute;left:15px;right:15px;top:12px;z-index:12;display:flex;justify-content:space-between}
-.team{background:rgba(4,10,13,.72);border:1px solid #40525a;padding:9px 18px;min-width:180px;text-align:center;font-size:12px}
-.team.red{border-color:#784646}.team.blue{border-color:#3e718a}
-.hp{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);width:360px;max-width:70%;height:17px;background:#111;border:1px solid #69777a;z-index:20}.hp i{display:block;height:100%;width:82%;background:linear-gradient(#59d267,#217e35)}
-.hpText{position:absolute;left:0;right:0;text-align:center;font-size:10px;line-height:15px;text-shadow:0 1px 2px #000}
-.ammo{position:absolute;right:22px;bottom:30px;background:rgba(5,10,12,.8);border:1px solid #52636a;padding:13px 20px;text-align:center;z-index:20}.ammo b{font-size:25px;color:#55bde6}.ammo small{display:block;color:#8fa0a6}
-.battleChat{bottom:25px;left:20px;height:150px;width:340px}
+/* =========================================================
+   CHAT
+========================================================= */
+.chat{
+ position:absolute;z-index:25;left:12px;bottom:84px;width:370px;height:185px;
+ background:rgba(4,9,12,.88);border:1px solid #40545c;box-shadow:0 6px 25px #000;
+}
+.chatHead{
+ height:28px;padding:7px 9px;background:linear-gradient(#1c2c34,#111e24);
+ border-bottom:1px solid #394b53;font-size:9px;letter-spacing:1px;color:#91a4ab;
+}
+.chatBody{height:122px;padding:6px 8px;overflow:auto;font-size:10px;line-height:16px}
+.chatBody::-webkit-scrollbar{width:5px}.chatBody::-webkit-scrollbar-thumb{background:#334952}
+.msg{color:#aab8bc}.msg b{color:#43b3e0}.msg.red b{color:#df6969}.msg.sys{color:#647981}
+.chatInput{height:34px;display:flex;border-top:1px solid #30434b}
+.chatInput input{flex:1;border:0;background:#091217;color:#ddd;padding:0 8px;font-size:10px;outline:none}
+.chatInput button{width:62px;border:0;background:#1a5870;color:#fff;font-size:9px}
 
-/* LOAD MAP */
-#mapload{background:#080f13;z-index:60}
-.mapPreview{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,#40565d,#0c161b 70%)}
-.mapLoadBox{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:500px;max-width:90%}
-.mapLoadBox h1{font-size:36px;margin:0;text-shadow:0 3px 4px #000}.mapLoadBox p{color:#8fa0a6;font-size:12px}
-.mapLoadBar{height:9px;border:1px solid #52636b;background:#111b20;margin-top:25px}.mapLoadBar i{display:block;height:100%;width:0;background:#38a9d5}
+/* =========================================================
+   WINDOWS
+========================================================= */
+.window{
+ position:absolute;z-index:80;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:820px;max-width:94%;max-height:88%;background:#0d181e;
+ border:1px solid #51656d;box-shadow:0 25px 100px #000;
+}
+.windowBody{padding:18px;overflow:auto;max-height:calc(88vh - 46px)}
+.overlay{position:absolute;inset:0;background:#000b;z-index:70;display:none}
+.overlay.on{display:block}
+.tabs{display:flex;border-bottom:1px solid #3b4d55;margin-bottom:15px}
+.tab{padding:10px 15px;color:#71868f;font-size:10px;border-bottom:2px solid transparent}.tab.active{color:#fff;border-color:#2ba7d8}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{
+ min-height:145px;border:1px solid #3a4d55;background:linear-gradient(135deg,#1c3038,#0b151a);
+ padding:11px;position:relative;overflow:hidden;
+}
+.card:hover{border-color:#32a9d8;box-shadow:inset 0 0 20px #159bd41a}
+.card .preview{height:82px;margin:-11px -11px 9px;background:linear-gradient(135deg,#46574f,#172329);position:relative}
+.card .preview:after{content:"";position:absolute;inset:0;background:linear-gradient(150deg,transparent 45%,#0004)}
+.card b{font-size:12px}.card small{display:block;color:#72868e;font-size:9px;margin-top:4px}
+.card .play{position:absolute;right:8px;bottom:8px;height:27px;min-width:65px;font-size:8px}
+.list{border:1px solid #33464e;background:#0a141a}
+.listRow{height:48px;display:grid;grid-template-columns:45px 1fr 100px 100px;align-items:center;padding:0 10px;border-bottom:1px solid #22343b;font-size:10px}
+.listRow:last-child{border:0}.listRow:hover{background:#12262f}
+.green{color:#59c96a}.redText{color:#db6666}.muted{color:#6d828a}
 
-/* SETTINGS */
-#garageModal{position:absolute;inset:0;background:rgba(0,0,0,.65);z-index:40;display:none;align-items:center;justify-content:center}
-.settings{width:520px;max-width:90%;background:#101c23;border:1px solid #52656e;padding:20px;box-shadow:0 20px 80px #000}
-.settings h2{margin-top:0}.settingRow{display:flex;justify-content:space-between;border-bottom:1px solid #293940;padding:14px 0;color:#aab8bd}
-.toggle{background:#235d72;border:1px solid #4f8498;color:#fff;padding:5px 15px}
-@media(max-width:900px){.layout{grid-template-columns:190px 1fr 210px}.chat{width:300px}.navBtn{min-width:100px}}
-@media(max-width:650px){.layout{grid-template-columns:1fr}.left,.right{display:none}.chat{width:calc(100% - 24px)}.bottomNav{gap:2px}.navBtn{min-width:0;flex:1;font-size:9px}.logoTank{font-size:40px}}
+/* =========================================================
+   MAP LOADING
+========================================================= */
+#mapLoading{
+ background:#070d11;z-index:100;
+}
+.mapBackdrop{
+ position:absolute;inset:0;
+ background:radial-gradient(ellipse at 50% 45%,#4c5f61,#162327 45%,#050a0d 90%);
+}
+.mapBackdrop:after{
+ content:"";position:absolute;inset:0;
+ background:linear-gradient(90deg,#0006,transparent,#0006);
+}
+.mapLoadCenter{
+ position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:560px;max-width:88%;text-align:center;
+}
+.mapSmall{font-size:10px;color:#83969d;letter-spacing:5px}
+.mapLoadCenter h1{font-size:44px;letter-spacing:5px;margin:9px 0;text-shadow:0 4px 5px #000}
+.mapInfo{color:#80949b;font-size:11px}
+.mapBar{height:9px;background:#0a1318;border:1px solid #4a5c63;margin:25px 0 10px}
+.mapBar i{display:block;width:0;height:100%;background:linear-gradient(90deg,#0878a8,#57c9ed)}
+.mapPercent{font-size:10px;color:#6e848c}
+.mapTip{position:absolute;bottom:30px;left:0;right:0;text-align:center;color:#51656d;font-size:10px}
+
+/* =========================================================
+   BATTLE
+========================================================= */
+#battle{background:#263b38;cursor:crosshair}
+.world{
+ position:absolute;inset:0;overflow:hidden;
+ background:
+ radial-gradient(ellipse at 50% 35%,#778576,#4c5e54 43%,#25352f 80%);
+}
+.worldGrid{
+ position:absolute;left:-20%;right:-20%;bottom:-40%;height:80%;
+ transform:perspective(650px) rotateX(61deg);
+ background:
+ linear-gradient(90deg,transparent 49.5%,#91a19755 50%,transparent 50.5%),
+ linear-gradient(0deg,transparent 49.5%,#91a19755 50%,transparent 50.5%);
+ background-size:100px 100px;opacity:.28;
+}
+.rock{position:absolute;background:#35463e;filter:drop-shadow(0 10px 5px #0005)}
+.rock.r1{left:5%;bottom:35%;width:160px;height:70px;clip-path:polygon(0 90%,15% 35%,35% 20%,55% 35%,80% 0,100% 90%)}
+.rock.r2{right:8%;bottom:45%;width:190px;height:80px;clip-path:polygon(0 90%,20% 20%,43% 35%,70% 0,100% 90%)}
+.rock.r3{left:35%;bottom:52%;width:130px;height:60px;clip-path:polygon(0 90%,20% 25%,55% 5%,100% 90%)}
+.battleTop{
+ position:absolute;z-index:30;left:12px;right:12px;top:10px;
+ display:flex;justify-content:space-between;align-items:start;pointer-events:none;
+}
+.score{
+ min-width:175px;padding:8px 15px;background:#071014cc;border:1px solid #41545c;
+ text-align:center;font-size:10px;box-shadow:0 3px 12px #0005;
+}
+.score.blue{border-color:#326c84}.score.red{border-color:#784747}
+.score b{font-size:17px;display:block;margin-top:3px}
+.timer{font-size:19px;font-weight:bold;text-shadow:0 2px 4px #000}
+.battleTank{
+ position:absolute;z-index:12;left:50%;bottom:15%;transform:translateX(-50%);
+ width:430px;height:270px;filter:drop-shadow(0 20px 13px #0009);
+}
+.btTrack{position:absolute;width:275px;height:62px;top:165px;border:7px solid #5c6b6e;background:#121b1f;border-radius:35px}
+.btTrack.l{left:38px}.btTrack.r{right:38px}
+.btHull{position:absolute;left:76px;top:128px;width:278px;height:108px;background:linear-gradient(#718186,#26373c);clip-path:polygon(7% 4%,93% 4%,100% 42%,94% 93%,6% 93%,0 46%)}
+.btTurret{
+ position:absolute;left:136px;top:77px;width:165px;height:88px;
+ background:linear-gradient(#788a8f,#2b3c41);clip-path:polygon(14% 4%,86% 4%,100% 60%,83% 96%,17% 96%,0 60%);
+}
+.btBarrel{position:absolute;left:276px;top:98px;width:190px;height:20px;background:linear-gradient(#829197,#2a3a40);clip-path:polygon(0 18%,100% 0,100% 100%,0 82%)}
+.enemyTank{position:absolute;z-index:10;width:210px;height:130px;opacity:.92}
+.enemyTank .eh{position:absolute;left:35px;top:60px;width:140px;height:50px;background:#793f3f;clip-path:polygon(5% 5%,95% 5%,100% 90%,0 90%)}
+.enemyTank .et{position:absolute;left:70px;top:35px;width:85px;height:50px;background:#965050;clip-path:polygon(10% 5%,90% 5%,100% 70%,85% 100%,15% 100%,0 70%)}
+.enemyTank .eb{position:absolute;left:140px;top:48px;width:90px;height:10px;background:#9c6060}
+.enemyTank.e1{left:17%;top:30%}.enemyTank.e2{right:17%;top:24%;transform:scale(.8)}.enemyTank.e3{right:32%;top:44%;transform:scale(.65)}
+.enemyName{position:absolute;top:-18px;left:0;right:0;text-align:center;color:#f08787;font-size:10px;text-shadow:0 2px #000}
+.crosshair{
+ position:absolute;z-index:25;left:50%;top:50%;width:55px;height:55px;
+ transform:translate(-50%,-50%);border:1px solid #ffffffaa;border-radius:50%;pointer-events:none;
+}
+.crosshair:before,.crosshair:after{content:"";position:absolute;background:#fff9}
+.crosshair:before{width:1px;height:80px;left:26px;top:-14px}.crosshair:after{height:1px;width:80px;left:-14px;top:26px}
+.hitMarker{
+ position:absolute;z-index:40;left:50%;top:50%;transform:translate(-50%,-50%) rotate(45deg);
+ width:18px;height:18px;border:3px solid #fff;opacity:0;pointer-events:none;
+}
+.hitMarker.show{animation:hit .25s}
+@keyframes hit{0%{opacity:1;transform:translate(-50%,-50%) scale(.6) rotate(45deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.4) rotate(45deg)}}
+.battleHud{
+ position:absolute;z-index:35;left:15px;right:15px;bottom:15px;pointer-events:none;
+}
+.health{
+ width:370px;max-width:40vw;height:20px;background:#080d0f;border:1px solid #69787c;
+ position:absolute;left:50%;bottom:5px;transform:translateX(-50%);
+}
+.health i{display:block;width:100%;height:100%;background:linear-gradient(#63d66e,#257b30)}
+.health span{position:absolute;inset:0;text-align:center;font-size:10px;line-height:18px;text-shadow:0 1px 3px #000}
+.ammoBox{
+ position:absolute;right:5px;bottom:0;width:110px;height:72px;
+ background:#071014dd;border:1px solid #4a5c64;text-align:center;padding:8px;
+}
+.ammoBox small{display:block;font-size:8px;color:#738991}.ammoBox b{display:block;font-size:26px;color:#5bc8ee}
+.weaponBox{
+ position:absolute;left:5px;bottom:0;width:150px;height:72px;
+ background:#071014dd;border:1px solid #4a5c64;padding:9px;
+}
+.weaponBox b{font-size:13px}.weaponBox small{display:block;color:#71858c;font-size:8px;margin-top:6px}
+.battleChat{left:15px;bottom:100px;width:340px;height:155px}
+.battleChat .chatBody{height:92px}
+.pickup{
+ position:absolute;z-index:18;width:35px;height:35px;border:2px solid #c5ecff;
+ background:#36a9d988;transform:rotate(45deg);box-shadow:0 0 20px #37bce9;
+}
+.pickup:after{content:"+";position:absolute;inset:0;display:grid;place-items:center;transform:rotate(-45deg);font-weight:bold;font-size:22px}
+.p1{left:30%;top:55%}.p2{right:25%;top:65%}.p3{left:57%;top:32%}
+
+/* SCOREBOARD */
+.scoreboard{
+ position:absolute;z-index:90;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:700px;max-width:90%;background:#091319ee;border:1px solid #52666f;box-shadow:0 25px 80px #000;
+ display:none;
+}
+.scoreboard.on{display:block}
+
+/* ESC MENU */
+.esc{
+ position:absolute;z-index:120;inset:0;background:#0009;display:none;align-items:center;justify-content:center;
+}
+.esc.on{display:flex}
+.escBox{width:330px;background:#0d181e;border:1px solid #536770;padding:20px;text-align:center;box-shadow:0 25px 90px #000}
+.escBox h2{letter-spacing:3px}
+
+/* NOTIFY */
+#notify{
+ position:absolute;z-index:200;left:50%;top:20px;transform:translateX(-50%) translateY(-100px);
+ min-width:270px;padding:12px 20px;text-align:center;background:#09151bdd;border:1px solid #45616c;
+ box-shadow:0 8px 30px #000;transition:.3s;font-size:11px;
+}
+#notify.on{transform:translateX(-50%) translateY(0)}
+
+/* SHOP */
+.shopItem{display:grid;grid-template-columns:100px 1fr 120px;gap:15px;align-items:center;border-bottom:1px solid #273941;padding:13px 5px}
+.shopIcon{height:65px;background:linear-gradient(#485b61,#1c2a30);border:1px solid #50656c;position:relative}
+.shopIcon:after{content:"";position:absolute;width:55px;height:18px;left:23px;top:25px;background:#718186;clip-path:polygon(0 30%,100% 0,100% 100%,0 70%)}
+.shopInfo b{font-size:13px}.shopInfo small{display:block;color:#71858d;margin-top:6px;font-size:9px}
+.shopPrice{text-align:right;color:#5bc6eb;font-size:11px}
+
+/* PROFILE */
+.profileGrid{display:grid;grid-template-columns:170px 1fr;gap:20px}
+.bigAvatar{height:170px;border:1px solid #4e636b;background:radial-gradient(circle,#50636a,#18262d);display:grid;place-items:center;font-size:65px}
+.achievement{display:inline-block;padding:10px;border:1px solid #344850;background:#0a151a;margin:5px;font-size:10px;color:#8ea0a6}
+
+/* RESPONSIVE */
+@media(max-width:950px){
+ .garageLayout{grid-template-columns:190px 1fr 220px}
+ .gTank{transform:translate(-50%,-50%) scale(.8)}
+ .cards{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+ .topSection,.side.right{display:none}
+ .garageLayout{grid-template-columns:1fr}
+ .side{display:none}
+ .playerInfo{gap:7px}
+ .chat{width:calc(100% - 24px);bottom:80px}
+ .gTank{transform:translate(-50%,-50%) scale(.65)}
+ .battleChat{width:270px}
+ .score{min-width:100px}
+ .score b{font-size:13px}
+ .cards{grid-template-columns:1fr}
+ .window{max-height:94%}
+ .shopItem{grid-template-columns:65px 1fr 85px}
+}
 </style>
 </head>
 <body>
 
-<!-- BOOT -->
-<section id="boot" class="screen active">
+<!-- =========================================================
+ BOOT
+========================================================= -->
+<section id="boot" class="screen on">
  <div class="bootLogo">
-  <div class="logoTank">TANK <span>ARENA</span></div>
-  <div class="logoSub">RETRO BATTLE SYSTEM • 2012</div>
-  <div class="loader"><i id="bootBar"></i></div>
-  <div class="loadText" id="bootText">Инициализация...</div>
+  <h1>TANK <span>ARENA</span></h1>
+  <div class="sub">RETRO ARCADE TANK BATTLE</div>
+  <div class="bootBar"><i id="bootProgress"></i></div>
+  <div id="bootStatus">Инициализация клиента...</div>
  </div>
- <div class="bootTip">Загрузка игрового клиента...</div>
+ <div class="bootVersion">CLIENT 2012 • BUILD 0415</div>
+ <div class="bootHint">PLEASE WAIT...</div>
 </section>
 
-<!-- LOGIN -->
+<!-- =========================================================
+ LOGIN
+========================================================= -->
 <section id="login" class="screen">
- <div class="loginBg"></div>
+ <div class="loginScene">
+  <div class="loginGrid"></div>
+  <div class="loginTank">
+   <div class="simpleHull"></div><div class="simpleTurret"></div><div class="simpleBarrel"></div>
+  </div>
+ </div>
  <div class="loginBox">
-  <div class="loginTitle">TANK <b>ARENA</b></div>
-  <div class="loginHint">АРКАДНЫЕ ТАНКОВЫЕ СРАЖЕНИЯ</div>
-  <div class="field"><label>Имя игрока</label><input id="nick" value="TankCommander" maxlength="18"></div>
+  <div class="loginLogo">TANK <span>ARENA</span></div>
+  <div class="loginSub">ВХОД В ИГРОВОЙ КЛИЕНТ</div>
+  <div class="field"><label>Имя игрока</label><input id="nickInput" maxlength="18" value="TankCommander"></div>
   <div class="field"><label>Пароль</label><input type="password" value="123456"></div>
-  <button class="btn big" onclick="enterGarage()">ВОЙТИ В ИГРУ</button>
-  <div class="loginFoot">РЕТРО-КЛИЕНТ • СЕТЕВАЯ АРЕНА</div>
+  <button class="btn blue" style="width:100%;height:45px" onclick="login()">ВОЙТИ В ИГРУ</button>
+  <div class="loginLinks"><span>Регистрация</span><span>Забыли пароль?</span></div>
+  <div class="loginFoot">RETRO CLIENT • 2012 EDITION<br>Все данные сохраняются локально в браузере</div>
  </div>
 </section>
 
-<!-- GARAGE -->
+<!-- =========================================================
+ GARAGE
+========================================================= -->
 <section id="garage" class="screen">
- <div class="top">
-  <div class="miniLogo">TANK <b>ARENA</b></div>
-  <div style="font-size:10px;color:#70858e">ГАРАЖ</div>
-  <div class="player"><span id="playerNick">TankCommander</span><div class="rank">3</div><span class="currency">💎 12 450</span><span class="currency gold">★ 125</span></div>
- </div>
- <div class="layout">
-  <aside class="left">
-   <div class="sectionTitle">Навигация</div>
-   <div class="menuItem sel">▣ Гараж</div>
-   <div class="menuItem" onclick="openMaps()">⚔ Битвы</div>
-   <div class="menuItem">▤ Магазин</div>
-   <div class="menuItem">◉ Профиль</div>
-   <div class="menuItem" onclick="settings()">⚙ Настройки</div>
-   <div class="sectionTitle">Мой танк</div>
-   <div class="menuItem">Корпус</div>
-   <div class="menuItem">Пушка</div>
-   <div class="menuItem">Краска</div>
+ <header class="topbar">
+  <div class="brand">TANK <span>ARENA</span></div>
+  <div class="topSection">ГАРАЖ</div>
+  <div class="playerInfo">
+   <span id="topNick">TankCommander</span>
+   <div class="avatar" id="topAvatar">3</div>
+   <span class="money">💎 <b id="money">12450</b></span>
+   <span class="crystals">★ <b id="gold">125</b></span>
+  </div>
+ </header>
+
+ <div class="garageLayout">
+  <aside class="side">
+   <div class="sideTitle">Главное меню</div>
+   <div class="sideItem active"><span>▣</span>Гараж</div>
+   <div class="sideItem" onclick="openBattleWindow()"><span>⚔</span>Битвы</div>
+   <div class="sideItem" onclick="openShop()"><span>▤</span>Магазин</div>
+   <div class="sideItem" onclick="openProfile()"><span>●</span>Профиль</div>
+   <div class="sideItem" onclick="openSettings()"><span>⚙</span>Настройки</div>
+
+   <div class="sideTitle" style="margin-top:12px">Мой танк</div>
+   <div class="sideItem"><span>▰</span>Корпус <small style="margin-left:auto;color:#5cbde1">WASP M1</small></div>
+   <div class="sideItem"><span>◈</span>Пушка <small style="margin-left:auto;color:#5cbde1">SMOKY M1</small></div>
+   <div class="sideItem"><span>◆</span>Краска <small style="margin-left:auto;color:#5cbde1">GREEN</small></div>
+
+   <div class="sideTitle" style="margin-top:12px">Сервисы</div>
+   <div class="sideItem" onclick="notify('Сервис ремонта пока недоступен')"><span>🔧</span>Ремонт</div>
+   <div class="sideItem" onclick="notify('Боеприпасы пополнены')"><span>▣</span>Боеприпасы</div>
   </aside>
 
-  <main class="center">
-   <div class="floor"></div>
-   <div class="tankPlaceholder">
-    <div class="track a"></div><div class="track b"></div>
-    <div class="tbody"></div><div class="turret"></div><div class="barrel"></div>
+  <main class="centerGarage">
+   <div class="garageFloor"></div>
+   <div class="gTank">
+    <div class="gTrack left"></div><div class="gTrack right"></div>
+    <div class="gHull"></div><div class="gTurret"></div><div class="gBarrel"></div>
    </div>
-   <div class="tankName">WASP M1 • SMOKY M1</div>
+   <div class="gTankName">WASP M1</div>
+   <div class="gTankSub">SMOKY M1 • GREEN PAINT</div>
 
    <div class="chat">
-    <div class="chatHead">Общий чат</div>
+    <div class="chatHead">ОБЩИЙ ЧАТ</div>
     <div class="chatBody" id="garageChat">
-     <div class="msg system">[Система] Добро пожаловать на арену.</div>
+     <div class="msg sys">[Система] Добро пожаловать на арену.</div>
      <div class="msg"><b>ProTank:</b> всем привет!</div>
-     <div class="msg"><b>Raptor:</b> кто на CTF?</div>
-     <div class="msg"><b>SteelFox:</b> я через минуту.</div>
+     <div class="msg"><b>Raptor:</b> кто в Sandbox?</div>
+     <div class="msg"><b>SteelFox:</b> сейчас зайду.</div>
+     <div class="msg"><b>Viking:</b> собираемся в CTF.</div>
     </div>
-    <div class="chatInput"><input id="chatInput" placeholder="Введите сообщение..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">ОТПР.</button></div>
+    <div class="chatInput">
+     <input id="garageChatInput" placeholder="Введите сообщение..." onkeydown="if(event.key==='Enter')sendGarageChat()">
+     <button onclick="sendGarageChat()">ОТПР.</button>
+    </div>
    </div>
 
-   <div class="bottomNav">
-    <button class="navBtn main" onclick="openMaps()">⚔ БИТЬСЯ</button>
-    <button class="navBtn">▣ ГАРАЖ</button>
-    <button class="navBtn">▤ МАГАЗИН</button>
-    <button class="navBtn" onclick="settings()">⚙ НАСТРОЙКИ</button>
+   <div class="gBottom">
+    <button class="btn blue" onclick="openBattleWindow()">⚔ БИТЬСЯ</button>
+    <button class="btn dark" onclick="notify('Вы уже находитесь в гараже')">▣ ГАРАЖ</button>
+    <button class="btn dark" onclick="openShop()">▤ МАГАЗИН</button>
+    <button class="btn dark" onclick="openProfile()">● ПРОФИЛЬ</button>
    </div>
   </main>
 
-  <aside class="right">
-   <div class="sectionTitle">Танк</div>
-   <h3 style="margin:10px 4px">WASP M1</h3>
-   <div class="stats">
-    <div class="stat"><div><span>Броня</span><b>42</b></div><div class="bar"><i style="width:42%"></i></div></div>
-    <div class="stat"><div><span>Скорость</span><b>86</b></div><div class="bar"><i style="width:86%"></i></div></div>
-    <div class="stat"><div><span>Поворот</span><b>73</b></div><div class="bar"><i style="width:73%"></i></div></div>
-   </div>
-   <div class="sectionTitle" style="margin-top:25px">Оружие</div>
-   <h3 style="margin:10px 4px">SMOKY M1</h3>
-   <div class="stats">
-    <div class="stat"><div><span>Урон</span><b>68</b></div><div class="bar"><i style="width:68%"></i></div></div>
-    <div class="stat"><div><span>Перезарядка</span><b>55</b></div><div class="bar"><i style="width:55%"></i></div></div>
-   </div>
+  <aside class="side right">
+   <div class="statTitle">КОРПУС</div>
+   <div class="itemName">WASP M1</div>
+   <div class="itemSub">Лёгкий и быстрый корпус</div>
+   <div class="stat"><div class="statLine"><span>Броня</span><b>42</b></div><div class="statBar"><i style="width:42%"></i></div></div>
+   <div class="stat"><div class="statLine"><span>Скорость</span><b>86</b></div><div class="statBar"><i style="width:86%"></i></div></div>
+   <div class="stat"><div class="statLine"><span>Поворот</span><b>73</b></div><div class="statBar"><i style="width:73%"></i></div></div>
+
+   <div class="statTitle" style="margin-top:20px">ПУШКА</div>
+   <div class="itemName">SMOKY M1</div>
+   <div class="itemSub">Универсальная пушка</div>
+   <div class="stat"><div class="statLine"><span>Урон</span><b>68</b></div><div class="statBar"><i style="width:68%"></i></div></div>
+   <div class="stat"><div class="statLine"><span>Скорострельность</span><b>55</b></div><div class="statBar"><i style="width:55%"></i></div></div>
+
+   <div class="equip">★ МОДИФИКАЦИЯ M1<br><span style="color:#617a84">Следующее улучшение доступно</span></div>
   </aside>
  </div>
 </section>
 
-<!-- MAP SELECT -->
-<div id="mapModal" class="modal">
- <div class="mapBox">
-  <button class="close" onclick="closeMaps()">×</button>
-  <div class="mapTitle">ВЫБОР БИТВЫ</div>
-  <div class="maps">
-   <div class="map a" onclick="startMap('SANDBOX')"><small>DM • 10 игроков</small><b>SANDBOX</b></div>
-   <div class="map b" onclick="startMap('BARDА')"><small>TDM • 14 игроков</small><b>BARDA</b></div>
-   <div class="map c" onclick="startMap('BERLIN')"><small>CTF • 16 игроков</small><b>BERLIN</b></div>
-   <div class="map d" onclick="startMap('BRIDGE')"><small>TDM • 12 игроков</small><b>BRIDGE</b></div>
-   <div class="map e" onclick="startMap('FORT KNOX')"><small>CTF • 18 игроков</small><b>FORT KNOX</b></div>
-   <div class="map f" onclick="startMap('SILENCE')"><small>DM • 8 игроков</small><b>SILENCE</b></div>
+<!-- =========================================================
+ GENERIC OVERLAY
+========================================================= -->
+<div id="overlay" class="overlay"></div>
+
+<!-- =========================================================
+ BATTLE WINDOW
+========================================================= -->
+<div id="battleWindow" class="window hide">
+ <div class="titlebar"><b>БИТВЫ</b><button class="closeBtn" onclick="closeWindows()">×</button></div>
+ <div class="windowBody">
+  <div class="tabs">
+   <div class="tab active">ВСЕ БИТВЫ</div>
+   <div class="tab">DM</div><div class="tab">TDM</div><div class="tab">CTF</div>
+  </div>
+  <div class="list">
+   <div class="listRow"><b>01</b><span><b>Sandbox</b><br><span class="muted">DM • 10 игроков</span></span><span class="green">7/10</span><button class="btn blue" onclick="beginMap('SANDBOX','DM','10')">ВОЙТИ</button></div>
+   <div class="listRow"><b>02</b><span><b>Barda</b><br><span class="muted">TDM • 14 игроков</span></span><span class="green">11/14</span><button class="btn blue" onclick="beginMap('BARDA','TDM','14')">ВОЙТИ</button></div>
+   <div class="listRow"><b>03</b><span><b>Berlin</b><br><span class="muted">CTF • 16 игроков</span></span><span class="green">12/16</span><button class="btn blue" onclick="beginMap('BERLIN','CTF','16')">ВОЙТИ</button></div>
+   <div class="listRow"><b>04</b><span><b>Bridge</b><br><span class="muted">TDM • 12 игроков</span></span><span class="green">8/12</span><button class="btn blue" onclick="beginMap('BRIDGE','TDM','12')">ВОЙТИ</button></div>
+   <div class="listRow"><b>05</b><span><b>Fort Knox</b><br><span class="muted">CTF • 18 игроков</span></span><span class="green">16/18</span><button class="btn blue" onclick="beginMap('FORT KNOX','CTF','18')">ВОЙТИ</button></div>
+   <div class="listRow"><b>06</b><span><b>Silence</b><br><span class="muted">DM • 8 игроков</span></span><span class="green">5/8</span><button class="btn blue" onclick="beginMap('SILENCE','DM','8')">ВОЙТИ</button></div>
+   <div class="listRow"><b>07</b><span><b>Rio</b><br><span class="muted">TDM • 14 игроков</span></span><span class="green">9/14</span><button class="btn blue" onclick="beginMap('RIO','TDM','14')">ВОЙТИ</button></div>
+   <div class="listRow"><b>08</b><span><b>Island</b><br><span class="muted">CTF • 16 игроков</span></span><span class="green">13/16</span><button class="btn blue" onclick="beginMap('ISLAND','CTF','16')">ВОЙТИ</button></div>
   </div>
  </div>
 </div>
 
-<!-- MAP LOADING -->
-<section id="mapload" class="screen">
- <div class="mapPreview"></div>
- <div class="mapLoadBox">
-  <div style="font-size:10px;letter-spacing:4px;color:#79919b">ЗАГРУЗКА БОЯ</div>
-  <h1 id="mapName">SANDBOX</h1>
-  <p id="mapStatus">Подготовка игровой арены...</p>
-  <div class="mapLoadBar"><i id="mapBar"></i></div>
-  <p id="mapPercent">0%</p>
+<!-- =========================================================
+ SHOP
+========================================================= -->
+<div id="shopWindow" class="window hide">
+ <div class="titlebar"><b>МАГАЗИН</b><button class="closeBtn" onclick="closeWindows()">×</button></div>
+ <div class="windowBody">
+  <div class="tabs"><div class="tab active">КОРПУСА</div><div class="tab">ПУШКИ</div><div class="tab">КРАСКИ</div><div class="tab">ПРЕДМЕТЫ</div></div>
+
+  <div class="shopItem">
+   <div class="shopIcon"></div><div class="shopInfo"><b>WASP M1</b><small>Быстрый лёгкий корпус. Отличная манёвренность.</small></div>
+   <div class="shopPrice">УЖЕ КУПЛЕН<br><button class="btn" onclick="notify('WASP уже установлен')">ВЫБРАТЬ</button></div>
+  </div>
+  <div class="shopItem">
+   <div class="shopIcon"></div><div class="shopInfo"><b>HUNTER M1</b><small>Сбалансированный корпус для любого боя.</small></div>
+   <div class="shopPrice">5 500 💎<br><button class="btn" onclick="buy(5500,'HUNTER M1')">КУПИТЬ</button></div>
+  </div>
+  <div class="shopItem">
+   <div class="shopIcon"></div><div class="shopInfo"><b>TITAN M1</b><small>Тяжёлый корпус с большим запасом прочности.</small></div>
+   <div class="shopPrice">12 000 💎<br><button class="btn" onclick="buy(12000,'TITAN M1')">КУПИТЬ</button></div>
+  </div>
+  <div class="shopItem">
+   <div class="shopIcon"></div><div class="shopInfo"><b>THUNDER M1</b><small>Мощная пушка с большим уроном.</small></div>
+   <div class="shopPrice">8 000 💎<br><button class="btn" onclick="buy(8000,'THUNDER M1')">КУПИТЬ</button></div>
+  </div>
+  <div class="shopItem">
+   <div class="shopIcon"></div><div class="shopInfo"><b>TWINS M1</b><small>Двойной ствол и высокая скорострельность.</small></div>
+   <div class="shopPrice">7 200 💎<br><button class="btn" onclick="buy(7200,'TWINS M1')">КУПИТЬ</button></div>
+  </div>
  </div>
+</div>
+
+<!-- =========================================================
+ PROFILE
+========================================================= -->
+<div id="profileWindow" class="window hide">
+ <div class="titlebar"><b>ПРОФИЛЬ ИГРОКА</b><button class="closeBtn" onclick="closeWindows()">×</button></div>
+ <div class="windowBody">
+  <div class="profileGrid">
+   <div><div class="bigAvatar">3</div><div style="text-align:center;margin-top:9px"><b id="profileNick">TankCommander</b></div></div>
+   <div>
+    <h2 style="margin-top:0">TankCommander</h2>
+    <div class="muted">Звание: Новобранец III</div>
+    <div style="margin-top:20px">ОПЫТ <b>1 240 / 2 000</b></div>
+    <div class="statBar" style="margin-top:7px"><i style="width:62%"></i></div>
+    <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+     <div class="panel" style="padding:14px">ПОБЕД<br><b style="font-size:22px">38</b></div>
+     <div class="panel" style="padding:14px">ПОРАЖЕНИЙ<br><b style="font-size:22px">21</b></div>
+     <div class="panel" style="padding:14px">УНИЧТОЖЕНО<br><b style="font-size:22px">146</b></div>
+     <div class="panel" style="padding:14px">ВРЕМЯ БОЯ<br><b style="font-size:22px">8ч 42м</b></div>
+    </div>
+   </div>
+  </div>
+  <h3 style="margin-top:25px">ДОСТИЖЕНИЯ</h3>
+  <div class="achievement">★ ПЕРВАЯ ПОБЕДА</div>
+  <div class="achievement">◆ 100 УНИЧТОЖЕНИЙ</div>
+  <div class="achievement">⚔ ВЕТЕРАН АРЕНЫ</div>
+ </div>
+</div>
+
+<!-- =========================================================
+ SETTINGS
+========================================================= -->
+<div id="settingsWindow" class="window hide">
+ <div class="titlebar"><b>НАСТРОЙКИ</b><button class="closeBtn" onclick="closeWindows()">×</button></div>
+ <div class="windowBody">
+  <div class="settingLine">Музыка <button class="btn dark" id="musicToggle" onclick="toggleMusic()">ВКЛЮЧЕНА</button></div>
+  <div class="settingLine">Звуки <button class="btn dark" id="soundToggle" onclick="toggleSound()">ВКЛЮЧЕНЫ</button></div>
+  <div class="settingLine">Качество графики <button class="btn dark">ВЫСОКОЕ</button></div>
+  <div class="settingLine">Полный экран <button class="btn dark" onclick="goFullscreen()">ВКЛЮЧИТЬ</button></div>
+  <div class="settingLine">Сбросить прогресс <button class="btn red" onclick="resetGame()">СБРОСИТЬ</button></div>
+ </div>
+</div>
+<style>
+.settingLine{display:flex;justify-content:space-between;align-items:center;padding:16px 4px;border-bottom:1px solid #273940;font-size:11px}
+</style>
+
+<!-- =========================================================
+ MAP LOADING
+========================================================= -->
+<section id="mapLoading" class="screen">
+ <div class="mapBackdrop"></div>
+ <div class="mapLoadCenter">
+  <div class="mapSmall">ПОДКЛЮЧЕНИЕ К БИТВЕ</div>
+  <h1 id="loadingMapName">SANDBOX</h1>
+  <div class="mapInfo" id="loadingMapInfo">DM • 10 игроков</div>
+  <div class="mapBar"><i id="mapProgress"></i></div>
+  <div class="mapPercent" id="mapPercent">0%</div>
+  <div id="mapLoadingText" style="margin-top:18px;color:#657b84;font-size:10px">Загрузка карты...</div>
+ </div>
+ <div class="mapTip">СОВЕТ: Используйте укрытия, чтобы пережить вражеский огонь.</div>
 </section>
 
-<!-- BATTLE -->
+<!-- =========================================================
+ BATTLE
+========================================================= -->
 <section id="battle" class="screen">
- <div class="battleWorld"></div>
- <div class="hill"></div>
- <div class="hudTop">
-  <div class="team blue">СИНИЕ <b>12 : 8</b></div>
-  <div class="team">SANDBOX • DM</div>
-  <div class="team red">КРАСНЫЕ <b>8 : 12</b></div>
+ <div class="world">
+  <div class="worldGrid"></div>
+  <div class="rock r1"></div><div class="rock r2"></div><div class="rock r3"></div>
+  <div class="pickup p1"></div><div class="pickup p2"></div><div class="pickup p3"></div>
+
+  <div class="enemyTank e1"><div class="enemyName">Raptor</div><div class="eh"></div><div class="et"></div><div class="eb"></div></div>
+  <div class="enemyTank e2"><div class="enemyName">SteelFox</div><div class="eh"></div><div class="et"></div><div class="eb"></div></div>
+  <div class="enemyTank e3"><div class="enemyName">Viking</div><div class="eh"></div><div class="et"></div><div class="eb"></div></div>
  </div>
+
+ <div class="battleTop">
+  <div class="score blue">СИНИЕ<b id="blueScore">12</b></div>
+  <div class="timer" id="battleTimer">09:59</div>
+  <div class="score red">КРАСНЫЕ<b id="redScore">8</b></div>
+ </div>
+
  <div class="crosshair"></div>
- <div class="battleTank">
-  <div class="track a"></div><div class="track b"></div><div class="tbody"></div><div class="turret"></div><div class="barrel"></div>
+ <div class="hitMarker" id="hitMarker"></div>
+
+ <div class="battleTank" id="playerTank">
+  <div class="btTrack l"></div><div class="btTrack r"></div>
+  <div class="btHull"></div><div class="btTurret" id="battleTurret"></div><div class="btBarrel" id="battleBarrel"></div>
  </div>
- <div class="hp"><i></i><span class="hpText">820 / 1000</span></div>
- <div class="ammo"><small>SMOKY M1</small><b id="ammo">99</b><small>БОЕПРИПАСЫ</small></div>
+
+ <div class="battleHud">
+  <div class="weaponBox"><b>SMOKY M1</b><small>SPACE — ОГОНЬ</small><small>R — РЕМОНТ</small></div>
+  <div class="health"><i id="healthBar"></i><span id="healthText">1000 / 1000</span></div>
+  <div class="ammoBox"><small>БОЕПРИПАСЫ</small><b id="ammoCount">99</b><small id="reloadText">ГОТОВ</small></div>
+ </div>
 
  <div class="chat battleChat">
-  <div class="chatHead">Командный чат</div>
+  <div class="chatHead">КОМАНДНЫЙ ЧАТ</div>
   <div class="chatBody" id="battleChat">
-   <div class="msg"><b>ProTank:</b> вперёд!</div>
-   <div class="msg enemy"><b>Enemy:</b> на базе!</div>
+   <div class="msg sys">[Система] Бой начался.</div>
+   <div class="msg"><b>ProTank:</b> всем на центр!</div>
+   <div class="msg red"><b>Raptor:</b> я уже там.</div>
   </div>
-  <div class="chatInput"><input id="battleInput" placeholder="Сообщение..." onkeydown="if(event.key==='Enter')sendBattleChat()"><button onclick="sendBattleChat()">ОТПР.</button></div>
+  <div class="chatInput"><input id="battleChatInput" placeholder="Сообщение..." onkeydown="if(event.key==='Enter')sendBattleChat()"><button onclick="sendBattleChat()">ОТПР.</button></div>
  </div>
 
- <div style="position:absolute;right:20px;top:75px;z-index:20">
-  <button class="btn" onclick="fire()">ОГОНЬ [SPACE]</button>
-  <button class="btn" onclick="leaveBattle()" style="margin-left:5px">В ГАРАЖ</button>
+ <div class="battleControls" style="position:absolute;right:15px;top:70px;z-index:40">
+  <button class="btn blue" onclick="fire()">ОГОНЬ</button>
+  <button class="btn dark" onclick="showScoreboard()">ТАБЛИЦА</button>
  </div>
 </section>
 
-<!-- SETTINGS -->
-<div id="garageModal">
- <div class="settings">
-  <button class="close" onclick="closeSettings()">×</button>
-  <h2>НАСТРОЙКИ</h2>
-  <div class="settingRow">Музыка <button class="toggle">ВКЛ</button></div>
-  <div class="settingRow">Звуки <button class="toggle">ВКЛ</button></div>
-  <div class="settingRow">Качество <button class="toggle">ВЫСОКОЕ</button></div>
-  <div class="settingRow">Полный экран <button class="toggle" onclick="fullscreen()">ВКЛ</button></div>
-  <button class="btn big" onclick="closeSettings()">ЗАКРЫТЬ</button>
+<!-- SCOREBOARD -->
+<div id="scoreboard" class="scoreboard">
+ <div class="titlebar"><b>РЕЗУЛЬТАТЫ БОЯ</b><button class="closeBtn" onclick="hideScoreboard()">×</button></div>
+ <div style="padding:15px">
+  <div class="list">
+   <div class="listRow"><b>1</b><span><b>ProTank</b><br><span class="muted">TankCommander</span></span><b>1240</b><span class="green">18 / 4</span></div>
+   <div class="listRow"><b>2</b><span><b>Raptor</b></span><b>980</b><span class="redText">13 / 7</span></div>
+   <div class="listRow"><b>3</b><span><b>SteelFox</b></span><b>810</b><span class="redText">10 / 8</span></div>
+   <div class="listRow"><b>4</b><span><b>Viking</b></span><b>620</b><span class="redText">8 / 9</span></div>
+   <div class="listRow"><b>5</b><span><b>Hunter</b></span><b>510</b><span class="green">7 / 5</span></div>
+  </div>
  </div>
 </div>
 
+<!-- ESC -->
+<div id="esc" class="esc">
+ <div class="escBox">
+  <h2>ПАУЗА</h2>
+  <p style="color:#71858d;font-size:10px">Бой продолжается...</p>
+  <button class="btn blue" style="width:100%;margin:5px 0" onclick="closeEsc()">ПРОДОЛЖИТЬ</button>
+  <button class="btn dark" style="width:100%;margin:5px 0" onclick="leaveBattle()">В ГАРАЖ</button>
+ </div>
+</div>
+
+<div id="notify">Готово</div>
+
 <script>
+/* =========================================================
+   DATA / STATE
+========================================================= */
+const state={
+ nick:localStorage.getItem('tankNick')||'TankCommander',
+ money:Number(localStorage.getItem('tankMoney')||12450),
+ gold:Number(localStorage.getItem('tankGold')||125),
+ sound:true,music:true,
+ hp:1000,maxHp:1000,ammo:99,maxAmmo:99,reloading:false,
+ map:'SANDBOX',mode:'DM',players:'10',time:600,
+ gameRunning:false
+};
+
 const $=id=>document.getElementById(id);
-function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active')}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on')}
+function openOverlay(){ $('overlay').classList.add('on') }
+function closeOverlay(){ $('overlay').classList.remove('on') }
+function closeWindows(){
+ ['battleWindow','shopWindow','profileWindow','settingsWindow'].forEach(id=>$(id).classList.add('hide'));
+ closeOverlay();
+}
+function notify(text){
+ const n=$('notify');n.textContent=text;n.classList.add('on');
+ clearTimeout(window.nt);window.nt=setTimeout(()=>n.classList.remove('on'),2200);
+}
+function save(){
+ localStorage.setItem('tankNick',state.nick);
+ localStorage.setItem('tankMoney',state.money);
+ localStorage.setItem('tankGold',state.gold);
+}
+function updateMoney(){
+ $('money').textContent=state.money.toLocaleString('ru-RU');
+ $('gold').textContent=state.gold.toLocaleString('ru-RU');
+}
 
-let boot=0;
-const bootTimer=setInterval(()=>{
- boot+=Math.floor(Math.random()*9)+4;if(boot>100)boot=100;
- $('bootBar').style.width=boot+'%';
- const texts=['Инициализация клиента...','Загрузка интерфейса...','Подготовка гаража...','Загрузка ресурсов...','Проверка соединения...','Готово'];
- $('bootText').textContent=texts[Math.min(texts.length-1,Math.floor(boot/18))];
- if(boot>=100){clearInterval(bootTimer);setTimeout(()=>show('login'),500)}
-},120);
+/* =========================================================
+   BOOT
+========================================================= */
+let bp=0;
+const bootMessages=[
+ 'Инициализация клиента...',
+ 'Проверка графической системы...',
+ 'Загрузка интерфейса...',
+ 'Загрузка игровых ресурсов...',
+ 'Подготовка гаража...',
+ 'Подключение к серверу...',
+ 'Синхронизация профиля...',
+ 'Готово.'
+];
+const bootInt=setInterval(()=>{
+ bp+=Math.floor(Math.random()*7)+3;if(bp>100)bp=100;
+ $('bootProgress').style.width=bp+'%';
+ $('bootStatus').textContent=bootMessages[Math.min(7,Math.floor(bp/14))];
+ if(bp>=100){
+  clearInterval(bootInt);
+  setTimeout(()=>{show('login');playBeep(420,.08)},650);
+ }
+},110);
 
-function enterGarage(){
- let n=$('nick').value.trim()||'TankCommander';
- $('playerNick').textContent=n;
+/* =========================================================
+   LOGIN
+========================================================= */
+function login(){
+ state.nick=$('nickInput').value.trim()||'TankCommander';
+ save();
+ $('topNick').textContent=state.nick;
+ $('profileNick').textContent=state.nick;
+ notify('Добро пожаловать, '+state.nick+'!');
  show('garage');
+ playBeep(620,.12);
+ updateMoney();
+}
+$('nickInput').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+
+/* =========================================================
+   WINDOWS
+========================================================= */
+function openBattleWindow(){
+ closeWindows();openOverlay();$('battleWindow').classList.remove('hide');
+}
+function openShop(){
+ closeWindows();openOverlay();$('shopWindow').classList.remove('hide');
+}
+function openProfile(){
+ closeWindows();openOverlay();$('profileWindow').classList.remove('hide');
+}
+function openSettings(){
+ closeWindows();openOverlay();$('settingsWindow').classList.remove('hide');
 }
 
-function openMaps(){$('mapModal').classList.add('open')}
-function closeMaps(){$('mapModal').classList.remove('open')}
-
-let mapTimer;
-function startMap(name){
- closeMaps();show('mapload');$('mapName').textContent=name;
- let p=0;clearInterval(mapTimer);
- mapTimer=setInterval(()=>{
-  p+=Math.floor(Math.random()*10)+5;if(p>100)p=100;
-  $('mapBar').style.width=p+'%';$('mapPercent').textContent=p+'%';
-  if(p<25)$('mapStatus').textContent='Загрузка текстур...';
-  else if(p<50)$('mapStatus').textContent='Создание игровой арены...';
-  else if(p<75)$('mapStatus').textContent='Подключение игроков...';
-  else if(p<100)$('mapStatus').textContent='Подготовка боеприпасов...';
-  else{$('mapStatus').textContent='Бой начинается!';clearInterval(mapTimer);setTimeout(()=>show('battle'),700)}
- },160);
+/* =========================================================
+   CHAT
+========================================================= */
+function safe(s){
+ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 }
-
-function sendChat(){
- let input=$('chatInput'),v=input.value.trim();if(!v)return;
- $('garageChat').innerHTML+=`<div class="msg"><b>${escapeHtml($('playerNick').textContent)}:</b> ${escapeHtml(v)}</div>`;
- input.value='';$('garageChat').scrollTop=99999;
+function sendGarageChat(){
+ const i=$('garageChatInput'),v=i.value.trim();if(!v)return;
+ $('garageChat').innerHTML+=`<div class="msg"><b>${safe(state.nick)}:</b> ${safe(v)}</div>`;
+ i.value='';$('garageChat').scrollTop=999999;playBeep(330,.04);
 }
 function sendBattleChat(){
- let input=$('battleInput'),v=input.value.trim();if(!v)return;
- $('battleChat').innerHTML+=`<div class="msg"><b>${escapeHtml($('playerNick').textContent)}:</b> ${escapeHtml(v)}</div>`;
- input.value='';$('battleChat').scrollTop=99999;
+ const i=$('battleChatInput'),v=i.value.trim();if(!v)return;
+ $('battleChat').innerHTML+=`<div class="msg"><b>${safe(state.nick)}:</b> ${safe(v)}</div>`;
+ i.value='';$('battleChat').scrollTop=999999;playBeep(330,.04);
 }
-function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 
-let ammo=99;
-function fire(){
- if(ammo<=0)return;
- ammo--;$('ammo').textContent=ammo;
- document.querySelector('.battleTank .barrel').animate([{transform:'translateX(0)'},{transform:'translateX(-22px)'},{transform:'translateX(0)'}],{duration:180});
- let flash=document.createElement('div');
- flash.style.cssText='position:absolute;left:calc(50% + 145px);bottom:calc(17% + 105px);width:38px;height:38px;background:#fff4a0;border-radius:50%;filter:blur(4px);z-index:15';
- $('battle').appendChild(flash);setTimeout(()=>flash.remove(),90);
+/* =========================================================
+   SHOP
+========================================================= */
+function buy(price,name){
+ if(state.money<price){notify('Недостаточно кристаллов');playBeep(130,.1);return}
+ state.money-=price;save();updateMoney();notify(name+' куплен!');playBeep(700,.1);
 }
-document.addEventListener('keydown',e=>{if(e.code==='Space'&&$('battle').classList.contains('active')){e.preventDefault();fire()}});
+
+/* =========================================================
+   MAP LOADING
+========================================================= */
+let loadTimer;
+function beginMap(name,mode,players){
+ closeWindows();
+ state.map=name;state.mode=mode;state.players=players;
+ $('loadingMapName').textContent=name;
+ $('loadingMapInfo').textContent=mode+' • '+players+' игроков';
+ $('mapProgress').style.width='0%';$('mapPercent').textContent='0%';
+ show('mapLoading');
+ let p=0;clearInterval(loadTimer);
+ const msgs=['Загрузка карты...','Загрузка текстур...','Создание объектов...','Подключение игроков...','Подготовка боеприпасов...','Готово!'];
+ loadTimer=setInterval(()=>{
+  p+=Math.floor(Math.random()*8)+4;if(p>100)p=100;
+  $('mapProgress').style.width=p+'%';$('mapPercent').textContent=p+'%';
+  $('mapLoadingText').textContent=msgs[Math.min(5,Math.floor(p/20))];
+  if(p>=100){
+   clearInterval(loadTimer);
+   setTimeout(()=>startBattle(),650);
+  }
+ },130);
+}
+
+/* =========================================================
+   BATTLE START
+========================================================= */
+let battleInterval;
+function startBattle(){
+ show('battle');
+ state.hp=1000;state.ammo=99;state.time=600;state.gameRunning=true;
+ updateBattleHud();
+ $('blueScore').textContent=12;$('redScore').textContent=8;
+ $('battleChat').innerHTML='<div class="msg sys">[Система] '+safe(state.map)+' загружена.</div><div class="msg sys">[Система] Бой начался!</div>';
+ clearInterval(battleInterval);
+ battleInterval=setInterval(()=>{
+  if(!state.gameRunning)return;
+  state.time--;updateTimer();
+  if(Math.random()<.035)botAttack();
+  if(state.time<=0)finishBattle();
+ },1000);
+ notify('Бой начался!');
+ playBeep(520,.12);
+}
+function updateTimer(){
+ const m=Math.floor(state.time/60),s=state.time%60;
+ $('battleTimer').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+function updateBattleHud(){
+ $('healthBar').style.width=Math.max(0,state.hp/state.maxHp*100)+'%';
+ $('healthText').textContent=state.hp+' / '+state.maxHp;
+ $('ammoCount').textContent=state.ammo;
+}
+
+/* =========================================================
+   SHOOTING
+========================================================= */
+let lastShot=0;
+function fire(){
+ if(!state.gameRunning)return;
+ if(state.reloading){notify('Перезарядка...');return}
+ if(state.ammo<=0){reload();return}
+ const now=Date.now();if(now-lastShot<650)return;
+ lastShot=now;state.ammo--;updateBattleHud();playBeep(150,.07);
+ const barrel=$('battleBarrel');
+ barrel.animate([{transform:'translateX(0)'},{transform:'translateX(-22px)'},{transform:'translateX(0)'}],{duration:170});
+ const flash=document.createElement('div');
+ flash.style.cssText='position:absolute;z-index:22;left:calc(50% + 210px);bottom:calc(15% + 168px);width:45px;height:45px;border-radius:50%;background:#ffe99a;box-shadow:0 0 35px #fff3a0;pointer-events:none';
+ $('battle').appendChild(flash);
+ setTimeout(()=>flash.remove(),100);
+ const marker=$('hitMarker');marker.classList.remove('show');void marker.offsetWidth;marker.classList.add('show');
+ if(Math.random()<.72){
+  let red=Math.max(0,Number($('redScore').textContent)-1);
+  $('redScore').textContent=red;
+  notify('Попадание! +45 опыта');
+ }
+ if(state.ammo<=0)reload();
+}
+function reload(){
+ if(state.reloading||state.ammo>=state.maxAmmo)return;
+ state.reloading=true;$('reloadText').textContent='ПЕРЕЗАРЯДКА';
+ let t=3;
+ const ri=setInterval(()=>{
+  t--;
+  $('reloadText').textContent='ПЕРЕЗАРЯДКА '+t;
+  if(t<=0){
+   clearInterval(ri);state.ammo=state.maxAmmo;state.reloading=false;
+   $('reloadText').textContent='ГОТОВ';updateBattleHud();playBeep(500,.06);
+  }
+ },700);
+}
+
+/* =========================================================
+   DAMAGE / RESPAWN
+========================================================= */
+function botAttack(){
+ if(!state.gameRunning)return;
+ const dmg=Math.floor(Math.random()*80)+20;
+ state.hp=Math.max(0,state.hp-dmg);updateBattleHud();playBeep(90,.05);
+ if(state.hp<=0)playerDestroyed();
+}
+function playerDestroyed(){
+ state.gameRunning=false;notify('Танк уничтожен! Возрождение...');
+ $('battleChat').innerHTML+=`<div class="msg red"><b>Система:</b> Ваш танк уничтожен.</div>`;
+ setTimeout(()=>{
+  if(!$('battle').classList.contains('on'))return;
+  state.hp=1000;state.ammo=99;state.gameRunning=true;updateBattleHud();
+  notify('Возрождение!');
+ },2500);
+}
+
+/* =========================================================
+   BATTLE CONTROLS
+========================================================= */
+document.addEventListener('keydown',e=>{
+ if($('battle').classList.contains('on')){
+  if(e.code==='Space'){e.preventDefault();fire()}
+  if(e.key.toLowerCase()==='r'){reload()}
+  if(e.key==='Escape'){toggleEsc()}
+  moveTank(e);
+ }
+});
+let tankX=0;
+function moveTank(e){
+ const tank=$('playerTank');
+ if(e.key==='a'||e.key==='ArrowLeft')tankX=Math.max(-230,tankX-10);
+ if(e.key==='d'||e.key==='ArrowRight')tankX=Math.min(230,tankX+10);
+ tank.style.transform=`translateX(calc(-50% + ${tankX}px))`;
+}
+document.addEventListener('mousemove',e=>{
+ if(!$('battle').classList.contains('on'))return;
+ const turret=$('battleTurret'),barrel=$('battleBarrel');
+ const rect=$('battle').getBoundingClientRect();
+ const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+ const ang=Math.atan2(e.clientY-cy,e.clientX-cx)*180/Math.PI;
+ const limited=Math.max(-32,Math.min(32,ang));
+ turret.style.transform='rotate('+limited*.25+'deg)';
+ barrel.style.transform='rotate('+limited*.10+'deg)';
+});
+$('battle').addEventListener('click',e=>{
+ if(e.target.closest('button,.chat,.battleChat'))return;
+ fire();
+});
+
+/* =========================================================
+   SCOREBOARD / ESC
+========================================================= */
+function showScoreboard(){$('scoreboard').classList.add('on')}
+function hideScoreboard(){$('scoreboard').classList.remove('on')}
+function toggleEsc(){$('esc').classList.toggle('on')}
+function closeEsc(){$('esc').classList.remove('on')}
 
 function leaveBattle(){
- show('garage');
- $('garageChat').innerHTML+=`<div class="msg system">[Система] Вы вернулись в гараж.</div>`;
+ closeEsc();hideScoreboard();state.gameRunning=false;clearInterval(battleInterval);
+ show('garage');notify('Вы вернулись в гараж');
+ $('garageChat').innerHTML+=`<div class="msg sys">[Система] ${safe(state.nick)} вернулся в гараж.</div>`;
+ playBeep(300,.08);
 }
-function settings(){$('garageModal').style.display='flex'}
-function closeSettings(){$('garageModal').style.display='none'}
-function fullscreen(){document.documentElement.requestFullscreen?.()}
+
+/* =========================================================
+   FINISH
+========================================================= */
+function finishBattle(){
+ state.gameRunning=false;clearInterval(battleInterval);
+ const win=Math.random()>.35;
+ if(win){
+  state.money+=750;state.gold+=5;save();updateMoney();
+  notify('Победа! +750 💎 +5 ★');
+ }else notify('Бой завершён');
+ setTimeout(()=>leaveBattle(),3000);
+}
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+function toggleMusic(){
+ state.music=!state.music;
+ $('musicToggle').textContent=state.music?'ВКЛЮЧЕНА':'ВЫКЛЮЧЕНА';
+ notify(state.music?'Музыка включена':'Музыка выключена');
+}
+function toggleSound(){
+ state.sound=!state.sound;
+ $('soundToggle').textContent=state.sound?'ВКЛЮЧЕНЫ':'ВЫКЛЮЧЕНЫ';
+}
+function goFullscreen(){
+ document.documentElement.requestFullscreen?.();
+}
+function resetGame(){
+ if(!confirm('Сбросить локальный прогресс?'))return;
+ localStorage.clear();location.reload();
+}
+
+/* =========================================================
+   SIMPLE AUDIO
+========================================================= */
+let audioCtx;
+function playBeep(freq,duration){
+ if(!state.sound)return;
+ try{
+  audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type='square';o.frequency.value=freq;
+  g.gain.setValueAtTime(.025,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
+  o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+duration);
+ }catch(e){}
+}
+
+/* =========================================================
+   STARTUP
+========================================================= */
+$('topNick').textContent=state.nick;
+$('profileNick').textContent=state.nick;
+$('nickInput').value=state.nick;
+updateMoney();
+
+window.addEventListener('beforeunload',save);
+
+/* Prevent accidental page scrolling */
+document.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
 </script>
 </body>
 </html>
