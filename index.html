@@ -1,502 +1,595 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>TANKI CLASSIC — Prototype</title>
+<title>TANKI CLASSIC — Old Battle Prototype</title>
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:#222;color:#ddd}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101713;font-family:Arial,Helvetica,sans-serif;color:#fff}
 button,input,select{font:inherit}
 button{cursor:pointer}
-.hidden{display:none!important}
+#app{position:fixed;inset:0;background:#101713}
+.screen{position:absolute;inset:0;display:none}
+.screen.on{display:block}
 
-#boot{
- position:fixed;inset:0;z-index:9999;background:
- radial-gradient(circle at 50% 35%,#555 0,#292929 42%,#111 100%);
- display:flex;align-items:center;justify-content:center;color:#ddd;
-}
-.bootBox{text-align:center;width:min(600px,90vw)}
-.bootLogo{
- font-weight:900;font-size:clamp(42px,9vw,88px);letter-spacing:-5px;
- color:#e8e8e8;text-shadow:0 5px 0 #111,0 0 20px #888;
-}
-.bootSub{font-size:13px;color:#aaa;margin:8px 0 28px;text-transform:uppercase;letter-spacing:3px}
-.loadTrack{height:15px;border:2px solid #111;background:#080808;box-shadow:inset 0 0 0 1px #666}
-.loadFill{height:100%;width:0;background:linear-gradient(#b9cf70,#506b22,#92ad43);transition:width .2s}
+/* ================= LOGIN ================= */
 #login{
- position:fixed;inset:0;z-index:9000;display:none;
  background:
- radial-gradient(circle at 50% 35%,rgba(130,140,130,.5),transparent 38%),
- linear-gradient(#3c403d,#171817);
- align-items:center;justify-content:center;
+ radial-gradient(circle at 50% 25%,rgba(90,160,100,.18),transparent 35%),
+ linear-gradient(#1c3025,#0d1711);
 }
-.loginPanel{
- width:min(430px,92vw);padding:26px;
- background:linear-gradient(#4d504e,#282a29);
- border:1px solid #777;box-shadow:0 8px 40px #000, inset 0 1px #aaa;
+.loginNoise{position:absolute;inset:0;opacity:.13;background-image:repeating-linear-gradient(0deg,#fff0 0 3px,#fff1 4px),repeating-linear-gradient(90deg,#fff0 0 4px,#fff1 5px)}
+.loginBox{
+ position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:min(440px,92vw);padding:28px;
+ background:linear-gradient(#263b2e,#14231a);
+ border:2px solid #55775b;
+ box-shadow:0 12px 45px #000b,inset 0 0 0 1px #172419;
 }
-.loginLogo{text-align:center;font-size:42px;font-weight:900;color:#ddd;text-shadow:0 3px #111;margin-bottom:4px}
-.loginSub{text-align:center;color:#9da59c;font-size:12px;letter-spacing:2px;margin-bottom:24px}
+.logo{
+ font-weight:900;letter-spacing:4px;text-align:center;font-size:34px;
+ color:#d9e4d7;text-shadow:2px 2px #000;margin-bottom:4px
+}
+.logoSub{text-align:center;color:#8da98e;font-size:12px;letter-spacing:3px;margin-bottom:25px}
+.loginTabs{display:flex;margin-bottom:15px}
+.loginTabs button{
+ flex:1;padding:12px;background:#17251c;border:1px solid #4d654f;color:#a9b7aa
+}
+.loginTabs button.active{background:#557d58;color:#fff}
 .field{margin:10px 0}
-.field label{display:block;font-size:11px;color:#aaa;margin-bottom:5px;text-transform:uppercase}
-.field input,.field select{
- width:100%;padding:12px;background:#181a19;color:#eee;border:1px solid #111;
- box-shadow:inset 0 2px 7px #000,0 1px #666;outline:none;
+.field label{display:block;font-size:11px;color:#8ea18e;margin-bottom:5px;text-transform:uppercase}
+.field input{
+ width:100%;padding:13px;color:#fff;background:#0d1711;border:1px solid #536c55;outline:0
 }
-.oldBtn{
- color:#e7e7e7;padding:10px 18px;border:1px solid #111;
- background:linear-gradient(#6f7470,#3a3d3b 48%,#272927);
- box-shadow:inset 0 1px #aaa,0 2px 3px #111;
- text-shadow:0 1px #000;font-weight:bold;
+.field input:focus{border-color:#91bd91}
+.bigBtn{
+ width:100%;padding:14px;margin-top:12px;border:1px solid #9db79d;
+ color:#fff;font-weight:bold;text-transform:uppercase;
+ background:linear-gradient(#789b73,#405e42);box-shadow:inset 0 1px #b8ccb4
 }
-.oldBtn:hover{filter:brightness(1.2)}
-.greenBtn{background:linear-gradient(#829b4c,#425827 48%,#283719)}
-.loginButtons{display:flex;gap:8px;margin-top:18px}
-.loginButtons button{flex:1}
-.small{text-align:center;font-size:11px;color:#888;margin-top:15px}
+.bigBtn:hover{filter:brightness(1.15)}
+.loginHint{text-align:center;color:#6f8372;font-size:11px;margin-top:12px}
 
-#app{position:fixed;inset:0;display:none;background:#252827}
-#top{
- position:absolute;left:0;right:0;top:0;height:75px;z-index:50;
- background:linear-gradient(#515552,#292b2a 45%,#1d1f1e);
- border-bottom:2px solid #101110;box-shadow:0 2px 10px #000;
- display:flex;align-items:center;padding:7px 10px;gap:10px;
-}
-.rankBox{
- height:59px;min-width:270px;display:flex;align-items:center;gap:9px;
- background:linear-gradient(#383b39,#202220);border:1px solid #111;padding:5px 8px;
-}
-.rankIcon{
- width:46px;height:46px;border:2px solid #777;background:#171917;
- display:flex;align-items:center;justify-content:center;font-size:25px;
- box-shadow:inset 0 0 10px #000;
-}
-.rankInfo{min-width:180px}
-.rankName{font-size:13px;font-weight:bold;color:#eee}
-.xpText{font-size:10px;color:#aaa;margin-top:3px}
-.xpBar{height:9px;background:#111;border:1px solid #080808;margin-top:4px}
-.xpFill{height:100%;width:0;background:linear-gradient(#c6d66d,#637f29)}
-.money{margin-left:auto;text-align:right;font-size:12px;line-height:19px}
-.nav{display:flex;align-self:stretch;gap:3px;margin-left:auto}
-.nav button{
- min-width:92px;border:1px solid #151515;color:#ccc;background:linear-gradient(#555956,#303330);
- text-shadow:0 1px #000;font-weight:bold;font-size:12px;
-}
-.nav button.active{background:linear-gradient(#81994f,#3e5226);color:#fff}
-#content{position:absolute;inset:75px 0 0;overflow:hidden}
-
-.panelTitle{
- color:#ddd;font-weight:bold;font-size:14px;padding:9px 12px;
- background:linear-gradient(#555957,#303331);border:1px solid #111;
- box-shadow:inset 0 1px #777;text-transform:uppercase;
-}
-.page{position:absolute;inset:0;overflow:auto;padding:12px;background:
- linear-gradient(rgba(55,59,57,.93),rgba(29,31,30,.98)),
- repeating-linear-gradient(135deg,rgba(255,255,255,.015) 0 2px,transparent 2px 6px);
-}
-.grid{display:grid;gap:10px}
-.homeGrid{grid-template-columns:minmax(300px,1fr) 330px}
-.battleList{height:calc(100vh - 180px);overflow:auto;border:1px solid #111;background:#181a19}
-.battleRow{
- display:grid;grid-template-columns:1.3fr .8fr .8fr .6fr;
- padding:10px;border-bottom:1px solid #333;background:linear-gradient(#363937,#282a29);
- font-size:12px;align-items:center;
-}
-.battleRow:hover{background:#464946}
-.chat{
- height:260px;border:1px solid #111;background:#151716;padding:8px;
- overflow:auto;font-size:12px;
-}
-.chatLine{margin:5px 0}.chatLine b{color:#91aa59}
-.createBox{margin-top:10px}
-.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.formGrid label{font-size:10px;color:#aaa;display:block;margin-bottom:4px}
-.formGrid input,.formGrid select{
- width:100%;background:#151716;color:#eee;border:1px solid #090909;padding:9px;
-}
-.createBox .oldBtn{width:100%;margin-top:10px}
-
-#garagePage{padding:0;overflow:hidden}
-.garage{
- height:100%;display:grid;grid-template-columns:minmax(0,1fr) 300px;
- grid-template-rows:minmax(0,1fr) 170px;background:#303331;
-}
-.garageView{
- position:relative;min-width:0;min-height:0;
+/* ================= LOBBY ================= */
+#lobby{
  background:
- radial-gradient(circle at 50% 50%,#777 0,#4e514f 25%,#272a28 70%,#161817 100%);
- border-right:1px solid #111;overflow:hidden;
+ radial-gradient(circle at 70% 30%,#4b7256 0,#263f2e 24%,transparent 45%),
+ linear-gradient(#314a37,#18271d 55%,#111a14);
+}
+#lobby:after{
+ content:"";position:absolute;inset:0;pointer-events:none;opacity:.15;
+ background:repeating-linear-gradient(0deg,transparent 0 4px,#fff 5px)
+}
+.top{
+ position:absolute;left:0;right:0;top:0;height:74px;z-index:5;
+ display:flex;align-items:center;padding:8px 14px;
+ background:linear-gradient(#354b3a,#18251c);
+ border-bottom:2px solid #627a62;
+ box-shadow:0 3px 15px #0008
+}
+.topLogo{font-weight:900;letter-spacing:2px;font-size:20px;width:210px}
+.profileTop{display:flex;align-items:center;gap:9px;min-width:260px}
+.rankIcon{
+ width:38px;height:38px;border:2px solid #b5c2ae;background:#28382a;
+ display:grid;place-items:center;font-size:19px;box-shadow:inset 0 0 8px #000
+}
+.topNick{font-weight:bold}
+.topRank{font-size:11px;color:#a9b9a9}
+.xpWrap{width:160px}
+.xpBar{height:8px;background:#0b110c;border:1px solid #526552}
+.xpFill{height:100%;width:0;background:#b5cf6e;box-shadow:0 0 6px #b5cf6e}
+.xpText{font-size:9px;color:#a9b8a5;margin-top:3px}
+.balance{margin-left:auto;display:flex;gap:14px;font-weight:bold;color:#d5dfcb}
+.nav{
+ position:absolute;left:0;top:74px;bottom:0;width:230px;z-index:5;
+ padding:14px 10px;background:linear-gradient(90deg,#19271d,#223528);
+ border-right:2px solid #536b54
+}
+.nav button{
+ width:100%;padding:14px 15px;margin-bottom:5px;text-align:left;
+ color:#c8d2c5;background:linear-gradient(#304734,#1e3023);
+ border:1px solid #526a53
+}
+.nav button:hover,.nav button.sel{background:linear-gradient(#5b805c,#385438);color:#fff}
+.content{position:absolute;left:230px;top:74px;right:0;bottom:0;padding:18px;z-index:2;overflow:auto}
+.panel{
+ background:linear-gradient(#273b2bdf,#17251bdf);
+ border:1px solid #607760;box-shadow:0 8px 25px #0007;
+}
+.homeGrid{display:grid;grid-template-columns:1.3fr .7fr;gap:14px;height:100%}
+.hero{
+ min-height:370px;position:relative;overflow:hidden;
+ background:
+ radial-gradient(circle at 55% 30%,#6c8b62,#304a34 35%,#162219 70%);
+}
+.hero:before{
+ content:"";position:absolute;inset:0;
+ background:
+ linear-gradient(150deg,transparent 0 48%,#101812aa 49% 50%,transparent 51%),
+ repeating-linear-gradient(20deg,#ffffff06 0 4px,#00000005 5px 10px)
+}
+.heroTitle{position:absolute;left:30px;bottom:105px;font-size:34px;font-weight:900;text-shadow:3px 3px #000}
+.heroDesc{position:absolute;left:32px;bottom:75px;color:#b7c7b4}
+.playBtn{
+ position:absolute;left:30px;bottom:24px;width:220px;padding:16px;
+ background:linear-gradient(#8ba56d,#526d49);border:2px solid #b8c8a6;color:#fff;font-weight:bold
+}
+.homeSide{display:flex;flex-direction:column;gap:14px}
+.news{padding:16px}
+.news h3,.missions h3{margin:0 0 12px}
+.newsItem{padding:11px;border-bottom:1px solid #405442;font-size:12px;color:#aebcae}
+.mission{padding:12px;border:1px solid #435745;background:#142018;margin:7px 0}
+.mission b{display:block;margin-bottom:5px}
+.miniProgress{height:6px;background:#080d09;margin-top:7px}
+.miniProgress div{height:100%;background:#a8c96e}
+
+/* ================= GARAGE ================= */
+.garage{
+ position:absolute;inset:0;display:grid;grid-template-columns:1fr 310px;grid-template-rows:1fr 190px;
+ background:
+ radial-gradient(ellipse at 40% 35%,#566e52,#293b2b 35%,#131e17 78%);
+}
+.garageTitle{position:absolute;left:20px;top:16px;z-index:4;font-size:22px;font-weight:bold;text-shadow:2px 2px #000}
+.tankStage{position:relative;overflow:hidden}
+.garageFloor{
+ position:absolute;left:0;right:0;bottom:-30%;height:75%;
+ transform:perspective(600px) rotateX(58deg);
+ background:
+ repeating-linear-gradient(90deg,#283a2b 0 80px,#314631 81px 83px),
+ repeating-linear-gradient(0deg,#233326 0 80px,#314331 81px 83px);
+ opacity:.9
 }
 #garageCanvas{position:absolute;inset:0;width:100%;height:100%}
-.garageLabel{
- position:absolute;left:14px;top:12px;font-weight:bold;font-size:16px;
- text-shadow:0 2px #000;z-index:2;
+.info{
+ margin:55px 15px 15px 0;padding:15px;background:linear-gradient(#2d402fdd,#152219ee);
+ border:1px solid #637962;box-shadow:0 8px 25px #0008;z-index:3
 }
-.garageHint{
- position:absolute;left:50%;bottom:13px;transform:translateX(-50%);
- color:#aaa;background:#111b;padding:7px 13px;border:1px solid #555;font-size:11px;
+.info h2{margin:0 0 5px;font-size:20px}
+.stat{margin:12px 0}
+.statLine{display:flex;justify-content:space-between;font-size:11px;color:#abb9aa}
+.statBar{height:7px;background:#0a100c;border:1px solid #465847;margin-top:4px}
+.statBar i{display:block;height:100%;background:#8aa765}
+.buy{
+ width:100%;padding:10px;background:linear-gradient(#66895f,#3e5d3d);
+ color:white;border:1px solid #a4b99b
 }
-.infoPanel{background:linear-gradient(#464946,#292b2a);padding:10px;overflow:auto}
-.infoName{font-size:22px;font-weight:bold;color:#eee}
-.stat{margin:9px 0}.statTitle{font-size:10px;color:#aaa}
-.statBar{height:9px;background:#111;border:1px solid #000}.statBar i{display:block;height:100%;background:#859c52}
-.price{font-size:15px;color:#d5b85a;margin:12px 0}
-.equip{
- grid-column:1/-1;background:linear-gradient(#454845,#242624);
- border-top:2px solid #111;padding:8px;overflow-x:auto;overflow-y:hidden;
- white-space:nowrap;
+.items{
+ grid-column:1/3;display:flex;flex-direction:column;
+ background:linear-gradient(#18251b,#0e1711);border-top:2px solid #627661;z-index:5
 }
-.tabs{height:28px;display:flex;gap:4px;margin-bottom:7px}
-.tabs button{height:28px;padding:0 15px}
-.cards{display:flex;gap:8px;height:115px}
-.card{
- flex:0 0 145px;height:108px;background:linear-gradient(#555955,#2b2d2c);
- border:1px solid #111;box-shadow:inset 0 1px #888,0 2px 4px #111;
- padding:6px;position:relative;cursor:pointer;
+.categories{height:42px;display:flex;border-bottom:1px solid #4d624e}
+.categories button{
+ min-width:115px;border:0;border-right:1px solid #4a5d4a;
+ background:#1a281d;color:#a9b6a7;font-size:11px;text-transform:uppercase
 }
-.card.active{outline:2px solid #91a65b}
-.cardName{font-weight:bold;font-size:11px}
-.cardSub{font-size:9px;color:#aaa;margin-top:3px}
-.cardPrice{position:absolute;bottom:7px;color:#d2b45c;font-size:10px}
-.cardPreview{height:57px;display:flex;align-items:center;justify-content:center;font-size:33px;filter:drop-shadow(0 4px 2px #111)}
+.categories button.active{background:#5b7d59;color:#fff}
+.itemScroller{display:flex;gap:8px;overflow-x:auto;padding:9px 12px;height:145px}
+.itemCard{
+ flex:0 0 118px;height:118px;border:2px solid #3d5140;background:#1b2b1f;
+ padding:7px;position:relative;text-align:center;cursor:pointer
+}
+.itemCard:hover{border-color:#91aa7f}
+.itemCard.owned{background:#3d623e;border-color:#80a477}
+.itemCard.locked{background:#252b26;color:#6e776f}
+.itemPic{height:66px;display:grid;place-items:center;font-size:35px}
+.itemName{font-size:10px;font-weight:bold}
+.itemCost{font-size:9px;color:#d2d8c9;margin-top:4px}
+.eq{position:absolute;right:4px;top:4px;background:#a5c673;color:#162015;font-size:8px;padding:2px}
 
-#missionsPage .mission{
- background:linear-gradient(#444744,#292b2a);border:1px solid #111;margin:8px 0;padding:12px;
-}
-.missionTop{display:flex;justify-content:space-between}.missionName{font-weight:bold}
-.progress{height:12px;background:#111;margin-top:9px}.progress i{display:block;height:100%;background:#819d49}
-.missionReward{font-size:11px;color:#d8bb5e;margin-top:7px}
-
-#mapPage{overflow:auto}
-.mapGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:9px}
+/* ================= MAPS ================= */
+.mapsGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
 .mapCard{
- background:linear-gradient(#4b4e4c,#292b2a);border:1px solid #111;min-height:115px;padding:9px;
- cursor:pointer;box-shadow:inset 0 1px #777;
+ height:145px;position:relative;padding:13px;overflow:hidden;cursor:pointer;
+ background:linear-gradient(145deg,#526d52,#263b2b 55%,#172219);
+ border:1px solid #607961
 }
-.mapCard:hover{filter:brightness(1.2)}
-.mapPreview{height:70px;background:#242826;position:relative;overflow:hidden;border:1px solid #111;margin-bottom:7px}
-.mapPreview:before,.mapPreview:after{content:"";position:absolute;background:#5b625b}
-.mapPreview:before{width:70%;height:13px;left:15%;top:27px;transform:rotate(-12deg)}
-.mapPreview:after{width:13px;height:75%;left:45%;top:12%;transform:rotate(25deg)}
-.mapCard b{font-size:12px}.mapCard span{font-size:10px;color:#aaa}
+.mapCard:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.mapCard b{font-size:16px;text-shadow:2px 2px #000}
+.mapCard span{position:absolute;bottom:12px;left:13px;color:#b6c4b4;font-size:10px}
+.mapPreview{
+ position:absolute;right:-20px;top:35px;width:110px;height:70px;
+ transform:rotate(-12deg);background:#71875f;border:7px solid #253527;box-shadow:0 0 0 2px #6b7c65
+}
+.create{
+ position:fixed;inset:0;background:#0009;z-index:50;display:none;align-items:center;justify-content:center
+}
+.create.on{display:flex}
+.createBox{width:min(500px,92vw);padding:20px;background:#1d2c20;border:2px solid #6b8068;box-shadow:0 20px 60px #000}
+.createBox h2{margin-top:0}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.createBox select,.createBox input{
+ width:100%;padding:11px;background:#0c140e;color:#fff;border:1px solid #526a54
+}
+.createActions{display:flex;gap:10px;margin-top:15px}
+.createActions button{flex:1;padding:12px}
 
-#battle{
- position:absolute;inset:0;z-index:200;background:#000;display:none;overflow:hidden;
+/* ================= LOADING ================= */
+#loading{
+ background:#0d1510;display:none;align-items:center;justify-content:center
 }
-#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-#hudTop{
- position:absolute;top:8px;left:50%;transform:translateX(-50%);
- width:min(850px,96vw);height:56px;display:flex;align-items:center;
- background:linear-gradient(#4d504eaa,#171917dd);border:1px solid #777;
- box-shadow:0 3px 12px #000;padding:5px 8px;gap:9px;z-index:10;
+.loadingBox{text-align:center}
+.loadingLogo{font-size:30px;font-weight:900;letter-spacing:4px}
+.loader{width:310px;height:8px;background:#18251b;border:1px solid #536453;margin-top:20px}
+.loader i{display:block;height:100%;width:0;background:#a8bd78}
+.loadingText{font-size:11px;color:#839483;margin-top:10px}
+
+/* ================= BATTLE ================= */
+#battle{background:#6da1d0}
+#gl{
+ position:absolute;inset:0;width:100%;height:100%;display:block;
+ background:#6ca3d3
 }
-.teamScore{font-size:22px;font-weight:bold;min-width:70px;text-align:center}
-.red{color:#d65757}.blue{color:#6399df}
-.battleTimer{font-size:23px;font-weight:bold;min-width:80px;text-align:center}
-.battleFund{font-size:11px;color:#d6bd63;min-width:100px;text-align:center}
-.battleXP{flex:1;min-width:130px}.battleXP .xpBar{margin-top:4px}
-#battleMsg{
- position:absolute;left:50%;top:75px;transform:translateX(-50%);
- padding:8px 16px;background:#111c;border:1px solid #777;z-index:12;
- opacity:0;transition:.2s;font-weight:bold;
+#skyFallback{
+ position:absolute;inset:0;pointer-events:none;
+ background:linear-gradient(#64a0d4 0%,#9fc7df 47%,#c8d5b9 48%,#697856 100%)
 }
-#crosshair{
+#battleUI{position:absolute;inset:0;pointer-events:none}
+.hudTop{
+ position:absolute;left:0;right:0;top:0;height:70px;
+ display:flex;align-items:center;justify-content:center;gap:13px;
+ background:linear-gradient(#142018d9,#17221888,transparent);
+}
+.teamScore{min-width:130px;text-align:center;font-size:22px;font-weight:bold;text-shadow:2px 2px #000}
+.red{color:#e56868}.blue{color:#62a5ee}
+.timer{
+ min-width:90px;text-align:center;font-size:25px;font-weight:900;text-shadow:2px 2px #000
+}
+.battleFund{
+ position:absolute;top:72px;left:50%;transform:translateX(-50%);
+ padding:5px 12px;background:#152017c9;border:1px solid #72806d;font-size:11px
+}
+.rankHud{
+ position:absolute;left:12px;top:10px;width:220px;
+ background:#152018c9;border:1px solid #62705f;padding:7px
+}
+.rankHudTop{display:flex;align-items:center;gap:8px}
+.rankHud .rankIcon{width:32px;height:32px}
+.rankHudName{font-size:11px;font-weight:bold}
+.rankHudXp{font-size:9px;color:#a7b6a3}
+.cross{
  position:absolute;left:50%;top:50%;width:30px;height:30px;transform:translate(-50%,-50%);
- pointer-events:none;z-index:9;
+ opacity:.9
 }
-#crosshair:before,#crosshair:after{content:"";position:absolute;background:#fff;box-shadow:0 0 4px #000}
-#crosshair:before{width:30px;height:2px;top:14px}.crosshair:after{height:30px;width:2px;left:14px}
-#supplies{
- position:absolute;bottom:13px;left:50%;transform:translateX(-50%);
- display:flex;gap:5px;z-index:20;
+.cross:before,.cross:after{content:"";position:absolute;background:#fff;box-shadow:0 0 3px #000}
+.cross:before{left:14px;top:0;width:2px;height:30px}
+.cross:after{left:0;top:14px;width:30px;height:2px}
+.healthBox{
+ position:absolute;left:50%;bottom:26px;transform:translateX(-50%);
+ width:min(440px,55vw);height:22px;background:#111a13d9;border:2px solid #63745e
+}
+.healthFill{height:100%;width:100%;background:#70a05a}
+.healthText{position:absolute;inset:0;text-align:center;font-size:11px;line-height:18px;text-shadow:1px 1px #000}
+.supplies{
+ position:absolute;right:12px;bottom:15px;display:flex;gap:6px;pointer-events:auto
 }
 .supply{
- width:58px;height:58px;border:2px solid #111;background:#303331dd;
- box-shadow:0 2px 8px #000,inset 0 1px #aaa;text-align:center;position:relative;
+ width:55px;height:55px;background:#1a281ddd;border:2px solid #5c6d58;
+ display:grid;place-items:center;position:relative
 }
-.supply .key{position:absolute;top:2px;left:4px;font-size:10px;color:#fff}
-.supply .ico{font-size:25px;margin-top:10px}
-.supply .cnt{font-size:9px;color:#fff}
-.s1 .ico{color:#62a94c}.s2 .ico{color:#5999cf}.s3 .ico{color:#d34d4d}
-.s4 .ico{color:#e1bd4d}.s5 .ico{color:#68745b}.s6 .ico{color:#f1cb4b}
-#mobileControls{display:none}
-.joy{
- position:absolute;bottom:25px;left:20px;width:125px;height:125px;border-radius:50%;
- background:#1118;border:2px solid #aaa5;z-index:30;touch-action:none;
+.supply b{font-size:19px}.supply span{position:absolute;bottom:2px;right:3px;font-size:9px;color:#d5dfd0}
+.supply.active{border-color:#c6db80;box-shadow:0 0 10px #a4c56d}
+.supply:nth-child(1) b{color:#7ed477}
+.supply:nth-child(2) b{color:#68b8ff}
+.supply:nth-child(3) b{color:#e98b59}
+.supply:nth-child(4) b{color:#d6cf64}
+.supply:nth-child(5) b{color:#bc805b}
+.chatBattle{
+ position:absolute;left:10px;bottom:14px;width:330px;height:120px;
+ background:#10191191;border-left:2px solid #667662;padding:7px;font-size:10px
 }
-.joyKnob{position:absolute;width:52px;height:52px;border-radius:50%;background:#aaa8;left:34px;top:34px}
-.mobileFire{
- position:absolute;right:24px;bottom:40px;width:88px;height:88px;border-radius:50%;
- background:#a33a8;border:2px solid #aaa;color:#fff;font-weight:bold;z-index:30;
+.chatLine{margin:3px 0;color:#ccd5ca}
+.scoreboard{
+ position:absolute;inset:70px 18% 70px;display:none;
+ background:#101811e8;border:2px solid #70816c;padding:18px
 }
-.mobileAim{position:absolute;right:125px;bottom:35px;width:70px;height:70px;border-radius:50%;background:#3338;border:1px solid #aaa;z-index:30}
+.scoreboard.on{display:block}
+.scoreCols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.scoreCols>div{border:1px solid #536653;padding:10px}
+.scorePlayer{display:flex;justify-content:space-between;padding:7px;border-bottom:1px solid #334533;font-size:11px}
+.damageFlash{position:absolute;inset:0;background:#f00;opacity:0;pointer-events:none}
+.death{
+ position:absolute;inset:0;background:#000a;display:none;align-items:center;justify-content:center;text-align:center
+}
+.death.on{display:flex}
+.death h1{font-size:45px;text-shadow:3px 3px #000}
+.respawn{font-size:16px;color:#bfcbbb}
+.scope{
+ position:absolute;inset:0;display:none;pointer-events:none;
+ background:radial-gradient(circle,transparent 0 34%,#000d 36% 100%)
+}
+.scope.on{display:block}
+.scope:before{
+ content:"";position:absolute;left:50%;top:50%;width:54%;height:54%;
+ transform:translate(-50%,-50%);border:2px solid #b7d3a5;border-radius:50%
+}
+.scopeDot{position:absolute;left:50%;top:50%;width:8px;height:8px;background:#ff2b2b;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 7px red}
+.charge{
+ position:absolute;left:50%;top:72%;transform:translateX(-50%);
+ width:250px;height:12px;background:#101510;border:1px solid #9aa98d;display:none
+}
+.charge i{display:block;width:0;height:100%;background:#d2e477}
+.mobileControls{display:none}
 
-#scoreboard{
- position:absolute;inset:70px 10%;z-index:100;background:#171918ee;border:1px solid #777;
- box-shadow:0 8px 30px #000;display:none;padding:12px;
-}
-.scoreTitle{text-align:center;font-size:20px;font-weight:bold;margin-bottom:10px}
-.scoreGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.scoreTeam{border:1px solid #555;padding:8px;background:#292b2a}
-.playerRow{display:flex;justify-content:space-between;padding:7px;border-bottom:1px solid #444;font-size:11px}
-#death{
- position:absolute;inset:0;z-index:90;background:#0009;display:none;align-items:center;justify-content:center;
-}
-.deathBox{text-align:center}.deathBox h1{font-size:40px;margin:0 0 10px}.respawn{color:#bbb}
-
+/* ================= RESULT ================= */
 #result{
- position:absolute;inset:0;z-index:500;background:#161817eF;display:none;
- align-items:center;justify-content:center;text-align:center;
+ background:radial-gradient(circle,#3d593e,#111a14 70%);
+ align-items:center;justify-content:center;text-align:center
 }
-.resultBox{width:min(560px,92vw);padding:28px;background:linear-gradient(#505350,#252725);border:1px solid #888;box-shadow:0 10px 50px #000}
-.resultBox h1{font-size:36px;margin:0 0 12px}
-.resultStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:15px 0}
-.resultStat{background:#171917;border:1px solid #111;padding:10px}.resultStat b{display:block;font-size:20px}
-#scope{
- position:absolute;inset:0;z-index:80;display:none;pointer-events:none;
- background:radial-gradient(circle,transparent 0 27%,rgba(0,0,0,.3) 28%,rgba(0,0,0,.85) 53%,#000 70%);
-}
-#scope:after{
- content:"";position:absolute;left:50%;top:50%;width:42vw;height:42vw;max-width:620px;max-height:620px;
- transform:translate(-50%,-50%);border:2px solid #aaa8;border-radius:50%;
-}
-#scopeDot{position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:#f22;transform:translate(-50%,-50%)}
-#charge{
- position:absolute;left:50%;bottom:105px;transform:translateX(-50%);width:250px;height:13px;
- background:#111;border:1px solid #aaa;display:none;z-index:90;
-}
-#charge i{display:block;height:100%;width:0;background:#d7d7d7}
+.resultBox{width:min(600px,92vw);padding:30px;background:#17251beF;border:2px solid #71836d;box-shadow:0 20px 60px #000}
+.resultBox h1{font-size:38px}
+.reward{font-size:20px;color:#cbdc93;margin:20px}
+.resultStats{display:flex;justify-content:space-around;margin:20px 0}
+.resultStats div{padding:10px}
+.resultStats b{display:block;font-size:25px}
 
-#loadingBattle{
- position:absolute;inset:0;z-index:400;background:#292b2a;display:none;
- align-items:center;justify-content:center;text-align:center;
-}
-#loadingBattle .loadCard{width:min(500px,90vw)}
-.loadMap{font-size:40px;font-weight:bold;margin-bottom:20px}
+/* ================= MOBILE ================= */
 @media(max-width:800px){
- #top{height:65px}.rankBox{min-width:190px}.rankInfo{min-width:120px}.nav button{min-width:60px;font-size:9px}
- #content{inset:65px 0 0}
+ .top{height:62px}.topLogo{width:auto;font-size:15px}
+ .profileTop{min-width:0}.profileTop .topRank,.xpWrap{display:none}
+ .balance{font-size:10px;gap:6px}
+ .nav{top:62px;width:65px;padding:8px 5px}
+ .nav button{height:54px;padding:4px;text-align:center;font-size:0}
+ .nav button:first-letter{font-size:19px}
+ .content{left:65px;top:62px;padding:8px}
  .homeGrid{grid-template-columns:1fr}
- .garage{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 135px 145px}
- .infoPanel{display:none}.equip{grid-row:2}
- .garageView{grid-row:1}
- #supplies{bottom:7px}.supply{width:45px;height:48px}.supply .ico{font-size:20px}
- #mobileControls{display:block}
- #scoreboard{inset:70px 3%}
+ .homeSide{display:none}
+ .garage{grid-template-columns:1fr;grid-template-rows:1fr 190px}
+ .info{display:none}.items{grid-column:1}
+ .garageTitle{font-size:17px}
+ .hudTop{height:55px}.teamScore{min-width:70px;font-size:16px}.timer{font-size:19px}
+ .rankHud{width:180px;top:58px}
+ .chatBattle{display:none}
+ .healthBox{width:60vw;bottom:84px}
+ .supplies{bottom:10px;right:5px;gap:3px}.supply{width:48px;height:48px}
+ .scoreboard{inset:65px 4px 65px}
+ .mobileControls{display:block}
+ .joystick{
+  position:absolute;left:15px;bottom:35px;width:120px;height:120px;border-radius:50%;
+  background:#ffffff15;border:2px solid #fff5;pointer-events:auto
+ }
+ .stick{
+  position:absolute;width:48px;height:48px;border-radius:50%;background:#ffffff30;
+  border:2px solid #fff8;left:34px;top:34px
+ }
+ .mobileFire{
+  position:absolute;right:20px;bottom:90px;width:78px;height:78px;border-radius:50%;
+  background:#9e3e3eaa;border:3px solid #fff8;color:#fff;pointer-events:auto
+ }
 }
+
+/* small texture helper */
+::-webkit-scrollbar{height:8px;width:8px}
+::-webkit-scrollbar-track{background:#111a13}
+::-webkit-scrollbar-thumb{background:#50664f}
 </style>
 </head>
 <body>
-
-<div id="boot">
- <div class="bootBox">
-  <div class="bootLogo">TANKI</div>
-  <div class="bootSub">CLASSIC ONLINE • 2012–2015 PROTOTYPE</div>
-  <div class="loadTrack"><div id="bootFill" class="loadFill"></div></div>
- </div>
-</div>
-
-<div id="login">
- <div class="loginPanel">
-  <div class="loginLogo">TANKI</div>
-  <div class="loginSub">CLASSIC ONLINE</div>
-  <div class="field"><label>Имя танкиста</label><input id="loginName" value="Танкист"></div>
-  <div class="field"><label>Пароль</label><input type="password" value="••••••"></div>
-  <div class="loginButtons">
-   <button class="oldBtn greenBtn" id="loginBtn">ВОЙТИ</button>
-   <button class="oldBtn" id="guestBtn">ГОСТЬ</button>
-  </div>
-  <div class="small">Локальный прототип • прогресс сохраняется в браузере</div>
- </div>
-</div>
-
 <div id="app">
- <header id="top">
-  <div class="rankBox">
-   <div class="rankIcon" id="rankIcon">★</div>
-   <div class="rankInfo">
-    <div class="rankName" id="rankName">НОВОБРАНЕЦ</div>
-    <div class="xpText" id="xpText">0 / 100 XP</div>
-    <div class="xpBar"><div id="xpFill" class="xpFill"></div></div>
-   </div>
-   <div class="money">💎 <b id="crystals">1250</b><br>🪙 <b id="fundMoney">0</b></div>
+
+<!-- LOGIN -->
+<section id="login" class="screen on">
+ <div class="loginNoise"></div>
+ <div class="loginBox">
+  <div class="logo">TANKI</div>
+  <div class="logoSub">CLASSIC BATTLE</div>
+  <div class="loginTabs">
+   <button id="tabLogin" class="active">ВХОД</button>
+   <button id="tabReg">РЕГИСТРАЦИЯ</button>
   </div>
-  <nav class="nav">
-   <button data-page="home" class="active">ГЛАВНАЯ</button>
-   <button data-page="garage">ГАРАЖ</button>
-   <button data-page="missions">МИССИИ</button>
-   <button data-page="maps">КАРТЫ</button>
-  </nav>
- </header>
+  <div class="field">
+   <label>Никнейм</label>
+   <input id="loginName" maxlength="18" value="Танкист">
+  </div>
+  <div class="field">
+   <label>Пароль</label>
+   <input id="loginPass" type="password" value="1234">
+  </div>
+  <button class="bigBtn" id="enterBtn">ВОЙТИ В ИГРУ</button>
+  <div class="loginHint">Классический локальный прототип • прогресс сохраняется</div>
+ </div>
+</section>
 
- <main id="content">
-  <section id="homePage" class="page">
-   <div class="grid homeGrid">
-    <div>
-     <div class="panelTitle">БИТВЫ</div>
-     <div class="battleList" id="battleList"></div>
-    </div>
-    <div>
-     <div class="panelTitle">ЧАТ</div>
-     <div class="chat" id="chat">
-      <div class="chatLine"><b>Система:</b> Добро пожаловать на сервер.</div>
-      <div class="chatLine"><b>Танкист_77:</b> Кто на Полигон?</div>
-      <div class="chatLine"><b>SteelFox:</b> Я захожу.</div>
-     </div>
-     <div class="panelTitle createBox">СОЗДАТЬ БИТВУ</div>
-     <div class="createBox" style="padding:9px;background:#303230;border:1px solid #111">
-      <div class="formGrid">
-       <div><label>Карта</label><select id="createMap"></select></div>
-       <div><label>Режим</label><select id="createMode">
-        <option>TDM</option><option>DM</option><option>CTF</option><option>CP</option>
-       </select></div>
-       <div><label>Время</label><select id="createTime">
-        <option value="180">3 минуты</option><option value="300">5 минут</option>
-        <option value="600" selected>10 минут</option><option value="900">15 минут</option>
-        <option value="1200">20 минут</option><option value="1800">30 минут</option>
-        <option value="2700">45 минут</option><option value="3600">60 минут</option>
-       </select></div>
-       <div><label>Игроков</label><select id="createPlayers">
-        <option>6</option><option>10</option><option selected>16</option><option>20</option><option>24</option>
-       </select></div>
-       <div><label>Лимит счёта</label><input id="createLimit" type="number" value="50" min="1"></div>
-       <div><label>Время суток</label><select id="createTheme">
-        <option value="day">День</option><option value="night">Ночь</option><option value="winter">Зима</option>
-       </select></div>
-      </div>
-      <button class="oldBtn greenBtn" id="createBattle">СОЗДАТЬ БИТВУ</button>
-     </div>
-    </div>
+<!-- LOBBY -->
+<section id="lobby" class="screen">
+ <div class="top">
+  <div class="topLogo">TANKI CLASSIC</div>
+  <div class="profileTop">
+   <div class="rankIcon" id="topRankIcon">1</div>
+   <div>
+    <div class="topNick" id="topNick">Танкист</div>
+    <div class="topRank" id="topRank">Новобранец</div>
    </div>
-  </section>
+  </div>
+  <div class="xpWrap">
+   <div class="xpBar"><div id="topXpFill" class="xpFill"></div></div>
+   <div id="topXpText" class="xpText">0 / 100 XP</div>
+  </div>
+  <div class="balance">
+   💎 <span id="crystals">10000</span>
+   ⭐ <span id="goldCount">0</span>
+  </div>
+ </div>
 
-  <section id="garagePage" class="page hidden">
-   <div class="garage">
-    <div class="garageView">
-     <div class="garageLabel">МОЙ ТАНК</div>
-     <canvas id="garageCanvas"></canvas>
-     <div class="garageHint">Зажми мышь / палец и вращай • колесо — приблизить</div>
-    </div>
-    <aside class="infoPanel">
-     <div class="panelTitle">ИНФОРМАЦИЯ</div>
-     <div style="padding-top:12px">
-      <div class="infoName" id="infoName">VIKING M0</div>
-      <div style="font-size:11px;color:#aaa;margin-top:4px" id="infoType">Корпус</div>
-      <div class="stat"><div class="statTitle">БРОНЯ</div><div class="statBar"><i id="statArmor"></i></div></div>
-      <div class="stat"><div class="statTitle">СКОРОСТЬ</div><div class="statBar"><i id="statSpeed"></i></div></div>
-      <div class="stat"><div class="statTitle">ПОВОРОТ</div><div class="statBar"><i id="statTurn"></i></div></div>
-      <div class="stat"><div class="statTitle">УРОН</div><div class="statBar"><i id="statDamage"></i></div></div>
-      <div class="stat"><div class="statTitle">ДАЛЬНОСТЬ</div><div class="statBar"><i id="statRange"></i></div></div>
-      <div class="price">💎 <span id="infoPrice">0</span></div>
-      <button class="oldBtn greenBtn" id="equipBtn" style="width:100%">УСТАНОВИТЬ</button>
-     </div>
-    </aside>
-    <div class="equip">
-     <div class="tabs">
-      <button class="oldBtn" id="tabHulls">КОРПУСА</button>
-      <button class="oldBtn" id="tabGuns">ПУШКИ</button>
-     </div>
-     <div class="cards" id="equipCards"></div>
-    </div>
+ <aside class="nav">
+  <button class="sel" data-page="home">🏠 ГЛАВНАЯ</button>
+  <button data-page="garage">🔧 ГАРАЖ</button>
+  <button data-page="maps">⚔ БИТВЫ</button>
+  <button data-page="missions">★ МИССИИ</button>
+  <button data-page="create">＋ СОЗДАТЬ БОЙ</button>
+ </aside>
+
+ <main id="content" class="content"></main>
+</section>
+
+<!-- CREATE BATTLE -->
+<div id="createModal" class="create">
+ <div class="createBox">
+  <h2>СОЗДАНИЕ БИТВЫ</h2>
+  <div class="field">
+   <label>Карта</label>
+   <select id="createMap"></select>
+  </div>
+  <div class="row">
+   <div class="field">
+    <label>Режим</label>
+    <select id="createMode">
+     <option value="TDM">Командный бой</option>
+     <option value="DM">Каждый сам за себя</option>
+     <option value="CTF">Захват флага</option>
+     <option value="CP">Контроль точек</option>
+    </select>
    </div>
-  </section>
-
-  <section id="missionsPage" class="page hidden">
-   <div class="panelTitle">ЕЖЕДНЕВНЫЕ МИССИИ</div>
-   <div id="missions"></div>
-  </section>
-
-  <section id="mapPage" class="page hidden">
-   <div class="panelTitle">КАРТЫ</div>
-   <div class="mapGrid" id="mapGrid"></div>
-  </section>
- </main>
+   <div class="field">
+    <label>Время боя</label>
+    <select id="createTime">
+     <option value="180">3 минуты</option>
+     <option value="300" selected>5 минут</option>
+     <option value="600">10 минут</option>
+     <option value="900">15 минут</option>
+     <option value="1200">20 минут</option>
+     <option value="1800">30 минут</option>
+     <option value="3600">60 минут</option>
+    </select>
+   </div>
+  </div>
+  <div class="row">
+   <div class="field">
+    <label>Размер</label>
+    <select id="createPlayers">
+     <option value="8">8 игроков</option>
+     <option value="12" selected>12 игроков</option>
+     <option value="16">16 игроков</option>
+     <option value="24">24 игрока</option>
+    </select>
+   </div>
+   <div class="field">
+    <label>Фонд</label>
+    <input id="createFund" type="number" min="0" value="1000">
+   </div>
+  </div>
+  <div class="createActions">
+   <button class="bigBtn" id="createCancel">ОТМЕНА</button>
+   <button class="bigBtn" id="createStart">СОЗДАТЬ</button>
+  </div>
+ </div>
 </div>
 
-<div id="battle">
- <canvas id="gameCanvas"></canvas>
- <div id="hudTop">
-  <div class="teamScore red">🔴 <span id="redScore">0</span></div>
-  <div class="battleTimer" id="battleTimer">10:00</div>
-  <div class="battleFund">ФОНД<br><b id="battleFund">0</b> 💎</div>
-  <div class="battleXP">
-   <div style="font-size:10px"><b id="battleRank">НОВОБРАНЕЦ</b> · <span id="battleXpText">0/100</span></div>
-   <div class="xpBar"><div id="battleXpFill" class="xpFill"></div></div>
+<!-- LOADING -->
+<section id="loading" class="screen">
+ <div class="loadingBox">
+  <div class="loadingLogo">TANKI</div>
+  <div id="loadingMap" style="margin-top:8px;color:#aabbaa">ЗАГРУЗКА КАРТЫ</div>
+  <div class="loader"><i id="loadFill"></i></div>
+  <div id="loadingText" class="loadingText">Подготовка поля боя...</div>
+ </div>
+</section>
+
+<!-- BATTLE -->
+<section id="battle" class="screen">
+ <div id="skyFallback"></div>
+ <canvas id="gl"></canvas>
+
+ <div id="battleUI">
+  <div class="hudTop">
+   <div class="teamScore red">🔻 <span id="redScore">0</span></div>
+   <div class="timer" id="battleTimer">05:00</div>
+   <div class="teamScore blue"><span id="blueScore">0</span> 🔷</div>
   </div>
-  <div class="teamScore blue">🔵 <span id="blueScore">0</span></div>
- </div>
- <div id="battleMsg"></div>
- <div id="crosshair"></div>
- <div id="scope"><div id="scopeDot"></div></div>
- <div id="charge"><i></i></div>
 
- <div id="supplies">
-  <div class="supply s1"><span class="key">1</span><div class="ico">🔧</div><div class="cnt" id="sup1">4</div></div>
-  <div class="supply s2"><span class="key">2</span><div class="ico">🛡</div><div class="cnt" id="sup2">4</div></div>
-  <div class="supply s3"><span class="key">3</span><div class="ico">💥</div><div class="cnt" id="sup3">4</div></div>
-  <div class="supply s4"><span class="key">4</span><div class="ico">⚡</div><div class="cnt" id="sup4">4</div></div>
-  <div class="supply s5"><span class="key">5</span><div class="ico">💣</div><div class="cnt" id="sup5">4</div></div>
-  <div class="supply s6"><span class="key">6</span><div class="ico">🟨</div><div class="cnt" id="sup6">0</div></div>
- </div>
-
- <div id="mobileControls">
-  <div class="joy" id="joy"><div class="joyKnob" id="joyKnob"></div></div>
-  <div class="mobileAim" id="mobileAim">AIM</div>
-  <button class="mobileFire" id="mobileFire">ОГОНЬ</button>
- </div>
-
- <div id="scoreboard">
-  <div class="scoreTitle">ТАБЛИЦА СЧЁТА</div>
-  <div class="scoreGrid">
-   <div class="scoreTeam"><b class="red">КРАСНЫЕ</b><div id="redPlayers"></div></div>
-   <div class="scoreTeam"><b class="blue">СИНИЕ</b><div id="bluePlayers"></div></div>
-  </div>
- </div>
-
- <div id="death">
-  <div class="deathBox">
-   <h1>ТАНК УНИЧТОЖЕН</h1>
-   <div class="respawn" id="respawnText">Респавн через 3</div>
-  </div>
- </div>
-
- <div id="result">
-  <div class="resultBox">
-   <h1 id="resultTitle">БИТВА ОКОНЧЕНА</h1>
-   <div id="resultReason"></div>
-   <div class="resultStats">
-    <div class="resultStat">УБИЙСТВА<b id="rKills">0</b></div>
-    <div class="resultStat">СМЕРТИ<b id="rDeaths">0</b></div>
-    <div class="resultStat">XP<b id="rXp">0</b></div>
+  <div class="rankHud">
+   <div class="rankHudTop">
+    <div class="rankIcon" id="battleRankIcon">1</div>
+    <div>
+     <div id="battleRankName" class="rankHudName">Новобранец</div>
+     <div id="battleXpText" class="rankHudXp">0 / 100</div>
+    </div>
    </div>
-   <div style="font-size:18px;color:#d5bb5d;margin:12px">Награда: 💎 <b id="rMoney">0</b></div>
-   <button class="oldBtn greenBtn" id="leaveBattle">В ЛОББИ</button>
+   <div class="xpBar" style="margin-top:5px"><div id="battleXpFill" class="xpFill"></div></div>
   </div>
- </div>
 
- <div id="loadingBattle">
-  <div class="loadCard">
-   <div class="loadMap" id="loadingMap">ПОЛИГОН</div>
-   <div style="color:#aaa;margin-bottom:15px" id="loadingMode">TDM</div>
-   <div class="loadTrack"><div id="battleLoadFill" class="loadFill"></div></div>
+  <div class="battleFund">ФОНД: 💎 <b id="fund">1000</b></div>
+
+  <div class="cross"></div>
+
+  <div class="healthBox">
+   <div id="healthFill" class="healthFill"></div>
+   <div id="healthText" class="healthText">1000 / 1000</div>
+  </div>
+
+  <div class="supplies">
+   <div class="supply" data-supply="1"><b>✚</b><span id="s1">3</span></div>
+   <div class="supply" data-supply="2"><b>🛡</b><span id="s2">3</span></div>
+   <div class="supply" data-supply="3"><b>⚡</b><span id="s3">3</span></div>
+   <div class="supply" data-supply="4"><b>➤</b><span id="s4">3</span></div>
+   <div class="supply" data-supply="5"><b>◆</b><span id="s5">3</span></div>
+  </div>
+
+  <div class="chatBattle" id="battleChat">
+   <div class="chatLine"><b class="blue">[СИНИЕ]</b> Удачной игры!</div>
+   <div class="chatLine"><b class="red">[КРАСНЫЕ]</b> В бой!</div>
+  </div>
+
+  <div id="scoreboard" class="scoreboard">
+   <h2>ТАБЛИЦА БОЯ</h2>
+   <div class="scoreCols">
+    <div>
+     <h3 class="blue">СИНИЕ</h3>
+     <div id="bluePlayers"></div>
+    </div>
+    <div>
+     <h3 class="red">КРАСНЫЕ</h3>
+     <div id="redPlayers"></div>
+    </div>
+   </div>
+  </div>
+
+  <div class="scope" id="scope"><div class="scopeDot"></div></div>
+  <div class="charge" id="charge"><i></i></div>
+  <div class="damageFlash" id="damageFlash"></div>
+
+  <div class="death" id="death">
+   <div>
+    <h1>УНИЧТОЖЕН</h1>
+    <div class="respawn" id="respawnText">Возрождение через 3</div>
+   </div>
+  </div>
+
+  <div class="mobileControls">
+   <div class="joystick" id="joystick"><div class="stick" id="stick"></div></div>
+   <button class="mobileFire" id="mobileFire">ОГОНЬ</button>
   </div>
  </div>
+</section>
+
+<!-- RESULT -->
+<section id="result" class="screen">
+ <div class="resultBox">
+  <div style="font-size:12px;color:#8fa28f">БИТВА ОКОНЧЕНА</div>
+  <h1 id="resultTitle">ПОБЕДА!</h1>
+  <div id="resultReason">Время вышло</div>
+  <div class="resultStats">
+   <div>УБИЙСТВА<b id="rKills">0</b></div>
+   <div>ОПЫТ<b id="rXp">0</b></div>
+   <div>КРИСТАЛЛЫ<b id="rCrystals">0</b></div>
+  </div>
+  <div class="reward">ФОНД БОЯ: 💎 <span id="rFund">0</span></div>
+  <button class="bigBtn" id="returnLobby">ВЕРНУТЬСЯ В ГАРАЖ</button>
+ </div>
+</section>
+
 </div>
 
 <script>
-/* =========================================================
-   TANKI CLASSIC — SINGLE FILE PROTOTYPE
-   Procedural WebGL, no external libraries/assets.
-========================================================= */
+/* ============================================================
+   TANKI CLASSIC SINGLE FILE
+   Original procedural graphics — no ripped assets.
+============================================================ */
 
-const $=id=>document.getElementById(id);
-const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-const lerp=(a,b,t)=>a+(b-a)*t;
-const TAU=Math.PI*2;
+"use strict";
 
-/* ---------- PROFILE / RANKS ---------- */
-const ranks=[
+/* -------------------- DATA -------------------- */
+const RANKS=[
  ["Новобранец",0,100],["Рядовой",100,500],["Ефрейтор",500,1500],
  ["Капрал",1500,3700],["Мастер-капрал",3700,7100],["Сержант",7100,12300],
  ["Старший сержант",12300,20000],["Старшина",20000,29000],
@@ -511,99 +604,8 @@ const ranks=[
  ["Генерал-лейтенант",787000,889000],["Генерал",889000,1000000],
  ["Маршал",1000000,Infinity]
 ];
-let profile=JSON.parse(localStorage.getItem("tankProfile")||"null")||{
- name:"Танкист",xp:0,crystals:1250,rank:0,kills:0,deaths:0,
- hull:"Viking",gun:"Smoky",missions:[]
-};
-function save(){localStorage.setItem("tankProfile",JSON.stringify(profile))}
-function getRank(){
- let r=0;
- for(let i=0;i<ranks.length;i++)if(profile.xp>=ranks[i][1])r=i;
- return r;
-}
-function updateProfile(){
- profile.rank=getRank();
- let r=ranks[profile.rank],next=ranks[Math.min(profile.rank+1,ranks.length-1)];
- $("rankName").textContent=r[0].toUpperCase();
- $("rankIcon").textContent=profile.rank<10?"★":profile.rank<18?"◆":profile.rank<25?"✦":"♛";
- $("crystals").textContent=Math.floor(profile.crystals);
- if(next[2]===Infinity){
-  $("xpText").textContent=profile.xp+" XP • МАКСИМУМ";
-  $("xpFill").style.width="100%";
- }else{
-  $("xpText").textContent=profile.xp+" / "+next[2]+" XP";
-  $("xpFill").style.width=(clamp((profile.xp-r[1])/(next[2]-r[1])*100,0,100))+"%";
- }
- updateBattleProfile();
- save();
-}
-function addXP(n){
- let old=getRank();
- profile.xp+=Math.max(0,Math.floor(n));
- let nr=getRank();
- if(nr>old) toast("НОВОЕ ЗВАНИЕ: "+ranks[nr][0].toUpperCase());
- updateProfile();
-}
 
-/* ---------- EQUIPMENT ---------- */
-const hulls=[
- ["Wasp",32,92,100,35,900],["Hornet",39,87,115,42,1800],
- ["Hunter",47,75,95,50,3500],["Viking",55,70,90,58,5200],
- ["Titan",72,55,70,73,8500],["Dictator",68,64,78,68,10500],
- ["Mammoth",94,42,55,95,15000]
-];
-const guns=[
- ["Smoky","medium",52,65,55,62,900],["Firebird","flame",42,32,85,28,1500],
- ["Twins","twins",48,44,80,38,2800],["Railgun","rail",85,100,25,100,5000],
- ["Isida","isida",38,36,90,25,6200],["Thunder","thunder",92,48,38,70,7600],
- ["Freeze","freeze",44,30,88,25,8500],["Ricochet","ricochet",57,66,60,65,10000],
- ["Shaft","shaft",100,100,18,100,12500]
-];
-let garageMode="hulls",garageSel={type:"hull",name:profile.hull},garageRot=0,garageZoom=1;
-function equipmentCards(){
- const arr=garageMode==="hulls"?hulls:guns;
- $("equipCards").innerHTML=arr.map((x,i)=>{
-  let active=x[0]===garageSel.name;
-  let icon=garageMode==="hulls"?"▰":"◉";
-  return `<div class="card ${active?"active":""}" data-i="${i}">
-   <div class="cardName">${x[0]} M0</div>
-   <div class="cardPreview">${icon}</div>
-   <div class="cardSub">${garageMode==="hulls"?"Корпус":"Пушка"}</div>
-   <div class="cardPrice">💎 ${x[x.length-1]}</div>
-  </div>`;
- }).join("");
- [...$("equipCards").children].forEach(c=>c.onclick=()=>{
-  let x=arr[+c.dataset.i];
-  garageSel={type:garageMode==="hulls"?"hull":"gun",name:x[0]};
-  if(garageMode==="hulls")profile.hull=x[0];else profile.gun=x[0];
-  updateGarageInfo();equipmentCards();drawGarage();
- });
-}
-$("tabHulls").onclick=()=>{garageMode="hulls";garageSel={type:"hull",name:profile.hull};equipmentCards();updateGarageInfo();};
-$("tabGuns").onclick=()=>{garageMode="guns";garageSel={type:"gun",name:profile.gun};equipmentCards();updateGarageInfo();};
-function updateGarageInfo(){
- let x=(garageMode==="hulls"?hulls:guns).find(a=>a[0]===garageSel.name);
- if(!x)return;
- $("infoName").textContent=x[0]+" M0";
- $("infoType").textContent=garageMode==="hulls"?"Корпус":"Пушка";
- if(garageMode==="hulls"){
-  $("statArmor").style.width=x[1]+"%";$("statSpeed").style.width=x[2]+"%";
-  $("statTurn").style.width=x[3]+"%";$("statDamage").style.width=x[4]+"%";
-  $("statRange").style.width="65%";
- }else{
-  $("statArmor").style.width=x[2]+"%";$("statSpeed").style.width=x[3]+"%";
-  $("statTurn").style.width=x[4]+"%";$("statDamage").style.width=x[2]+"%";
-  $("statRange").style.width=x[5]+"%";
- }
- $("infoPrice").textContent=x[x.length-1];
-}
-$("equipBtn").onclick=()=>{
- if(garageMode==="hulls")profile.hull=garageSel.name;else profile.gun=garageSel.name;
- save();updateProfile();toast("УСТАНОВЛЕНО: "+garageSel.name);
-};
-
-/* ---------- MAPS ---------- */
-const mapNames=[
+const MAPS=[
 "Александровск","Арена","Архипелаг","Атра","Барда","Безумие","Берлин","Бобруйск",
 "Бойня","Брест","Бумбокс","Будущее","Волна","Вольфенштейн","Гардер","Гравити",
 "Год 2042","Губаха","Долина","Дуалити","Дуэль","Дюссельдорф","Жаворонки","Зона",
@@ -615,756 +617,1627 @@ const mapNames=[
 "Тишина","Трек","Трибьют","Тэмпл","Ущелье","Фабрика","Ферма","Форест","Форт Нокс",
 "Холм","Чернобыль","Чернушка","Шоссе","Шум","Эдинбург","Эспланада"
 ];
-function fillMaps(){
- $("createMap").innerHTML=mapNames.map(m=>`<option>${m}</option>`).join("");
- $("mapGrid").innerHTML=mapNames.map((m,i)=>`<div class="mapCard" data-map="${m}">
-  <div class="mapPreview"></div><b>${m}</b><br><span>${i%3===0?"TDM • CTF • CP":"DM • TDM • CTF"} • ${i%2?16:20} игроков</span>
- </div>`).join("");
- [...$("mapGrid").children].forEach(c=>c.onclick=()=>{
-  $("createMap").value=c.dataset.map;showPage("home");
-  toast("ВЫБРАНА КАРТА: "+c.dataset.map);
- });
-}
-fillMaps();equipmentCards();updateGarageInfo();
 
-/* ---------- MISSIONS ---------- */
-const missionPool=[
- ["Уничтожить 15 танков",15,"kills",250],
- ["Получить 1500 XP",1500,"xp",300],
- ["Захватить 3 флага",3,"flags",350],
- ["Занять 5 контрольных точек",5,"cp",400],
- ["Использовать 5 припасов",5,"supplies",180],
- ["Занять первое место в битве",1,"first",500]
+const GUNS=[
+ {n:"Smoky",icon:"◉",range:8,damage:145,cost:0,desc:"Классическая пушка среднего радиуса. Сильный одиночный выстрел."},
+ {n:"Firebird",icon:"♨",range:3,damage:42,cost:1200,desc:"Огненный поток ближнего боя."},
+ {n:"Twins",icon:"Ⅱ",range:6,damage:75,cost:1800,desc:"Два плазменных ствола с высокой скорострельностью."},
+ {n:"Railgun",icon:"═",range:18,damage:330,cost:4500,desc:"Мощный мгновенный выстрел, пробивающий ряд танков."},
+ {n:"Isida",icon:"✦",range:6,damage:60,cost:3000,desc:"Луч наносит урон врагу и может восстанавливать союзника."},
+ {n:"Thunder",icon:"●",range:10,damage:240,cost:3600,desc:"Мощный снаряд с радиусом взрыва."},
+ {n:"Freeze",icon:"❄",range:4,damage:52,cost:2200,desc:"Холодный поток замедляет противника."},
+ {n:"Ricochet",icon:"◆",range:8,damage:105,cost:3300,desc:"Плазменный снаряд способен отражаться от стен."},
+ {n:"Shaft",icon:"╫",range:25,damage:500,cost:5200,desc:"Снайперская пушка. Space — прицел и заряд выстрела."}
 ];
-function refreshMissions(){
- let day=new Date().toDateString();
- let saved=JSON.parse(localStorage.getItem("tankMissions")||"null");
- if(!saved||saved.day!==day){
-  let a=[...missionPool].sort(()=>Math.random()-.5).slice(0,3);
-  saved={day,items:a.map(x=>({name:x[0],goal:x[1],type:x[2],reward:x[3],value:0}))};
-  localStorage.setItem("tankMissions",JSON.stringify(saved));
- }
- profile.missions=saved.items;
- $("missions").innerHTML=profile.missions.map(m=>{
-  let p=clamp(m.value/m.goal*100,0,100);
-  return `<div class="mission"><div class="missionTop"><div class="missionName">${m.name}</div><div>${m.value}/${m.goal}</div></div>
-  <div class="progress"><i style="width:${p}%"></i></div><div class="missionReward">Награда: 💎 ${m.reward}</div></div>`
- }).join("");
-}
-function missionProgress(type,n=1){
- let changed=false;
- profile.missions.forEach(m=>{if(m.type===type&&m.value<m.goal){m.value+=n;changed=true}});
- if(changed){
-  localStorage.setItem("tankMissions",JSON.stringify({day:new Date().toDateString(),items:profile.missions}));
-  refreshMissions();
- }
-}
-refreshMissions();
 
-/* ---------- NAV ---------- */
-function showPage(name){
- document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
- $(name+"Page").classList.remove("hidden");
- document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
- if(name==="garage"){setTimeout(()=>resizeGarage(),30);drawGarage()}
-}
-document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
-
-/* ---------- HOME BATTLES ---------- */
-let battles=[
- {map:"Полигон",mode:"TDM",players:"8/16",time:600,left:487,fund:4200},
- {map:"Арена",mode:"CTF",players:"11/16",time:900,left:733,fund:6200},
- {map:"Плато",mode:"CP",players:"6/10",time:1200,left:1012,fund:3100},
- {map:"Мосты",mode:"DM",players:"7/12",time:600,left:352,fund:2700}
+const HULLS=[
+ {n:"Wasp",speed:9,armor:650,cost:0,icon:"▰"},
+ {n:"Hunter",speed:7,armor:900,cost:1200,icon:"▰"},
+ {n:"Titan",speed:5.5,armor:1500,cost:2500,icon:"▰"},
+ {n:"Dictator",speed:6,armor:1350,cost:3000,icon:"▰"},
+ {n:"Hornet",speed:8.5,armor:800,cost:4200,icon:"▰"},
+ {n:"Viking",speed:7.2,armor:1250,cost:5000,icon:"▰"},
+ {n:"Mammoth",speed:4.5,armor:2100,cost:6500,icon:"▰"}
 ];
-function fmt(t){t=Math.max(0,Math.floor(t));return String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0")}
-function renderBattles(){
- $("battleList").innerHTML=`<div class="battleRow" style="font-weight:bold;background:#1b1d1c">
-  <div>КАРТА</div><div>РЕЖИМ</div><div>ИГРОКИ</div><div>ВРЕМЯ</div></div>`+
- battles.map((b,i)=>`<div class="battleRow" data-i="${i}">
-  <div><b>${b.map}</b><br><span style="color:#999">Фонд ${b.fund} 💎</span></div>
-  <div>${b.mode}</div><div>${b.players}</div><div>${fmt(b.left)}</div>
- </div>`).join("");
- [...$("battleList").querySelectorAll(".battleRow[data-i]")].forEach(r=>r.onclick=()=>{
-  let b=battles[+r.dataset.i];startBattle({...b,limit:50,theme:"day"});
- });
-}
-renderBattles();
 
-$("createBattle").onclick=()=>{
- let seconds=+$("createTime").value;
- let b={
-  map:$("createMap").value,mode:$("createMode").value,players:"1/"+$("createPlayers").value,
-  time:seconds,left:seconds,fund:0,limit:Math.max(1,+$("createLimit").value||50),
-  theme:$("createTheme").value
- };
- battles.unshift(b);renderBattles();startBattle(b);
+const MISSIONS=[
+ ["Уничтожитель","Уничтожить 8 противников",8,0,300],
+ ["Боевой опыт","Получить 1200 XP",1200,0,250],
+ ["Флагман","Захватить 2 флага",2,0,400],
+ ["Поддержка","Активировать 5 припасов",5,0,200],
+ ["Первая кровь","Первым уничтожить врага",1,0,150],
+ ["Тяжёлая артиллерия","Нанести 5000 урона",5000,0,500]
+];
+
+let state={
+ name:"Танкист",
+ xp:0,crystals:10000,gold:0,
+ gun:0,hull:0,
+ ownedGuns:[true],ownedHulls:[true],
+ missions:[],
+ lastMissionDay:"",
+ kills:0,deaths:0
 };
 
-/* ---------- TOAST ---------- */
-let toastTimer;
-function toast(s){
- $("battleMsg").textContent=s;$("battleMsg").style.opacity=1;
- clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("battleMsg").style.opacity=0,2200);
+function save(){
+ localStorage.setItem("tankiClassicState",JSON.stringify(state));
+}
+function load(){
+ try{
+  let x=JSON.parse(localStorage.getItem("tankiClassicState"));
+  if(x) state=Object.assign(state,x);
+ }catch(e){}
+ if(!state.ownedGuns)state.ownedGuns=[true];
+ if(!state.ownedHulls)state.ownedHulls=[true];
+}
+load();
+
+function rankIndex(){
+ let idx=0;
+ for(let i=0;i<RANKS.length;i++)if(state.xp>=RANKS[i][1])idx=i;
+ return idx;
+}
+function rankInfo(){
+ let i=rankIndex(),r=RANKS[i],next=RANKS[i+1];
+ return {i,name:r[0],min:r[1],next:next?next[1]:r[2],max:r[2]};
+}
+function addXP(n){
+ state.xp+=Math.max(0,n);
+ save();
+ updateTop();
+}
+function fmtTime(s){
+ s=Math.max(0,Math.floor(s));
+ return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
 }
 
-/* ---------- GARAGE WEBGL ---------- */
-let gc,gctx,gProg,gBuf,gLoc={},garageDragging=false,lastGX=0;
-function mat4(){return new Float32Array(16)}
-function perspective(out,fov,aspect,near,far){
- let f=1/Math.tan(fov/2),nf=1/(near-far);
- out[0]=f/aspect;out[1]=0;out[2]=0;out[3]=0;
- out[4]=0;out[5]=f;out[6]=0;out[7]=0;
- out[8]=0;out[9]=0;out[10]=(far+near)*nf;out[11]=-1;
- out[12]=0;out[13]=0;out[14]=2*far*near*nf;out[15]=0;return out;
+/* -------------------- SCREEN -------------------- */
+function show(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("on"));
+ const el=document.getElementById(id);
+ if(el)el.classList.add("on");
 }
-function lookAt(out,e,c,u){
- let zx=e[0]-c[0],zy=e[1]-c[1],zz=e[2]-c[2],zl=Math.hypot(zx,zy,zz);zx/=zl;zy/=zl;zz/=zl;
- let xx=u[1]*zz-u[2]*zy,xy=u[2]*zx-u[0]*zz,xz=u[0]*zy-u[1]*zx,xl=Math.hypot(xx,xy,xz);xx/=xl;xy/=xl;xz/=xl;
- let yx=zy*xz-zz*xy,yy=zz*xx-zx*xz,yz=zx*xy-zy*xx;
- out[0]=xx;out[1]=yx;out[2]=zx;out[3]=0;out[4]=xy;out[5]=yy;out[6]=zy;out[7]=0;
- out[8]=xz;out[9]=yz;out[10]=zz;out[11]=0;
- out[12]=-(xx*e[0]+xy*e[1]+xz*e[2]);out[13]=-(yx*e[0]+yy*e[1]+yz*e[2]);
- out[14]=-(zx*e[0]+zy*e[1]+zz*e[2]);out[15]=1;return out;
+
+/* -------------------- LOGIN -------------------- */
+let registering=false;
+document.getElementById("tabLogin").onclick=()=>{
+ registering=false;
+ document.getElementById("tabLogin").classList.add("active");
+ document.getElementById("tabReg").classList.remove("active");
+ document.getElementById("enterBtn").textContent="ВОЙТИ В ИГРУ";
+};
+document.getElementById("tabReg").onclick=()=>{
+ registering=true;
+ document.getElementById("tabReg").classList.add("active");
+ document.getElementById("tabLogin").classList.remove("active");
+ document.getElementById("enterBtn").textContent="СОЗДАТЬ ТАНКИСТА";
+};
+
+document.getElementById("enterBtn").onclick=()=>{
+ const n=document.getElementById("loginName").value.trim()||"Танкист";
+ state.name=n.slice(0,18);
+ if(registering){
+  state.xp=0;state.crystals=10000;state.gold=0;state.kills=0;state.deaths=0;
+  state.ownedGuns=[true];state.ownedHulls=[true];
+  save();
+ }
+ initMissions();
+ openLobby("home");
+};
+
+/* -------------------- LOBBY -------------------- */
+function updateTop(){
+ const r=rankInfo();
+ document.getElementById("topNick").textContent=state.name;
+ document.getElementById("topRank").textContent=r.name;
+ document.getElementById("topRankIcon").textContent=r.i+1;
+ document.getElementById("crystals").textContent=state.crystals;
+ document.getElementById("goldCount").textContent=state.gold;
+ const span=Math.max(1,r.next-r.min);
+ const p=Math.min(100,Math.max(0,(state.xp-r.min)/span*100));
+ document.getElementById("topXpFill").style.width=p+"%";
+ document.getElementById("topXpText").textContent=
+  r.next===Infinity?state.xp+" XP / МАРШАЛ":state.xp+" / "+r.next+" XP";
 }
-function mul(a,b){
- let o=new Float32Array(16);
- for(let c=0;c<4;c++)for(let r=0;r<4;r++)o[c*4+r]=a[r]*b[c*4]+a[4+r]*b[c*4+1]+a[8+r]*b[c*4+2]+a[12+r]*b[c*4+3];
+function openLobby(page){
+ show("lobby");
+ updateTop();
+ renderPage(page);
+}
+function renderPage(page){
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("sel",b.dataset.page===page));
+ const c=document.getElementById("content");
+
+ if(page==="home"){
+  c.innerHTML=`
+  <div class="homeGrid">
+   <div class="panel hero">
+    <div class="heroTitle">ДОБРО ПОЖАЛОВАТЬ, ${escapeHTML(state.name).toUpperCase()}</div>
+    <div class="heroDesc">Классические командные сражения • старый гараж • старые пушки</div>
+    <button class="playBtn" id="quickBattle">▶ НАЙТИ БИТВУ</button>
+   </div>
+   <div class="homeSide">
+    <div class="panel news">
+     <h3>НОВОСТИ</h3>
+     <div class="newsItem">Классические карты снова открыты.</div>
+     <div class="newsItem">Новая система создания битв.</div>
+     <div class="newsItem">Голд может появиться во время боя.</div>
+     <div class="newsItem">Обновлены пушки и физика танка.</div>
+    </div>
+    <div class="panel missions">
+     <h3>МИССИИ</h3>
+     ${state.missions.slice(0,3).map(m=>missionHTML(m)).join("")}
+    </div>
+   </div>
+  </div>`;
+  document.getElementById("quickBattle").onclick=()=>startBattle({
+   map:MAPS[Math.floor(Math.random()*MAPS.length)],
+   mode:"TDM",time:300,fund:1000,players:12
+  });
+ }
+
+ if(page==="garage")renderGarage(c);
+ if(page==="maps")renderMaps(c);
+ if(page==="missions")renderMissions(c);
+ if(page==="create"){
+  openCreate();
+  renderPage("home");
+ }
+}
+document.querySelectorAll(".nav button").forEach(b=>{
+ b.onclick=()=>{
+  const p=b.dataset.page;
+  if(p==="create"){openCreate();return}
+  renderPage(p);
+ };
+});
+
+/* -------------------- GARAGE -------------------- */
+let garageRotation=0;
+let garageDrag=false,garageLastX=0;
+
+function renderGarage(c){
+ c.innerHTML=`
+ <div class="garage">
+  <div class="garageTitle">ГАРАЖ <span style="font-size:11px;color:#91a18f">/ МОЙ ТАНК</span></div>
+  <div class="tankStage" id="tankStage">
+   <div class="garageFloor"></div>
+   <canvas id="garageCanvas"></canvas>
+  </div>
+  <div class="info">
+   <h2 id="infoName">${GUNS[state.gun].n}</h2>
+   <div id="infoDesc" style="font-size:11px;color:#a8b7a6">${GUNS[state.gun].desc}</div>
+   <div class="stat"><div class="statLine"><span>УРОН</span><b>${GUNS[state.gun].damage}</b></div><div class="statBar"><i style="width:${Math.min(100,GUNS[state.gun].damage/5)}%"></i></div></div>
+   <div class="stat"><div class="statLine"><span>ДАЛЬНОБОЙНОСТЬ</span><b>${GUNS[state.gun].range}</b></div><div class="statBar"><i style="width:${GUNS[state.gun].range/25*100}%"></i></div></div>
+   <div class="stat"><div class="statLine"><span>КОРПУС</span><b>${HULLS[state.hull].n}</b></div></div>
+   <button class="buy" id="infoAction">ЭКИПИРОВАТЬ</button>
+  </div>
+  <div class="items">
+   <div class="categories">
+    <button class="active" data-cat="guns">ПУШКИ</button>
+    <button data-cat="hulls">КОРПУСА</button>
+    <button data-cat="paints">КРАСКИ</button>
+    <button data-cat="supplies">ПРИПАСЫ</button>
+   </div>
+   <div class="itemScroller" id="itemScroller"></div>
+  </div>
+ </div>`;
+
+ const canvas=document.getElementById("garageCanvas");
+ canvas.width=canvas.clientWidth*devicePixelRatio;
+ canvas.height=canvas.clientHeight*devicePixelRatio;
+ const gctx=canvas.getContext("2d");
+ drawGarageTank(gctx,canvas);
+
+ document.getElementById("tankStage").onpointerdown=e=>{
+  garageDrag=true;garageLastX=e.clientX;
+ };
+ document.getElementById("tankStage").onpointermove=e=>{
+  if(!garageDrag)return;
+  garageRotation+=(e.clientX-garageLastX)*.01;
+  garageLastX=e.clientX;
+  drawGarageTank(gctx,canvas);
+ };
+ document.getElementById("tankStage").onpointerup=()=>garageDrag=false;
+ document.getElementById("tankStage").onpointerleave=()=>garageDrag=false;
+ document.getElementById("tankStage").onwheel=e=>{
+  garageRotation+=e.deltaY*.002;
+  drawGarageTank(gctx,canvas);
+ };
+
+ document.querySelectorAll(".categories button").forEach(b=>{
+  b.onclick=()=>{
+   document.querySelectorAll(".categories button").forEach(x=>x.classList.remove("active"));
+   b.classList.add("active");
+   renderItems(b.dataset.cat);
+  };
+ });
+ renderItems("guns");
+}
+
+function renderItems(cat){
+ const s=document.getElementById("itemScroller");
+ if(!s)return;
+ let arr=[],owned=[],equipped=0;
+ if(cat==="guns"){arr=GUNS;owned=state.ownedGuns;equipped=state.gun}
+ else if(cat==="hulls"){arr=HULLS;owned=state.ownedHulls;equipped=state.hull}
+ else if(cat==="paints"){
+  arr=[
+   {n:"Зелёная",icon:"🟩",cost:0},
+   {n:"Пустынная",icon:"🟨",cost:500},
+   {n:"Зимняя",icon:"⬜",cost:700},
+   {n:"Тёмная",icon:"⬛",cost:1000},
+   {n:"Лесная",icon:"🟩",cost:1500}
+  ];
+  owned=[true,false,false,false,false];equipped=0;
+ }else{
+  arr=[
+   {n:"Ремкомплект",icon:"✚",cost:50},
+   {n:"Двойная защита",icon:"🛡",cost:70},
+   {n:"Двойной урон",icon:"⚡",cost:70},
+   {n:"Ускорение",icon:"➤",cost:80},
+   {n:"Мина",icon:"◆",cost:60}
+  ];
+  owned=[true,true,true,true,true];equipped=-1;
+ }
+ s.innerHTML="";
+ arr.forEach((it,i)=>{
+  const r=rankIndex();
+  const lock=cat==="guns"&&i>r+1 || cat==="hulls"&&i>r+1;
+  const own=owned[i]&&!lock;
+  const card=document.createElement("div");
+  card.className="itemCard "+(own?"owned ":"")+(lock?"locked":"");
+  card.innerHTML=`
+   ${i===equipped?'<div class="eq">УСТАНОВЛЕНО</div>':""}
+   <div class="itemPic">${it.icon||"◆"}</div>
+   <div class="itemName">${it.n}</div>
+   <div class="itemCost">${lock?"🔒 ЗВАНИЕ":it.cost===0?"БЕСПЛАТНО":"💎 "+it.cost}</div>`;
+  card.onclick=()=>{
+   if(lock){toast("Предмет ещё не доступен по званию");return}
+   if(cat==="guns"){
+    if(!state.ownedGuns[i]){
+     if(state.crystals<it.cost){toast("Недостаточно кристаллов");return}
+     state.crystals-=it.cost;state.ownedGuns[i]=true;
+    }
+    state.gun=i;
+   }
+   if(cat==="hulls"){
+    if(!state.ownedHulls[i]){
+     if(state.crystals<it.cost){toast("Недостаточно кристаллов");return}
+     state.crystals-=it.cost;state.ownedHulls[i]=true;
+    }
+    state.hull=i;
+   }
+   save();renderGarage(document.getElementById("content"));updateTop();
+  };
+  s.appendChild(card);
+ });
+}
+
+function drawGarageTank(ctx,canvas){
+ const w=canvas.width,h=canvas.height;
+ ctx.clearRect(0,0,w,h);
+ const cx=w*.46,cy=h*.53,sc=Math.min(w,h)/500;
+ ctx.save();ctx.translate(cx,cy);ctx.scale(sc,sc);
+ ctx.rotate(garageRotation*.18);
+
+ ctx.fillStyle="#0008";ctx.beginPath();ctx.ellipse(0,90,180,35,0,0,Math.PI*2);ctx.fill();
+
+ // tracks
+ for(const x of[-115,115]){
+  ctx.fillStyle="#171c18";ctx.strokeStyle="#707a6b";ctx.lineWidth=4;
+  roundRect(ctx,x-42,-48,84,155,18);ctx.fill();ctx.stroke();
+  for(let y=-35;y<100;y+=18){
+   ctx.fillStyle="#4e5a4d";ctx.fillRect(x-37,y,74,8);
+  }
+  ctx.fillStyle="#171c18";
+  for(let y=-20;y<95;y+=30){
+   ctx.beginPath();ctx.arc(x,y,17,0,Math.PI*2);ctx.fill();
+   ctx.strokeStyle="#65705f";ctx.stroke();
+  }
+ }
+
+ // hull
+ ctx.fillStyle="#536f4c";ctx.strokeStyle="#a0ad8c";ctx.lineWidth=5;
+ ctx.beginPath();
+ ctx.moveTo(-100,-55);ctx.lineTo(72,-55);ctx.lineTo(108,-25);
+ ctx.lineTo(92,68);ctx.lineTo(-92,68);ctx.closePath();ctx.fill();ctx.stroke();
+
+ // hull armor plates
+ ctx.fillStyle="#718a5c";
+ ctx.fillRect(-73,-48,105,25);
+ ctx.fillStyle="#334631";
+ ctx.fillRect(-75,30,150,20);
+
+ // turret
+ ctx.save();
+ ctx.rotate(garageRotation*.55);
+ ctx.fillStyle="#627c53";ctx.strokeStyle="#b0bd9b";ctx.lineWidth=4;
+ ctx.beginPath();ctx.ellipse(0,-45,75,48,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+
+ // barrel
+ let gun=GUNS[state.gun].n;
+ let len=gun==="Shaft"?190:gun==="Railgun"?165:gun==="Thunder"?135:105;
+ ctx.fillStyle="#303a2f";ctx.strokeStyle="#9da992";
+ ctx.fillRect(-14,-205,len+14,22);ctx.strokeRect(-14,-205,len+14,22);
+ if(gun==="Twins"){
+  ctx.fillRect(-27,-195,105,14);ctx.strokeRect(-27,-195,105,14);
+ }
+ ctx.fillStyle="#222a22";
+ ctx.beginPath();ctx.arc(len-2,-194,13,0,Math.PI*2);ctx.fill();
+ ctx.restore();
+
+ // bolts
+ ctx.fillStyle="#b7c29d";
+ for(let a=0;a<Math.PI*2;a+=Math.PI/3){
+  ctx.beginPath();ctx.arc(Math.cos(a)*72,Math.sin(a)*30-45,4,0,Math.PI*2);ctx.fill();
+ }
+ ctx.restore();
+
+ ctx.fillStyle="#d0d8c7";
+ ctx.font="bold 18px Arial";ctx.textAlign="center";
+ ctx.fillText(HULLS[state.hull].n+" + "+GUNS[state.gun].n,cx,h-25);
+}
+
+/* -------------------- MAPS -------------------- */
+function renderMaps(c){
+ c.innerHTML=`
+ <div class="panel" style="padding:16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
+  <div><b style="font-size:22px">БИТВЫ</b><div style="font-size:11px;color:#9dad9b">Выберите карту или создайте собственный бой</div></div>
+  <button class="bigBtn" style="width:190px" id="createBattleBtn">＋ СОЗДАТЬ БОЙ</button>
+ </div>
+ <div class="mapsGrid" id="mapsGrid"></div>`;
+ const grid=document.getElementById("mapsGrid");
+ MAPS.forEach((m,i)=>{
+  const card=document.createElement("div");
+  card.className="mapCard";
+  card.innerHTML=`<div class="mapPreview"></div><b>${m}</b><span>12 игроков • TDM • 05:00</span>`;
+  card.onclick=()=>startBattle({map:m,mode:"TDM",time:300,fund:1000,players:12});
+  grid.appendChild(card);
+ });
+ document.getElementById("createBattleBtn").onclick=openCreate;
+}
+
+function openCreate(){
+ document.getElementById("createModal").classList.add("on");
+ const sel=document.getElementById("createMap");
+ sel.innerHTML=MAPS.map(m=>`<option>${m}</option>`).join("");
+}
+document.getElementById("createCancel").onclick=()=>document.getElementById("createModal").classList.remove("on");
+document.getElementById("createStart").onclick=()=>{
+ document.getElementById("createModal").classList.remove("on");
+ startBattle({
+  map:document.getElementById("createMap").value,
+  mode:document.getElementById("createMode").value,
+  time:+document.getElementById("createTime").value,
+  fund:+document.getElementById("createFund").value||1000,
+  players:+document.getElementById("createPlayers").value
+ });
+};
+
+/* -------------------- MISSIONS -------------------- */
+function initMissions(){
+ const day=new Date().toISOString().slice(0,10);
+ if(state.lastMissionDay!==day||!state.missions?.length){
+  state.lastMissionDay=day;
+  state.missions=MISSIONS.slice(0,3).map(x=>[...x]);
+  save();
+ }
+}
+function missionHTML(m){
+ return `<div class="mission"><b>${m[0]}</b><span style="font-size:10px;color:#aab8a7">${m[1]}</span><div class="miniProgress"><div style="width:${Math.min(100,m[3]/m[2]*100)}%"></div></div><small>${m[3]} / ${m[2]} • 💎 ${m[4]}</small></div>`;
+}
+function renderMissions(c){
+ initMissions();
+ c.innerHTML=`
+ <div class="panel" style="padding:20px">
+  <h1 style="margin-top:0">МИССИИ</h1>
+  <div style="font-size:11px;color:#91a18f;margin-bottom:15px">Ежедневные задания. Прогресс сохраняется.</div>
+  ${state.missions.map(m=>missionHTML(m)).join("")}
+ </div>`;
+}
+
+/* -------------------- BATTLE STATE -------------------- */
+let battle=null;
+let keys={};
+let lastFrame=0;
+let gl=null,program=null;
+let objects=[];
+let bots=[];
+let decals=[];
+let particles=[];
+let drops=[];
+let goldBox=null;
+let battleRunning=false;
+let respawnTimer=0;
+let firing=false;
+let shaftCharging=false;
+let shaftCharge=0;
+let railBeam=0;
+
+window.addEventListener("keydown",e=>{
+ keys[e.code]=true;
+ if(e.code==="Tab"){e.preventDefault();document.getElementById("scoreboard").classList.add("on");updateScoreboard()}
+ if(e.code==="Space") e.preventDefault();
+ if(e.code==="Digit1")useSupply(1);
+ if(e.code==="Digit2")useSupply(2);
+ if(e.code==="Digit3")useSupply(3);
+ if(e.code==="Digit4")useSupply(4);
+ if(e.code==="Digit5")useSupply(5);
+ if(e.code==="KeyF")dropMine();
+});
+window.addEventListener("keyup",e=>{
+ keys[e.code]=false;
+ if(e.code==="Tab")document.getElementById("scoreboard").classList.remove("on");
+ if(e.code==="Space")releaseFire();
+});
+window.addEventListener("blur",()=>keys={});
+
+document.querySelectorAll(".supply").forEach(el=>{
+ el.onclick=()=>useSupply(+el.dataset.supply);
+});
+
+/* -------------------- BATTLE START -------------------- */
+function startBattle(config){
+ show("loading");
+ document.getElementById("loadingMap").textContent=config.map.toUpperCase();
+ document.getElementById("loadFill").style.width="0%";
+ let p=0;
+ const interval=setInterval(()=>{
+  p+=18+Math.random()*17;
+  document.getElementById("loadFill").style.width=Math.min(100,p)+"%";
+  if(p>25)document.getElementById("loadingText").textContent="Создание рельефа...";
+  if(p>50)document.getElementById("loadingText").textContent="Расстановка объектов...";
+  if(p>75)document.getElementById("loadingText").textContent="Подключение танкистов...";
+  if(p>=100){
+   clearInterval(interval);
+   setTimeout(()=>initBattle(config),100);
+  }
+ },60);
+}
+
+function initBattle(config){
+ battle={
+  map:config.map,mode:config.mode,time:config.time,fund:config.fund,
+  maxPlayers:config.players,remaining:config.time,
+  red:0,blue:0,kills:0,deaths:0,xp:0,crystals:0,
+  ended:false
+ };
+ show("battle");
+ document.getElementById("scoreboard").classList.remove("on");
+ objects=[];bots=[];decals=[];particles=[];drops=[];goldBox=null;
+ initGL();
+ createBattleWorld(config.map);
+ createPlayer();
+ createBots(config.players-1);
+ updateBattleHUD();
+ battleRunning=true;
+ lastFrame=performance.now();
+ requestAnimationFrame(loop);
+}
+
+/* -------------------- WEBGL -------------------- */
+const VS=`
+attribute vec3 aPos;
+attribute vec3 aNormal;
+attribute vec2 aUV;
+uniform mat4 uMVP;
+uniform mat4 uModel;
+varying vec3 vNormal;
+varying vec2 vUV;
+varying vec3 vWorld;
+void main(){
+ vec4 world=uModel*vec4(aPos,1.0);
+ vWorld=world.xyz;
+ vNormal=mat3(uModel)*aNormal;
+ vUV=aUV;
+ gl_Position=uMVP*vec4(aPos,1.0);
+}`;
+const FS=`
+precision mediump float;
+varying vec3 vNormal;
+varying vec2 vUV;
+varying vec3 vWorld;
+uniform vec4 uColor;
+uniform float uGlow;
+void main(){
+ vec3 n=normalize(vNormal);
+ vec3 light=normalize(vec3(-.4,1.0,.25));
+ float d=max(.25,dot(n,light));
+ vec3 c=uColor.rgb*d;
+ c+=uColor.rgb*uGlow;
+ gl_FragColor=vec4(c,uColor.a);
+}`;
+
+function initGL(){
+ const canvas=document.getElementById("gl");
+ gl=canvas.getContext("webgl",{antialias:true,alpha:false});
+ if(!gl){
+  document.getElementById("skyFallback").style.display="block";
+  return;
+ }
+ document.getElementById("skyFallback").style.display="none";
+ canvas.width=innerWidth*devicePixelRatio;
+ canvas.height=innerHeight*devicePixelRatio;
+ gl.viewport(0,0,canvas.width,canvas.height);
+ gl.enable(gl.DEPTH_TEST);
+ gl.enable(gl.CULL_FACE);
+ program=makeProgram(VS,FS);
+ gl.useProgram(program);
+}
+window.addEventListener("resize",()=>{
+ if(gl){
+  const c=document.getElementById("gl");
+  c.width=innerWidth*devicePixelRatio;c.height=innerHeight*devicePixelRatio;
+  gl.viewport(0,0,c.width,c.height);
+ }
+});
+
+function makeShader(type,src){
+ const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);
+ return s;
+}
+function makeProgram(v,f){
+ const p=gl.createProgram();
+ gl.attachShader(p,makeShader(gl.VERTEX_SHADER,v));
+ gl.attachShader(p,makeShader(gl.FRAGMENT_SHADER,f));
+ gl.linkProgram(p);
+ return p;
+}
+
+/* -------------------- MATH -------------------- */
+function mat4(){
+ return new Float32Array([1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]);
+}
+function multiply(a,b){
+ const o=new Float32Array(16);
+ for(let r=0;r<4;r++)for(let c=0;c<4;c++)
+  o[c+r*4]=a[r*4]*b[c]+a[r*4+1]*b[c+4]+a[r*4+2]*b[c+8]+a[r*4+3]*b[c+12];
  return o;
 }
-function T(x,y,z,sx,sy,sz,ry=0){
- let c=Math.cos(ry),s=Math.sin(ry),o=new Float32Array(16);
- o[0]=c*sx;o[1]=0;o[2]=-s*sx;o[3]=0;
- o[4]=0;o[5]=sy;o[6]=0;o[7]=0;
- o[8]=s*sz;o[9]=0;o[10]=c*sz;o[11]=0;
- o[12]=x;o[13]=y;o[14]=z;o[15]=1;return o;
+function perspective(fov,asp,n,f){
+ const t=1/Math.tan(fov/2),o=new Float32Array(16);
+ o[0]=t/asp;o[5]=t;o[10]=(f+n)/(n-f);o[11]=-1;o[14]=2*f*n/(n-f);
+ return o;
 }
-const vs=`attribute vec3 p;attribute vec3 n;attribute vec2 uv;uniform mat4 mvp;uniform mat4 model;varying vec3 N;varying vec2 U;varying vec3 W;void main(){N=mat3(model)*n;U=uv;W=(model*vec4(p,1.)).xyz;gl_Position=mvp*vec4(p,1.);}`;
-const fs=`precision mediump float;varying vec3 N;varying vec2 U;varying vec3 W;uniform vec4 col;uniform float metal;void main(){vec3 nn=normalize(N);vec3 l=normalize(vec3(-.4,1.,.6));float d=max(dot(nn,l),0.);float bands=sin(U.x*40.)*.035;vec3 c=col.rgb*(.38+d*.72)+bands;float edge=pow(1.-max(dot(nn,normalize(vec3(0.,0.,1.))),0.),2.)*.12;c+=edge;gl_FragColor=vec4(c,col.a);}`;
-function shader(gl,t,s){let x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);return x}
-function initGarageGL(){
- gc=$("garageCanvas");gctx=gc.getContext("webgl",{antialias:true});
- if(!gctx)return;
- let p=gctx.createProgram();gctx.attachShader(p,shader(gctx,gctx.VERTEX_SHADER,vs));gctx.attachShader(p,shader(gctx,gctx.FRAGMENT_SHADER,fs));gctx.linkProgram(p);gProg=p;
- gLoc.p=gctx.getAttribLocation(p,"p");gLoc.n=gctx.getAttribLocation(p,"n");gLoc.uv=gctx.getAttribLocation(p,"uv");
- gLoc.mvp=gctx.getUniformLocation(p,"mvp");gLoc.model=gctx.getUniformLocation(p,"model");gLoc.col=gctx.getUniformLocation(p,"col");
- gBuf=gctx.createBuffer();resizeGarage();
+function lookAt(ex,ey,ez,cx,cy,cz){
+ let z=norm([ex-cx,ey-cy,ez-cz]),x=norm(cross([0,1,0],z)),y=cross(z,x);
+ return new Float32Array([
+  x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,
+  -dot(x,[ex,ey,ez]),-dot(y,[ex,ey,ez]),-dot(z,[ex,ey,ez]),1
+ ]);
 }
-function cubeData(){
- let p=[],n=[],u=[];
- const faces=[
-  [[0,0,1],[[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]]],
-  [[0,0,-1],[[1,-1,-1],[-1,-1,-1],[-1,1,-1],[1,1,-1]]],
-  [[1,0,0],[[1,-1,1],[1,-1,-1],[1,1,-1],[1,1,1]]],
-  [[-1,0,0],[[-1,-1,-1],[-1,-1,1],[-1,1,1],[-1,1,-1]]],
-  [[0,1,0],[[-1,1,1],[1,1,1],[1,1,-1],[-1,1,-1]]],
-  [[0,-1,0],[[-1,-1,-1],[1,-1,-1],[1,-1,1],[-1,-1,1]]]
- ];
- faces.forEach(f=>{let q=f[1],nn=f[0];[[0,1,2],[0,2,3]].forEach(t=>t.forEach(i=>{p.push(...q[i]);n.push(...nn);u.push(i===0?0:i===1?1:1,i===0?0:i===1?0:1)}))});
- return {p,n,u};
+function translation(x,y,z){
+ let m=mat4();m[12]=x;m[13]=y;m[14]=z;return m;
 }
-const CUBE=cubeData();
-function drawPart(P,M,color){
- let arr=new Float32Array(CUBE.p.length+CUBE.n.length+CUBE.u.length);
- arr.set(CUBE.p,0);arr.set(CUBE.n,CUBE.p.length);arr.set(CUBE.u,CUBE.p.length+CUBE.n.length);
- gctx.bindBuffer(gctx.ARRAY_BUFFER,gBuf);gctx.bufferData(gctx.ARRAY_BUFFER,arr,gctx.DYNAMIC_DRAW);
- let off=0;
- gctx.enableVertexAttribArray(gLoc.p);gctx.vertexAttribPointer(gLoc.p,3,gctx.FLOAT,false,0,off);
- off=CUBE.p.length*4;gctx.enableVertexAttribArray(gLoc.n);gctx.vertexAttribPointer(gLoc.n,3,gctx.FLOAT,false,0,off);
- off+=(CUBE.n.length*4);gctx.enableVertexAttribArray(gLoc.uv);gctx.vertexAttribPointer(gLoc.uv,2,gctx.FLOAT,false,0,off);
- let MVP=mul(P,M);gctx.uniformMatrix4fv(gLoc.mvp,false,MVP);gctx.uniformMatrix4fv(gLoc.model,false,M);
- gctx.uniform4fv(gLoc.col,[...color,1]);gctx.drawArrays(gctx.TRIANGLES,0,36);
+function scale(x,y,z){
+ let m=mat4();m[0]=x;m[5]=y;m[10]=z;return m;
 }
-function tankModelGL(gl,P,hull,gun,angle=0,scale=1){
- let h=hulls.find(x=>x[0]===hull)||hulls[3], g=guns.find(x=>x[0]===gun)||guns[0];
- let base=[.25,.29,.23],dark=[.10,.12,.10],rub=[.045,.05,.045],metal=[.33,.36,.33];
- drawPart(P,T(0,0,0,1,1,1,angle),[0,0,0]);
- let body=T(0,.48,0,3.8*scale,0.75*scale,2.25*scale,angle);drawPart(P,body,base);
- drawPart(P,T(0,.78,0,2.2*scale,.42*scale,1.45*scale,angle),[.31,.34,.28]);
- let trackX=2.35*scale;
- [-trackX,trackX].forEach(x=>{
-  drawPart(P,T(x,.35,0,.62*scale,.72*scale,2.5*scale,angle),rub);
-  for(let i=-2;i<=2;i++){
-   let z=i*.85*scale;
-   drawPart(P,T(x,.36,z,.67*scale,.17*scale,.30*scale,angle),[.16,.17,.15]);
-  }
-  for(let i=-1;i<=1;i++)drawPart(P,T(x,.37,i*.9*scale,.30*scale,.34*scale,.30*scale,angle),metal);
- });
- drawPart(P,T(0,.95,0,1.55*scale,.38*scale,1.55*scale,angle),[.26,.29,.24]);
- let len=2.5;
- let type=g[1];
- if(type==="twins"){
-  [-.55,.55].forEach(x=>drawPart(P,T(x,.99,-2.0, .20*scale,.20*scale,2.8*scale,angle),[.16,.18,.15]));
- }else if(type==="shaft"||type==="rail"){
-  drawPart(P,T(0,1.0,-2.65, .19*scale,.19*scale,4.3*scale,angle),metal);
-  drawPart(P,T(0,1.0,-4.75, .25*scale,.25*scale,.25*scale,angle),dark);
- }else if(type==="thunder"){
-  drawPart(P,T(0,1.03,-2.0,.34*scale,.34*scale,2.8*scale,angle),metal);
-  drawPart(P,T(0,1.03,-3.5,.48*scale,.48*scale,.45*scale,angle),dark);
- }else if(type==="freeze"||type==="firebird"||type==="isida"){
-  drawPart(P,T(0,1.0,-1.9,.38*scale,.38*scale,2.2*scale,angle),metal);
-  drawPart(P,T(0,1.0,-3.15,.55*scale,.55*scale,.38*scale,angle),[.12,.15,.12]);
- }else{
-  drawPart(P,T(0,1.0,-2.25,.23*scale,.23*scale,3.1*scale,angle),metal);
-  drawPart(P,T(0,1.0,-3.85,.31*scale,.31*scale,.35*scale,angle),dark);
- }
+function rotationY(a){
+ let m=mat4(),c=Math.cos(a),s=Math.sin(a);
+ m[0]=c;m[2]=-s;m[8]=s;m[10]=c;return m;
 }
-function resizeGarage(){
- if(!gctx)return;
- let r=gc.getBoundingClientRect(),d=devicePixelRatio||1;gc.width=r.width*d;gc.height=r.height*d;
+function rotationX(a){
+ let m=mat4(),c=Math.cos(a),s=Math.sin(a);
+ m[5]=c;m[6]=s;m[9]=-s;m[10]=c;return m;
 }
-function drawGarage(){
- if(!gctx)return;
- resizeGarage();let gl=gctx,w=gc.width,h=gc.height;gl.viewport(0,0,w,h);
- gl.enable(gl.DEPTH_TEST);gl.clearColor(.12,.13,.12,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
- gl.useProgram(gProg);
- let P=perspective(mat4(),Math.PI/4,w/h,.1,100);
- let dist=15/garageZoom,e=[Math.sin(garageRot)*dist,7,Math.cos(garageRot)*dist];
- let V=lookAt(mat4(),e,[0,.6,0],[0,1,0]);
- tankModelGL(gl,P=mul(P,V),profile.hull,profile.gun,0,1.15);
- requestAnimationFrame(drawGarage);
-}
-$("garageCanvas").addEventListener("pointerdown",e=>{garageDragging=true;lastGX=e.clientX});
-addEventListener("pointerup",()=>garageDragging=false);
-$("garageCanvas").addEventListener("pointermove",e=>{if(garageDragging){garageRot+=(e.clientX-lastGX)*.01;lastGX=e.clientX}});
-$("garageCanvas").addEventListener("wheel",e=>{e.preventDefault();garageZoom=clamp(garageZoom-e.deltaY*.001,0.65,1.8)},{passive:false});
-initGarageGL();
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}
+function cross(a,b){return [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]}
+function norm(a){let l=Math.hypot(...a)||1;return a.map(x=>x/l)}
+function add(a,b){return[a[0]+b[0],a[1]+b[1],a[2]+b[2]]}
+function sub(a,b){return[a[0]-b[0],a[1]-b[1],a[2]-b[2]]}
+function mul(a,s){return[a[0]*s,a[1]*s,a[2]*s]}
 
-/* =========================================================
-   BATTLE WEBGL ENGINE
-========================================================= */
-let gl,prog,loc,buffer,idxBuffer;
-let battleState=null,keys={},lastTime=0,raf=0;
-const BVS=`attribute vec3 p;attribute vec3 n;attribute vec2 uv;uniform mat4 vp;uniform mat4 model;varying vec3 N;varying vec2 U;varying vec3 W;void main(){N=mat3(model)*n;U=uv;W=(model*vec4(p,1.)).xyz;gl_Position=vp*vec4(W,1.);}`;
-const BFS=`precision mediump float;varying vec3 N;varying vec2 U;varying vec3 W;uniform vec4 col;uniform float night;uniform float mark;void main(){vec3 nn=normalize(N);vec3 light=normalize(vec3(-.4,1.,.2));float d=max(dot(nn,light),0.);vec3 c=col.rgb*(.28+d*.8);if(night>.5)c*=.58;if(mark>.5)c*=.06;gl_FragColor=vec4(c,col.a);}`;
-function initBattleGL(){
- gl=$("gameCanvas").getContext("webgl",{antialias:true});
+/* -------------------- GEOMETRY -------------------- */
+const cubeVerts=[
+ -1,-1,-1, 1,-1,-1, 1,1,-1,-1,1,-1,
+ -1,-1,1, 1,-1,1,1,1,1,-1,1,1
+];
+const cubeIdx=[
+ 0,1,2,0,2,3,4,6,5,4,7,6,
+ 0,4,5,0,5,1,3,2,6,3,6,7,
+ 1,5,6,1,6,2,0,3,7,0,7,4
+];
+const cubeNormals=[
+ 0,0,-1,0,0,-1,0,0,-1,0,0,-1,
+ 0,0,1,0,0,1,0,0,1,0,0,1,
+ -1,0,0,-1,0,0,-1,0,0,-1,0,0,
+ 0,1,0,0,1,0,0,1,0,0,1,0,
+ 1,0,0,1,0,0,1,0,0,1,0,0,
+ 0,-1,0,0,-1,0,0,-1,0,0,-1,0
+];
+
+function createMesh(pos,normals,idx){
+ const p=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,p);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(pos),gl.STATIC_DRAW);
+ const n=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,n);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(normals),gl.STATIC_DRAW);
+ const i=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,i);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(idx),gl.STATIC_DRAW);
+ return {p,n,i,count:idx.length};
+}
+const CUBE=createMesh(cubeVerts,cubeNormals,cubeIdx);
+
+function drawMesh(mesh,model,color,glow=0){
  if(!gl)return;
- prog=gl.createProgram();gl.attachShader(prog,shader(gl,gl.VERTEX_SHADER,BVS));gl.attachShader(prog,shader(gl,gl.FRAGMENT_SHADER,BFS));gl.linkProgram(prog);
- loc.p=gl.getAttribLocation(prog,"p");loc.n=gl.getAttribLocation(prog,"n");loc.uv=gl.getAttribLocation(prog,"uv");
- loc.vp=gl.getUniformLocation(prog,"vp");loc.model=gl.getUniformLocation(prog,"model");loc.col=gl.getUniformLocation(prog,"col");loc.night=gl.getUniformLocation(prog,"night");loc.mark=gl.getUniformLocation(prog,"mark");
- buffer=gl.createBuffer();
-}
-function resizeBattle(){
- let c=$("gameCanvas"),r=c.getBoundingClientRect(),d=devicePixelRatio||1;
- c.width=r.width*d;c.height=r.height*d;if(gl)gl.viewport(0,0,c.width,c.height);
-}
-function modelPart(M,color,mark=0){
- let arr=new Float32Array(CUBE.p.length+CUBE.n.length+CUBE.u.length);arr.set(CUBE.p);arr.set(CUBE.n,CUBE.p.length);arr.set(CUBE.u,CUBE.p.length+CUBE.n.length);
- gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,arr,gl.DYNAMIC_DRAW);
- let o=0;gl.enableVertexAttribArray(loc.p);gl.vertexAttribPointer(loc.p,3,gl.FLOAT,false,0,o);
- o=CUBE.p.length*4;gl.enableVertexAttribArray(loc.n);gl.vertexAttribPointer(loc.n,3,gl.FLOAT,false,0,o);
- o+=(CUBE.n.length*4);gl.enableVertexAttribArray(loc.uv);gl.vertexAttribPointer(loc.uv,2,gl.FLOAT,false,0,o);
- gl.uniformMatrix4fv(loc.model,false,M);gl.uniform4fv(loc.col,[...color,1]);gl.uniform1f(loc.mark,mark);gl.drawArrays(gl.TRIANGLES,0,36);
-}
-function drawTank3D(vp,t){
- let team=t.team==="red"?[.50,.12,.10]:[.10,.25,.52];
- if(t===battleState.player)team=[.15,.42,.28];
- let a=t.heading;
- let h=t.hull;
- let scale=h==="Mammoth"?1.15:h==="Wasp"?.78:h==="Titan"?1.08:1;
- let pos=[t.x,.35,t.z];
- let M=T(pos[0],pos[1],pos[2],1,1,1,a);
- modelPart(mul(M,T(0,.3,0,1.8*scale,.5*scale,1.15*scale)),team);
- [-1,1].forEach(s=>{
-  modelPart(mul(M,T(s*1.35*scale,.2,0,.34*scale,.58*scale,1.35*scale)),[.045,.05,.045]);
-  for(let i=-2;i<=2;i++)modelPart(mul(M,T(s*1.37*scale,.2,i*.42,.38*scale,.12*scale,.22*scale)),[.14,.15,.13]);
-  for(let i=-1;i<=1;i++)modelPart(mul(M,T(s*1.37*scale,.2,i*.75,.23*scale,.25*scale,.23*scale)),[.3,.3,.28]);
- });
- modelPart(mul(M,T(0,.67,0,1.05*scale,.35*scale,.9*scale)),[team[0]*.85+.08,team[1]*.85+.08,team[2]*.85+.08]);
- let ty=a+t.turret;
- let TM=T(t.x,.83,t.z,1,1,1,ty);
- let gun=t.gun;
- let type=(guns.find(x=>x[0]===gun)||guns[0])[1];
- modelPart(mul(TM,T(0,.03,-.05,.8*scale,.27*scale,.75*scale)),[.22,.24,.21]);
- let len=2.2;
- if(type==="twins"){
-  [-.28,.28].forEach(x=>modelPart(mul(TM,T(x,.04,-1.55,.13*scale,.14*scale,2.3*scale)),[.28,.3,.27]));
- }else{
-  if(type==="shaft"||type==="rail")len=3.2;
-  if(type==="thunder")len=2.5;
-  modelPart(mul(TM,T(0,.05,-len/2,.17*scale,.17*scale,len*scale)),[.28,.3,.27]);
-  if(type==="thunder")modelPart(mul(TM,T(0,.05,-len,.31*scale,.31*scale,.35*scale)),[.12,.13,.12]);
- }
- if(t.hitFlash>0)modelPart(mul(TM,T(0,.2,-.7,.5,.5,.5)),[1,.6,.1]);
+ const cam=getCamera();
+ const proj=perspective((battle&&battle.scoped?.65:1.05),innerWidth/innerHeight,.1,700);
+ const mvp=multiply(proj,multiply(cam,model));
+ gl.useProgram(program);
+ gl.uniformMatrix4fv(gl.getUniformLocation(program,"uMVP"),false,mvp);
+ gl.uniformMatrix4fv(gl.getUniformLocation(program,"uModel"),false,model);
+ gl.uniform4fv(gl.getUniformLocation(program,"uColor"),color);
+ gl.uniform1f(gl.getUniformLocation(program,"uGlow"),glow);
+ let a=gl.getAttribLocation(program,"aPos");
+ gl.bindBuffer(gl.ARRAY_BUFFER,mesh.p);gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,3,gl.FLOAT,false,0,0);
+ let an=gl.getAttribLocation(program,"aNormal");
+ gl.bindBuffer(gl.ARRAY_BUFFER,mesh.n);gl.enableVertexAttribArray(an);gl.vertexAttribPointer(an,3,gl.FLOAT,false,0,0);
+ gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,mesh.i);gl.drawElements(gl.TRIANGLES,mesh.count,gl.UNSIGNED_SHORT,0);
 }
 
-/* ---------- MAP GEOMETRY ---------- */
-let obstacles=[];
-function addObs(x,z,w,d,h=2,type="building"){obstacles.push({x,z,w,d,h,type})}
-function mapSeed(name){
- let s=0;for(let i=0;i<name.length;i++)s=(s*31+name.charCodeAt(i))>>>0;return s;
+function box(x,y,z,sx,sy,sz,color){
+ objects.push({type:"box",x,y,z,sx,sy,sz,color,solid:true});
 }
-function makeMap(name){
- obstacles=[];
- const S=mapSeed(name),R=(a,b)=>a+(Math.abs(Math.sin(S+a*12.77+b*4.11))*10000%1)*(b-a);
- // outer flat mountain/cliff ring
- addObs(0,-108,220,12,9,"mountain");addObs(0,108,220,12,9,"mountain");
- addObs(-108,0,12,220,9,"mountain");addObs(108,0,12,220,9,"mountain");
- if(name==="Арена"){
-  addObs(0,0,5,34,3,"bridge");addObs(-48,-20,25,8,4);addObs(48,20,25,8,4);
-  addObs(-65,45,20,15,5);addObs(65,-45,20,15,5);
-  addObs(-38,0,12,12,3);addObs(38,0,12,12,3);
- }else if(name==="Полигон"){
-  addObs(0,0,34,14,5);addObs(0,42,14,25,4);addObs(-58,0,22,12,4);addObs(58,0,22,12,4);
-  addObs(-25,-45,20,10,3);addObs(25,45,20,10,3);
-  addObs(-72,-50,10,25,3);addObs(72,50,10,25,3);
- }else if(name==="Песочница"){
-  addObs(-45,0,40,8,2);addObs(45,0,40,8,2);addObs(0,-48,8,40,2);addObs(0,48,8,40,2);
- }else if(name==="Плато"){
-  addObs(-42,-38,28,18,4);addObs(42,35,25,15,5);addObs(0,0,20,10,3);
-  addObs(-60,40,12,12,2);addObs(60,-35,12,12,2);
-  addObs(-15,65,30,8,2);addObs(15,-65,30,8,2);
- }else if(name==="Барда"){
-  addObs(-42,0,35,8,3);addObs(42,0,35,8,3);
-  addObs(0,-45,8,35,4);addObs(0,45,8,35,4);
-  addObs(-65,-55,18,12,4);addObs(65,55,18,12,4);
- }else if(name==="Мосты"){
-  [[-60,-60],[-60,60],[60,-60],[60,60]].forEach(p=>addObs(p[0],p[1],28,10,5,"bridge"));
-  addObs(0,0,18,18,5);addObs(-35,0,7,55,3,"bridge");addObs(35,0,7,55,3,"bridge");
-  addObs(0,-35,55,7,3,"bridge");addObs(0,35,55,7,3,"bridge");
- }else{
-  for(let i=0;i<11;i++){
-   let x=(R(i,0)-.5)*150,z=(R(i+3,0)-.5)*150;
-   if(Math.hypot(x,z)<30){i--;continue}
-   let w=8+R(i+2,0)*18,d=8+R(i+5,0)*18;
-   addObs(x,z,w,d,2+R(i+7,0)*4,i%3===0?"container":"building");
-  }
- }
+function tree(x,z){
+ objects.push({type:"tree",x,z,solid:true});
 }
-function obstacleHit(x,z,r=.0){
- if(Math.abs(x)>99-r||Math.abs(z)>99-r)return true;
- for(let o of obstacles)if(x>o.x-o.w/2-r&&x<o.x+o.w/2+r&&z>o.z-o.d/2-r&&z<o.z+o.d/2+r)return true;
- return false;
+function addBuilding(x,z,w,d,h){
+ box(x,h/2,z,w/2,h/2,d/2,[.32,.35,.30,1]);
+ box(x,z*0+h+.02,z,w/2+.04,.08,d/2+.04,[.18,.20,.17,1]);
+ // windows / facade details as opaque blocks
+ for(let xx=-w/2+.8;xx<w/2-.5;xx+=1.4)
+  box(x+xx,h*.52,z-d/2-.035,.34,.42,.04,[.08,.11,.09,1]);
+}
+function addWall(x,z,w,d,h=3){
+ box(x,h/2,z,w/2,h/2,d/2,[.30,.34,.28,1]);
 }
 
-/* ---------- BATTLE STATE ---------- */
-function bot(name,team,x,z){
- let hull=hulls[Math.floor(Math.random()*hulls.length)][0];
- let gun=guns[Math.floor(Math.random()*guns.length)][0];
- return {name,team,x,z,heading:Math.random()*TAU,turret:0,speed:0,hull,gun,health:100,maxHealth:100,
-  alive:true,respawn:0,fireCd:Math.random()*2,ai:Math.random(),kills:0,deaths:0,target:null,hitFlash:0};
-}
-function createTeams(){
- let arr=[];
- for(let i=0;i<5;i++)arr.push(bot("Red_"+(i+1),"red",-55+i*25,-55));
- for(let i=0;i<4;i++)arr.push(bot("Blue_"+(i+1),"blue",55-i*25,55));
- return arr;
-}
-function spawnPlayer(){
- let p=battleState.player;
- p.x=42;p.z=42;p.heading=Math.PI;p.turret=0;p.health=100;p.alive=true;p.respawn=0;
-}
-function startBattle(b){
- $("battle").style.display="block";$("loadingBattle").style.display="flex";
- $("loadingMap").textContent=b.map.toUpperCase();$("loadingMode").textContent=b.mode;
- $("battleLoadFill").style.width="0";
- battleState={config:b,time:b.left,red:0,blue:0,fund:b.fund||0,ends:false,
-  player:{name:profile.name,team:"blue",x:42,z:42,heading:Math.PI,turret:0,speed:0,hull:profile.hull,gun:profile.gun,
-  health:100,maxHealth:100,alive:true,respawn:0,fireCd:0,kills:0,deaths:0,hitFlash:0},
-  bots:[],drops:[],decals:[],flags:0,cp:0,lastDrop:15,scope:false,charge:0,charging:false,shotFlash:0};
- makeMap(b.map);battleState.bots=createTeams();initBattleGL();resizeBattle();
- let n=0;function ld(){
-  n+=8;$("battleLoadFill").style.width=Math.min(100,n)+"%";
-  if(n<100)setTimeout(ld,30);else{
-   $("loadingBattle").style.display="none";lastTime=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);
-   toast(b.map+" • "+b.mode+" • "+fmt(b.time));
+/* -------------------- MAP WORLD -------------------- */
+function createBattleWorld(map){
+ const size=220;
+ battle.mapSize=size;
+ // ground
+ box(0,-1,0,size/2,1,size/2,[.30,.45,.25,1]);
+
+ // outer mountain/cliff ring — square, solid and too high to cross
+ const wallH=12;
+ const ringColor=[.27,.34,.25,1];
+ box(0,wallH/2,-size/2-5,size/2+15,wallH/2,5,ringColor);
+ box(0,wallH/2,size/2+5,size/2+15,wallH/2,5,ringColor);
+ box(-size/2-5,wallH/2,0,5,wallH/2,size/2+5,ringColor);
+ box(size/2+5,wallH/2,0,5,wallH/2,size/2+5,ringColor);
+
+ // stepped outer mountains
+ for(let i=0;i<5;i++){
+  const off=8+i*3;
+  const h=3+i*1.5;
+  box(0,h/2,-size/2-off,size/2+18, h/2,1.8,[.24,.31,.23,1]);
+  box(0,h/2,size/2+off,size/2+18,h/2,1.8,[.24,.31,.23,1]);
+  box(-size/2-off,h/2,0,1.8,h/2,size/2+18,[.24,.31,.23,1]);
+  box(size/2+off,h/2,0,1.8,h/2,size/2+18,[.24,.31,.23,1]);
+ }
+
+ // base-specific geometry
+ const m=map.toLowerCase();
+
+ if(m==="арена"){
+  addWall(0,0,55,4,4);
+  box(0,4,0,20,.5,5,[.38,.42,.34,1]);
+  box(-48,2,0,4,2,18,[.36,.38,.31,1]);
+  box(48,2,0,4,2,18,[.36,.38,.31,1]);
+  box(0,1,-45,12,1,3,[.4,.43,.34,1]);
+  box(0,1,45,12,1,3,[.4,.43,.34,1]);
+ }
+ else if(m==="полигон"){
+  addBuilding(-35,-35,28,18,10);
+  addBuilding(35,-35,24,20,8);
+  addBuilding(-35,35,24,22,7);
+  addBuilding(35,35,30,18,11);
+  box(0,-.2,0,28,.2,25,[.16,.19,.16,1]);
+  box(-50,1,0,8,1,25,[.32,.35,.28,1]);
+  box(50,1,0,8,1,25,[.32,.35,.28,1]);
+ }
+ else if(m==="песочница"){
+  for(let i=0;i<14;i++)box(
+   -65+Math.random()*130,.7,-65+Math.random()*130,
+   3+Math.random()*5,.7,3+Math.random()*5,[.57,.49,.31,1]
+  );
+ }
+ else if(m==="барда"){
+  box(0,3,0,30,1,4,[.34,.38,.32,1]);
+  box(-38,2,0,4,2,22,[.37,.39,.33,1]);
+  box(38,2,0,4,2,22,[.37,.39,.33,1]);
+  addBuilding(-50,-45,20,14,7);
+  addBuilding(50,45,20,14,7);
+ }
+ else if(m==="мосты"){
+  for(let x of[-70,-25,25,70]){
+   box(x,4,0,7,.6,70,[.35,.38,.32,1]);
   }
- }ld();
-}
-function allTanks(){return [battleState.player,...battleState.bots]}
-function nearestEnemy(t){
- let best=null,bd=Infinity;
- for(let q of allTanks()){
-  if(q===t||!q.alive||q.team===t.team)continue;
-  let d=Math.hypot(q.x-t.x,q.z-t.z);if(d<bd){bd=d;best=q}
+  box(0,1,0,16,1,16,[.37,.40,.32,1]);
+  for(let x of[-45,45])box(x,2,0,8,2,10,[.28,.32,.28,1]);
  }
- return best;
-}
-function angleDiff(a,b){return Math.atan2(Math.sin(b-a),Math.cos(b-a))}
-function lineWall(x,z,dx,dz,max){
- for(let t=0;t<max;t+=1.5){
-  let xx=x+dx*t,zz=z+dz*t;if(obstacleHit(xx,zz,.2))return {x:xx,z:zz,d:t};
- }
- return null;
-}
-function lineTank(t,dx,dz,max){
- let best=null,bd=max;
- for(let q of allTanks()){
-  if(!q.alive||q===t||q.team===t.team)continue;
-  let vx=q.x-t.x,vz=q.z-t.z,d=Math.hypot(vx,vz);
-  if(d>max)continue;
-  let cross=Math.abs(vx*dz-vz*dx);
-  if(cross<2.8&&d<bd){bd=d;best=q}
- }
- return best;
-}
-function damage(target,amount,attacker){
- if(!target.alive)return;
- target.health-=amount;target.hitFlash=.15;
- if(target.health<=0){
-  target.health=0;target.alive=false;target.deaths++;target.respawn=3;
-  if(attacker){attacker.kills++;if(attacker===battleState.player){profile.kills++;addXP(80);missionProgress("kills",1)}}
-  if(attacker){
-   if(attacker.team==="red")battleState.red++;else battleState.blue++;
-   battleState.fund+=120;
+ else if(m==="плато"){
+  for(let i=0;i<10;i++){
+   const x=(i%5)*28-56,z=Math.floor(i/5)*45-22;
+   box(x,2,z,10,2,10,[.38,.42,.31,1]);
   }
-  if(target===battleState.player){
-   profile.deaths++;missionProgress("xp",0);$("death").style.display="flex";
+  addBuilding(-40,-45,14,12,5);
+  addBuilding(42,40,18,13,6);
+  for(let i=0;i<20;i++)tree(-80+Math.random()*160,-80+Math.random()*160);
+ }
+ else{
+  // generic classic layout: buildings + blocks + ramps
+  addBuilding(-48,-42,22,16,7);
+  addBuilding(45,-42,18,20,9);
+  addBuilding(-45,42,20,18,8);
+  addBuilding(45,43,24,17,7);
+
+  for(let i=0;i<12;i++){
+   const x=(Math.random()>.5?1:-1)*(15+Math.random()*55);
+   const z=-65+Math.random()*130;
+   box(x,1.4,z,3+Math.random()*4,1.4,3+Math.random()*4,[.39,.42,.34,1]);
+  }
+  // central ramps
+  box(0,1.5,-28,18,1.5,4,[.43,.46,.37,1]);
+  box(0,1.5,28,18,1.5,4,[.43,.46,.37,1]);
+
+  // trees
+  for(let i=0;i<35;i++){
+   const x=-90+Math.random()*180,z=-90+Math.random()*180;
+   if(Math.hypot(x,z)<25)continue;
+   tree(x,z);
   }
  }
 }
-function fireTank(t,charge=1){
- if(!t.alive||t.fireCd>0)return;
- let type=(guns.find(x=>x[0]===t.gun)||guns[0])[1];
- let yaw=t.heading+t.turret;
- let dx=-Math.sin(yaw),dz=-Math.cos(yaw);
- let range=type==="shaft"||type==="rail"?150:type==="thunder"?95:80;
- let wall=lineWall(t.x,t.z,dx,dz,range);
- let enemy=lineTank(t,dx,dz,range);
- let wallD=wall?wall.d:range;
- if(enemy){
-  let ed=Math.hypot(enemy.x-t.x,enemy.z-t.z);
-  if(ed<wallD){
-   let dmg=12+Math.random()*13;
-   if(type==="shaft")dmg=25+38*charge;
-   if(type==="rail")dmg=48;
-   if(type==="thunder"){
-    dmg=35;
-    allTanks().forEach(q=>{
-     if(q!==t&&q.alive&&q.team!==t.team&&Math.hypot(q.x-enemy.x,q.z-enemy.z)<12)damage(q,25,t);
-    });
-   }
-   damage(enemy,dmg,t);
-  }else if(wall)battleState.decals.push({x:wall.x,z:wall.z,life:999});
- }else if(wall){
-  battleState.decals.push({x:wall.x,z:wall.z,life:999});
- }
- t.fireCd=type==="firebird"||type==="freeze"||type==="twins"?0.35:type==="rail"?2.5:type==="shaft"?2:1.0;
- battleState.shotFlash=.08;
+
+/* -------------------- TANK OBJECTS -------------------- */
+function tank(x,z,team,isPlayer=false){
+ return {
+  type:"tank",x,z,y:.2,heading:team==="blue"?0:Math.PI,
+  turret:team==="blue"?0:Math.PI,
+  hp:isPlayer?HULLS[state.hull].armor:850+Math.random()*350,
+  maxHp:isPlayer?HULLS[state.hull].armor:850+Math.random()*350,
+  team,isPlayer,
+  speed:0,turn:0,cool:0,dead:false,respawn:0,
+  radius:2.7,aiTimer:0,target:null,
+  armorBoost:0,damageBoost:0,nitro:0
+ };
 }
-function updateBot(t,dt){
- if(!t.alive){t.respawn-=dt;if(t.respawn<=0){t.alive=true;t.health=100;t.x=(t.team==="red"?-1:1)*(30+Math.random()*50);t.z=(Math.random()-.5)*110;t.heading=Math.random()*TAU}return}
- t.fireCd=Math.max(0,t.fireCd-dt);t.hitFlash=Math.max(0,t.hitFlash-dt);
- let target=nearestEnemy(t);if(!target)return;
- let dx=target.x-t.x,dz=target.z-t.z,d=Math.hypot(dx,dz);
- let desired=Math.atan2(-dx,-dz);
- let ad=angleDiff(t.heading,desired);
- if(Math.abs(ad)>.12)t.heading+=clamp(ad,-dt*1.6,dt*1.6);
- let ty=angleDiff(t.heading,turretAngleTo(t,target));
- t.turret+=clamp(ty,-dt*1.4,dt*1.4);
- if(d>18){
-  let sp=12;
-  let nx=-Math.sin(t.heading)*sp*dt,nz=-Math.cos(t.heading)*sp*dt;
-  if(!obstacleHit(t.x+nx,t.z,.9))t.x+=nx;
-  if(!obstacleHit(t.x,t.z+nz,.9))t.z+=nz;
- }else{
-  t.heading+=Math.sin(performance.now()/700+t.ai)*dt*.5;
- }
- let yaw=t.heading+t.turret,ddx=-Math.sin(yaw),ddz=-Math.cos(yaw);
- let aim=Math.abs(angleDiff(yaw,Math.atan2(-dx,-dz)));
- if(aim<.12&&d<90&&t.fireCd<=0){
-  let wall=lineWall(t.x,t.z,ddx,ddz,d);
-  if(!wall)fireTank(t);
- }
+let player=null;
+
+function createPlayer(){
+ player=tank(0,60,"blue",true);
+ battle.player=player;
+ bots.push(player);
 }
-function turretAngleTo(t,target){return Math.atan2(-(target.x-t.x),-(target.z-t.z))}
+
+function createBots(count){
+ for(let i=0;i<count;i++){
+  const team=i<Math.ceil(count/2)?"blue":"red";
+  let x,z;
+  if(team==="blue"){
+   x=-55+Math.random()*110;z=35+Math.random()*50;
+  }else{
+   x=-55+Math.random()*110;z=-35-Math.random()*50;
+  }
+  const b=tank(x,z,team,false);
+  b.heading=team==="blue"?0:Math.PI;
+  bots.push(b);
+ }
+ updateScoreboard();
+}
+
+/* -------------------- CAMERA -------------------- */
+function getCamera(){
+ if(!player)return mat4();
+ const h=player.heading;
+ let dist=battle.scoped?3:13;
+ let height=battle.scoped?2.4:7;
+ const target=[
+  player.x+Math.sin(h)*3,
+  .8,
+  player.z+Math.cos(h)*3
+ ];
+ const ex=player.x-Math.sin(h)*dist;
+ const ez=player.z-Math.cos(h)*dist;
+ return lookAt(ex, height, ez,target[0],target[1],target[2]);
+}
+
+/* -------------------- INPUT / PLAYER PHYSICS -------------------- */
 function updatePlayer(dt){
- let p=battleState.player;
- if(!p.alive)return;
- p.fireCd=Math.max(0,p.fireCd-dt);p.hitFlash=Math.max(0,p.hitFlash-dt);
- let scoped=battleState.scope;
- if(!scoped){
-  let f=(keys.w||keys.ArrowUp?1:0)-(keys.s||keys.ArrowDown?1:0);
-  let turn=(keys.d||keys.ArrowRight?1:0)-(keys.a||keys.ArrowLeft?1:0);
-  let max=profile.hull==="Mammoth"?12:profile.hull==="Wasp"?20:16;
-  p.speed=lerp(p.speed,f*max,clamp(dt*5,0,1));
-  if(!f)p.speed*=Math.pow(.08,dt);
-  p.heading+=turn*dt*(1.7+Math.abs(p.speed)*.04);
-  let nx=-Math.sin(p.heading)*p.speed*dt,nz=-Math.cos(p.heading)*p.speed*dt;
-  if(!obstacleHit(p.x+nx,p.z,.9))p.x+=nx;
-  else p.speed*=-.25;
-  if(!obstacleHit(p.x,p.z+nz,.9))p.z+=nz;
-  else p.speed*=-.25;
- }else p.speed=0;
- let tr=(keys.x?1:0)-(keys.z?1:0);
- p.turret+=tr*dt*(scoped?.75:2.2);
- if(mouse.active){
-  p.turret+=mouse.dx*.0025;mouse.dx=0;
- }
- if(battleState.charging){
-  battleState.charge=clamp(battleState.charge+dt*.65,0,1);$("charge").style.display="block";
-  $("charge").firstElementChild.style.width=(battleState.charge*100)+"%";
- }
-}
-const mouse={active:false,dx:0};
-addEventListener("keydown",e=>{
- keys[e.key]=true;
- if(e.key==="Tab"){e.preventDefault();$("scoreboard").style.display="block";updateScoreboard()}
- if(e.key==="Escape"){$("scoreboard").style.display="none";battleState.scope=false;$("scope").style.display="none"}
- if(["1","2","3","4","5","6"].includes(e.key))useSupply(+e.key);
- if(e.key==="f"||e.key==="F")missionProgress("flags",1);
-});
-addEventListener("keyup",e=>{
- keys[e.key]=false;
- if(e.key==="Tab")$("scoreboard").style.display="none";
-});
-addEventListener("mousemove",e=>{if(document.pointerLockElement===$("gameCanvas")){mouse.active=true;mouse.dx+=e.movementX}});
-$("gameCanvas").addEventListener("click",()=>{$("gameCanvas").requestPointerLock?.()});
-$("gameCanvas").addEventListener("mousedown",e=>{
- if(e.button===0)startCharge();
-});
-addEventListener("mouseup",e=>{if(e.button===0)releaseCharge()});
-function startCharge(){
- if(!battleState||!battleState.player.alive)return;
- let type=(guns.find(x=>x[0]===battleState.player.gun)||guns[0])[1];
- if(type==="shaft"){battleState.scope=true;$("scope").style.display="block"}
- battleState.charging=true;battleState.charge=0;
-}
-function releaseCharge(){
- if(!battleState||!battleState.charging)return;
- battleState.charging=false;$("charge").style.display="none";
- fireTank(battleState.player,battleState.charge);
- battleState.charge=0;
- if(battleState.scope){battleState.scope=false;$("scope").style.display="none"}
-}
-$("mobileFire").onpointerdown=e=>{e.preventDefault();startCharge()};
-$("mobileFire").onpointerup=e=>{e.preventDefault();releaseCharge()};
+ if(!player||player.dead)return;
 
-/* ---------- SUPPLIES / DROPS ---------- */
-function createDrop(){
- let types=["repair","armor","damage","speed","mine"];
- let type=types[Math.floor(Math.random()*types.length)];
- let x=(Math.random()*150-75),z=(Math.random()*150-75);
- battleState.drops.push({type,x,z,y:18,landed:false,life:45,rot:0});
+ const scoped=GUNS[state.gun].n==="Shaft"&&keys.Space;
+ battle.scoped=scoped;
+
+ if(scoped){
+  // Hull freezes, aim can move independently
+  if(keys.KeyA||keys.ArrowLeft)player.turret-=dt*.9;
+  if(keys.KeyD||keys.ArrowRight)player.turret+=dt*.9;
+  if(keys.KeyW||keys.ArrowUp)player.turret+=dt*.45;
+  if(keys.KeyS||keys.ArrowDown)player.turret-=dt*.45;
+ }else{
+  let forward=(keys.KeyW||keys.ArrowUp)?1:(keys.KeyS||keys.ArrowDown)?-1:0;
+  let steer=(keys.KeyA||keys.ArrowLeft)?-1:(keys.KeyD||keys.ArrowRight)?1:0;
+
+  const hull=HULLS[state.hull];
+  const max=hull.speed*(player.nitro>0?1.55:1);
+  const accel=forward?18:24;
+  player.speed+=forward*accel*dt;
+  if(!forward)player.speed*=Math.pow(.02,dt);
+  player.speed=Math.max(-max*.45,Math.min(max,player.speed));
+
+  const turnSpeed=1.8*(.25+Math.min(1,Math.abs(player.speed)/max));
+  player.heading+=steer*turnSpeed*dt*(player.speed>=0?1:-1);
+
+  player.x+=Math.sin(player.heading)*player.speed*dt;
+  player.z+=Math.cos(player.heading)*player.speed*dt;
+
+  // Z/X independently rotates turret
+  if(keys.KeyZ)player.turret-=dt*1.7;
+  if(keys.KeyX)player.turret+=dt*1.7;
+  if(keys.KeyC){
+   const diff=angleDiff(player.heading,player.turret);
+   player.turret+=diff*Math.min(1,dt*8);
+  }
+  if(keys.Space)startFire();
+ }
+
+ player.nitro=Math.max(0,player.nitro-dt);
+ player.armorBoost=Math.max(0,player.armorBoost-dt);
+ player.damageBoost=Math.max(0,player.damageBoost-dt);
+ player.cool=Math.max(0,player.cool-dt);
+
+ resolveTankBoundary(player);
+ resolveTankObjects(player);
 }
-function createGold(){
- let x=(Math.random()*140-70),z=(Math.random()*140-70);
- battleState.drops.push({type:"gold",x,z,y:22,landed:false,life:60,rot:0});
- toast("⚠ GOLD BOX: ЯЩИК ПАДАЕТ!");
+
+/* -------------------- AI -------------------- */
+function updateBots(dt){
+ for(const b of bots){
+  if(b===player||b.dead)continue;
+  b.cool=Math.max(0,b.cool-dt);
+  b.aiTimer-=dt;
+  if(b.aiTimer<=0){
+   b.aiTimer=.3+Math.random()*.7;
+   let candidates=bots.filter(x=>!x.dead&&x.team!==b.team);
+   if(candidates.length){
+    candidates.sort((a,c)=>dist2(b,a)-dist2(b,c));
+    b.target=candidates[0];
+   }
+  }
+  const t=b.target;
+  if(!t)continue;
+
+  const dx=t.x-b.x,dz=t.z-b.z;
+  const distance=Math.hypot(dx,dz);
+  const desired=Math.atan2(dx,dz);
+  const diff=angleDiff(b.heading,desired);
+  b.heading+=Math.sign(diff)*Math.min(Math.abs(diff),dt*1.3);
+
+  const desiredTurret=desired;
+  const td=angleDiff(b.turret,desiredTurret);
+  b.turret+=Math.sign(td)*Math.min(Math.abs(td),dt*1.8);
+
+  if(distance>22)b.speed=Math.min(6,b.speed+dt*8);
+  else if(distance<8)b.speed*=.95;
+  else b.speed*=.97;
+
+  b.x+=Math.sin(b.heading)*b.speed*dt;
+  b.z+=Math.cos(b.heading)*b.speed*dt;
+
+  if(distance<70 && Math.abs(td)<.15 && b.cool<=0){
+   botFire(b);
+  }
+
+  resolveTankBoundary(b);
+  resolveTankObjects(b);
+ }
+}
+function botFire(b){
+ const gun=["Smoky","Twins","Thunder","Firebird","Railgun"][Math.floor(Math.random()*5)];
+ const old=state.gun;
+ // temporary gun behavior
+ fireRay(b,gun,false);
+ b.cool=gun==="Firebird"?.25:gun==="Twins"?.65:gun==="Railgun"?3:gun==="Thunder"?2.2:1.1;
+}
+
+/* -------------------- COLLISION -------------------- */
+function resolveTankBoundary(t){
+ const s=battle.mapSize/2-7;
+ t.x=Math.max(-s,Math.min(s,t.x));
+ t.z=Math.max(-s,Math.min(s,t.z));
+}
+function resolveTankObjects(t){
+ for(const o of objects){
+  if(!o.solid||o.type==="tree")continue;
+  const minX=o.x-o.sx,maxX=o.x+o.sx,minZ=o.z-o.sz,maxZ=o.z+o.sz;
+  const nx=Math.max(minX,Math.min(t.x,maxX));
+  const nz=Math.max(minZ,Math.min(t.z,maxZ));
+  const dx=t.x-nx,dz=t.z-nz;
+  const d=Math.hypot(dx,dz);
+  if(d<t.radius){
+   if(d<.001){
+    const ax=Math.min(Math.abs(t.x-minX),Math.abs(t.x-maxX));
+    const az=Math.min(Math.abs(t.z-minZ),Math.abs(t.z-maxZ));
+    if(ax<az)t.x+=(t.x<o.x?-1:1)*(t.radius+.1);
+    else t.z+=(t.z<o.z?-1:1)*(t.radius+.1);
+   }else{
+    const push=(t.radius-d)/d;
+    t.x+=dx*push;t.z+=dz*push;
+   }
+   t.speed*=.2;
+  }
+ }
+}
+function angleDiff(a,b){
+ let d=(b-a+Math.PI)%(Math.PI*2)-Math.PI;
+ return d;
+}
+function dist2(a,b){
+ const x=a.x-b.x,z=a.z-b.z;return x*x+z*z;
+}
+
+/* -------------------- FIRING -------------------- */
+function startFire(){
+ if(!player||player.dead)return;
+ const gun=GUNS[state.gun].n;
+ if(gun==="Shaft"){
+  shaftCharging=true;
+  shaftCharge=Math.min(1,shaftCharge+.018);
+  document.getElementById("charge").style.display="block";
+  document.querySelector("#charge i").style.width=(shaftCharge*100)+"%";
+  document.getElementById("scope").classList.add("on");
+  return;
+ }
+ if(player.cool>0)return;
+ fireRay(player,gun,true);
+}
+
+function releaseFire(){
+ if(!player)return;
+ if(GUNS[state.gun].n==="Shaft"&&shaftCharging){
+  shaftCharging=false;
+  document.getElementById("charge").style.display="none";
+  document.getElementById("scope").classList.remove("on");
+  if(player.cool<=0){
+   fireRay(player,"Shaft",true,shaftCharge);
+   player.cool=3.8;
+  }
+  shaftCharge=0;
+ }
+}
+
+function getMuzzle(t){
+ const a=t.turret;
+ return [t.x+Math.sin(a)*3,t.y+1.25,t.z+Math.cos(a)*3];
+}
+function fireRay(shooter,gun,isPlayer,power=1){
+ if(!shooter||shooter.dead)return;
+ let damage=0,range=30;
+ if(gun==="Smoky"){damage=145;range=65;shooter.cool=1.05}
+ if(gun==="Firebird"){damage=42;range=13;shooter.cool=.18}
+ if(gun==="Twins"){damage=72;range=48;shooter.cool=.32}
+ if(gun==="Railgun"){damage=330;range=130;shooter.cool=2.7}
+ if(gun==="Isida"){damage=60;range=18;shooter.cool=.2}
+ if(gun==="Thunder"){damage=245;range=75;shooter.cool=2.2}
+ if(gun==="Freeze"){damage=48;range=14;shooter.cool=.18}
+ if(gun==="Ricochet"){damage=110;range=65;shooter.cool=1}
+ if(gun==="Shaft"){damage=500*power;range=160}
+
+ damage*=shooter.damageBoost>0?2:1;
+
+ const origin=getMuzzle(shooter);
+ const dir=norm([Math.sin(shooter.turret),0,Math.cos(shooter.turret)]);
+
+ // find first enemy tank along ray
+ let best=null,bestT=range;
+ for(const b of bots){
+  if(b===shooter||b.dead)continue;
+  if(b.team===shooter.team&&gun!=="Isida")continue;
+  const rel=[b.x-origin[0],0,b.z-origin[2]];
+  const t=dot(rel,dir);
+  if(t<0||t>range)continue;
+  const closest=add(origin,mul(dir,t));
+  const dd=Math.hypot(b.x-closest[0],b.z-closest[2]);
+  if(dd<b.radius&&t<bestT){best=b;bestT=t}
+ }
+
+ // building intersection
+ let wallT=rayWall(origin,dir,range);
+ if(best&&bestT<wallT){
+  if(gun==="Isida"&&best.team===shooter.team){
+   best.hp=Math.min(best.maxHp,best.hp+damage*.35);
+  }else{
+   damageTank(best,damage,shooter);
+  }
+ }else{
+  if(wallT<Infinity)addImpact(add(origin,mul(dir,wallT)),dir);
+ }
+
+ // railgun penetrates several enemies
+ if(gun==="Railgun"){
+  for(const b of bots){
+   if(b===shooter||b.dead||b.team===shooter.team)continue;
+   const rel=[b.x-origin[0],0,b.z-origin[2]];
+   const t=dot(rel,dir);
+   const closest=add(origin,mul(dir,t));
+   if(t>0&&t<range&&Math.hypot(b.x-closest[0],b.z-closest[2])<b.radius)
+    damageTank(b,damage*.72,shooter);
+  }
+  railBeam=.14;
+ }
+
+ // thunder splash
+ if(gun==="Thunder"){
+  let hitPoint=best? [best.x,0,best.z]:
+   add(origin,mul(dir,Math.min(wallT,range)));
+  for(const b of bots){
+   if(b.dead||b.team===shooter.team)continue;
+   const d=Math.hypot(b.x-hitPoint[0],b.z-hitPoint[2]);
+   if(d<11){
+    damageTank(b,damage*(1-d/15)*.75,shooter);
+   }
+  }
+  explosion(hitPoint);
+ }
+
+ // tracer/flash
+ muzzle(origin,dir,gun);
+ if(isPlayer&&gun!=="Shaft"){
+  battle.xp+=2;
+  addMission("damage",damage);
+ }
+}
+
+function rayWall(o,d,max){
+ let best=Infinity;
+ const s=battle.mapSize/2-5;
+ // square boundary
+ if(Math.abs(d[0])>.0001){
+  for(const x of[-s,s]){
+   const t=(x-o[0])/d[0];
+   if(t>0&&t<best){
+    const z=o[2]+d[2]*t;
+    if(Math.abs(z)<=s)best=t;
+   }
+  }
+ }
+ if(Math.abs(d[2])>.0001){
+  for(const z of[-s,s]){
+   const t=(z-o[2])/d[2];
+   if(t>0&&t<best){
+    const x=o[0]+d[0]*t;
+    if(Math.abs(x)<=s)best=t;
+   }
+  }
+ }
+ // AABB buildings
+ for(const ob of objects){
+  if(!ob.solid||ob.type==="tree")continue;
+  const minX=ob.x-ob.sx,maxX=ob.x+ob.sx,minZ=ob.z-ob.sz,maxZ=ob.z+ob.sz;
+  let tx1=(minX-o[0])/d[0],tx2=(maxX-o[0])/d[0];
+  let tz1=(minZ-o[2])/d[2],tz2=(maxZ-o[2])/d[2];
+  if(d[0]===0)tx1=-Infinity,tx2=Infinity;
+  if(d[2]===0)tz1=-Infinity,tz2=Infinity;
+  const tmin=Math.max(Math.min(tx1,tx2),Math.min(tz1,tz2));
+  const tmax=Math.min(Math.max(tx1,tx2),Math.max(tz1,tz2));
+  if(tmax>=Math.max(0,tmin)&&tmin<best&&tmax>0)best=Math.max(.01,tmin);
+ }
+ return best;
+}
+
+function addImpact(pos,dir){
+ decals.push({x:pos[0],y:.05,z:pos[2],life:999,dir});
+ // visual black circular mark represented by a dark flattened box
+ objects.push({type:"decal",x:pos[0],y:.055,z:pos[2],sx:.45,sy:.03,sz:.45,color:[.015,.015,.012,1],solid:false});
+}
+function muzzle(pos,dir,gun){
+ particles.push({x:pos[0],y:pos[1],z:pos[2],life:.12,kind:"muzzle",gun});
+}
+function explosion(pos){
+ for(let i=0;i<20;i++){
+  particles.push({
+   x:pos[0],y:.3,z:pos[2],
+   vx:(Math.random()-.5)*8,vy:Math.random()*7,vz:(Math.random()-.5)*8,
+   life:.5+Math.random()*.6,kind:"explosion"
+  });
+ }
+}
+function damageTank(t,damage,attacker){
+ if(t.dead)return;
+ if(t.armorBoost>0)damage*=.5;
+ t.hp-=damage;
+ if(t.isPlayer){
+  damageFlash();
+ }
+ if(t.hp<=0){
+  killTank(t,attacker);
+ }
+}
+function killTank(t,killer){
+ t.hp=0;t.dead=true;t.respawn=3.2;t.speed=0;
+ explosion([t.x,0,t.z]);
+ if(killer){
+  if(killer.team==="blue")battle.blue++;
+  else battle.red++;
+  if(killer===player){
+   battle.kills++;
+   state.kills++;
+   const reward=70+Math.floor(Math.random()*80);
+   battle.xp+=reward;
+   battle.crystals+=Math.floor(reward/4);
+   addMission("kills",1);
+   addMission("damage",1);
+  }
+ }
+ battle.fund+=10;
+ state.xp+=killer===player?70:15;
+ if(t===player){
+  state.deaths++;
+  document.getElementById("death").classList.add("on");
+ }
+ save();
+ updateBattleHUD();
+}
+function respawnTank(t){
+ const blue=t.team==="blue";
+ t.x=blue?(-50+Math.random()*100):(-50+Math.random()*100);
+ t.z=blue?(35+Math.random()*35):(-35-Math.random()*35);
+ t.heading=blue?0:Math.PI;t.turret=t.heading;
+ t.maxHp=t.isPlayer?HULLS[state.hull].armor:1000;
+ t.hp=t.maxHp;t.dead=false;t.respawn=0;
+ if(t===player)document.getElementById("death").classList.remove("on");
+}
+
+/* -------------------- SUPPLIES -------------------- */
+let supplyCounts=[0,3,3,3,3,3];
+function useSupply(n){
+ if(!battle||!player||player.dead)return;
+ if(supplyCounts[n]<=0){toast("Припас закончился");return}
+ supplyCounts[n]--;
+ document.getElementById("s"+n).textContent=supplyCounts[n];
+ if(n===1)player.hp=Math.min(player.maxHp,player.hp+350);
+ if(n===2)player.armorBoost=12;
+ if(n===3)player.damageBoost=12;
+ if(n===4)player.nitro=5;
+ if(n===5)dropMine();
+ addMission("supplies",1);
+ const el=document.querySelector(`.supply[data-supply="${n}"]`);
+ el.classList.add("active");setTimeout(()=>el.classList.remove("active"),400);
+}
+function dropMine(){
+ if(!player)return;
+ drops.push({type:"mine",x:player.x,z:player.z,life:20});
+}
+function spawnSupply(){
+ const types=["repair","armor","damage","speed","mine"];
+ const type=types[Math.floor(Math.random()*types.length)];
+ drops.push({type,x:-80+Math.random()*160,z:-80+Math.random()*160,life:30});
 }
 function updateDrops(dt){
- battleState.lastDrop-=dt;
- if(battleState.lastDrop<=0){createDrop();battleState.lastDrop=35+Math.random()*35}
- if(Math.random()<dt*.004&&battleState.time<60)createGold();
- for(let d of battleState.drops){
-  d.rot+=dt*2;if(!d.landed){d.y-=dt*7;if(d.y<=1){d.y=1;d.landed=true;toast(d.type==="gold"?"GOLD BOX ПРИЗЕМЛИЛСЯ!":"ПРИПАС ПРИЗЕМЛИЛСЯ")}}
-  d.life-=dt;
-  let p=battleState.player;
-  if(p.alive&&Math.hypot(p.x-d.x,p.z-d.z)<3&&d.landed){
-   pickupDrop(d);d.life=-1;
+ for(const d of drops)d.life-=dt;
+ for(const d of drops){
+  if(d.type==="mine"){
+   for(const b of bots){
+    if(b.dead||b===player)continue;
+    if(Math.hypot(b.x-d.x,b.z-d.z)<3){
+     damageTank(b,260,player);d.life=-1;explosion([d.x,0,d.z]);
+    }
+   }
+  }else if(player&&!player.dead&&Math.hypot(player.x-d.x,player.z-d.z)<3){
+   d.life=-1;
+   const map={repair:1,armor:2,damage:3,speed:4,mine:5};
+   supplyCounts[map[d.type]]++;
+   document.getElementById("s"+map[d.type]).textContent=supplyCounts[map[d.type]];
   }
  }
- battleState.drops=battleState.drops.filter(d=>d.life>0);
-}
-function pickupDrop(d){
- if(d.type==="gold"){profile.crystals+=1000; $("sup6").textContent=1;toast("+1000 💎 GOLD BOX");addXP(100);return}
- let map={repair:1,armor:2,damage:3,speed:4,mine:5},n=map[d.type];
- $("sup"+n).textContent=+$("sup"+n).textContent+1;
- missionProgress("supplies",1);toast("ПОДОБРАН ПРИПАС: "+d.type.toUpperCase());
-}
-function useSupply(n){
- if(!battleState||!battleState.player.alive)return;
- let el=$("sup"+n),cnt=+el.textContent;if(cnt<=0)return;
- el.textContent=cnt-1;let p=battleState.player;
- if(n===1)p.health=clamp(p.health+35,0,100);
- if(n===2)p.armor=3;
- if(n===3)p.damageBoost=3;
- if(n===4)p.speedBoost=3;
- if(n===5){battleState.mines=battleState.mines||[];battleState.mines.push({x:p.x,z:p.z,life:90});}
- if(n===6){profile.crystals+=1000;el.textContent=0}
- missionProgress("supplies",1);
+ drops=drops.filter(d=>d.life>0);
 }
 
-/* ---------- MAP RENDER ---------- */
-function drawGround(vp){
- // giant square floor
- modelPart(T(0,-.5,0,105,.5,105),[.18,.23,.17]);
- // grid-like concrete/terrain strips
- for(let x=-90;x<=90;x+=15)modelPart(T(x,-.44,0,.015,.02,100),[.22,.27,.20]);
- for(let z=-90;z<=90;z+=15)modelPart(T(0,-.43,z,100,.02,.015),[.22,.27,.20]);
- // mountains / boundary walls: flat square cliff slabs
- modelPart(T(0,4,-105,105,5,6),[.25,.27,.25]);
- modelPart(T(0,4,105,105,5,6),[.25,.27,.25]);
- modelPart(T(-105,4,0,6,5,105),[.25,.27,.25]);
- modelPart(T(105,4,0,6,5,105),[.25,.27,.25]);
- for(let o of obstacles){
-  let c=o.type==="mountain"?[.25,.27,.25]:o.type==="container"?[.38,.28,.12]:[.28,.30,.28];
-  modelPart(T(o.x,o.h/2,o.z,o.w/2,o.h/2,o.d/2),c);
-  // roof/window details, opaque
-  if(o.type==="building"){
-   modelPart(T(o.x,o.h*.7,o.z-o.d/2-.02,o.w*.28,o.h*.12,.03),[.06,.08,.07]);
-   modelPart(T(o.x-o.w*.28,o.h*.45,o.z-o.d/2-.025,.03,o.h*.12,o.d*.01),[.06,.08,.07]);
+/* -------------------- GOLD BOX -------------------- */
+let goldTimer=35;
+function updateGold(dt){
+ if(goldBox){
+  if(player&&!player.dead&&Math.hypot(player.x-goldBox.x,player.z-goldBox.z)<4){
+   goldBox=null;
+   state.crystals+=1000;
+   state.gold++;
+   battle.crystals+=1000;
+   battle.fund=Math.max(0,battle.fund-1000);
+   save();updateTop();updateBattleHUD();
+   toast("💎 ГОЛД БОКС! +1000 КРИСТАЛЛОВ");
   }
+  return;
  }
- for(let d of battleState.drops)drawDrop(vp,d);
-}
-function drawDrop(vp,d){
- let c=d.type==="gold"?[.95,.65,.08]:d.type==="repair"?[.18,.65,.20]:d.type==="armor"?[.15,.42,.8]:d.type==="damage"?[.8,.15,.12]:d.type==="speed"?[.9,.68,.08]:[.25,.3,.22];
- modelPart(T(d.x,d.y,d.z,.9,.9,.9,d.rot),c);
- if(!d.landed){
-  modelPart(T(d.x,d.y+5,d.z,.04,5,.04),[.9,.9,.9]);
-  modelPart(T(d.x,d.y+9,d.z,.18,.03,.18),c);
+ goldTimer-=dt;
+ if(goldTimer<=0&&battle.fund>=250){
+  goldBox={
+   x:-70+Math.random()*140,z:-70+Math.random()*140,
+   time:30
+  };
+  goldTimer=90+Math.random()*100;
+  toast("🚨 СИРЕНА! ЗОЛОТОЙ ЯЩИК СКОРО УПАДЁТ!");
+ }
+ if(goldBox){
+  goldBox.time-=dt;
+  if(goldBox.time<=0)goldBox=null;
  }
 }
 
-/* ---------- CAMERA ---------- */
-function cameraMatrix(){
- let p=battleState.player;
- let yaw=p.heading;
- let distance=battleState.scope?4.0:10;
- let height=battleState.scope?2.5:6;
- let cx=p.x+Math.sin(yaw)*distance,cz=p.z+Math.cos(yaw)*distance;
- let cy=p.scope?2:height;
- let V=lookAt(mat4(),[cx,cy,cz],[p.x,.7,p.z],[0,1,0]);
- let c=$("gameCanvas"),P=perspective(mat4(),Math.PI/(battleState.scope?3.1:3.6),c.width/c.height,.1,250);
- return mul(P,V);
+/* -------------------- MISSIONS PROGRESS -------------------- */
+function addMission(type,value){
+ if(!state.missions)return;
+ if(type==="kills")state.missions[0][3]=Math.min(state.missions[0][2],state.missions[0][3]+value);
+ if(type==="damage")state.missions[5][3]=Math.min(state.missions[5][2],state.missions[5][3]+value);
+ if(type==="supplies")state.missions[3][3]=Math.min(state.missions[3][2],state.missions[3][3]+value);
+ save();
 }
-function renderBattle(){
+
+/* -------------------- RENDER WORLD -------------------- */
+function drawWorld(){
  if(!gl)return;
- resizeBattle();gl.enable(gl.DEPTH_TEST);gl.clearColor(.18,.25,.32,1);
- gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(prog);
- let night=battleState.config.theme==="night"?1:0;
- gl.uniform1f(loc.night,night);
- let vp=cameraMatrix();
- drawGround(vp);
- for(let t of allTanks())if(t.alive)drawTank3D(vp,t);
- // laser-like rail beam / shot trace
- if(battleState.shotFlash>0){
-  let p=battleState.player,y=p.heading+p.turret;
-  let type=(guns.find(x=>x[0]===p.gun)||guns[0])[1];
-  if(type==="rail"){
-   modelPart(T(p.x,.95,p.z, .06,.06,35,y),[.9,.9,.35]);
+ gl.clearColor(.38,.62,.82,1);
+ gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+
+ // sky is cleared blue. Add a giant distant sun/sky sphere-like planes through objects
+ drawSun();
+ drawGround();
+ for(const o of objects)drawObject(o);
+ for(const d of drops)drawDrop(d);
+ if(goldBox)drawGold(goldBox);
+ for(const b of bots)if(!b.dead)drawTank(b);
+ drawParticles();
+ if(railBeam>0)drawRailBeam();
+}
+
+function drawGround(){
+ // broad green ground plate
+ drawMesh(CUBE,scale(battle.mapSize/2,0.05,battle.mapSize/2),[.30,.48,.26,1]);
+ // visible grass pattern as many small dark/bright strips
+ for(let x=-100;x<=100;x+=12){
+  for(let z=-100;z<=100;z+=12){
+   if((x+z)%24===0)
+    drawMesh(CUBE,multiply(translation(x,.08,z),scale(5,.02,.15)),[.26,.42,.22,1]);
   }
  }
 }
 
-/* ---------- LOOP ---------- */
-function updateHUD(){
- let b=battleState;
- $("redScore").textContent=b.red;$("blueScore").textContent=b.blue;
- $("battleTimer").textContent=fmt(b.time);
- $("battleFund").textContent=Math.floor(b.fund);
- let r=ranks[getRank()],next=ranks[Math.min(getRank()+1,ranks.length-1)];
- $("battleRank").textContent=r[0].toUpperCase();
- if(next[2]===Infinity){$("battleXpText").textContent=profile.xp;$("battleXpFill").style.width="100%"}
- else{$("battleXpText").textContent=profile.xp+"/"+next[2];$("battleXpFill").style.width=(clamp((profile.xp-r[1])/(next[2]-r[1])*100,0,100))+"%"}
+function drawSun(){
+ // large luminous sun high in sky, represented by distant glowing cube
+ const model=multiply(translation(-70,90,-100),scale(8,8,8));
+ drawMesh(CUBE,model,[1,.88,.48,1],.65);
 }
-function loop(now){
- if(!battleState)return;
- let dt=Math.min(.05,(now-lastTime)/1000);lastTime=now;
- if(!battleState.ends){
-  battleState.time-=dt;battleState.fund+=dt*.7;
-  updatePlayer(dt);battleState.bots.forEach(t=>updateBot(t,dt));updateDrops(dt);
-  battleState.shotFlash=Math.max(0,battleState.shotFlash-dt);
-  if(battleState.player.alive&&battleState.player.health<=0){}
-  if(battleState.player.respawn>0){
-   battleState.player.respawn-=dt;
-   $("respawnText").textContent="Респавн через "+Math.ceil(battleState.player.respawn);
-   if(battleState.player.respawn<=0){spawnPlayer();$("death").style.display="none"}
-  }
-  if(battleState.time<=0||battleState.red>=battleState.config.limit||battleState.blue>=battleState.config.limit)endBattle();
+
+function drawObject(o){
+ if(o.type==="box"||o.type==="decal"){
+  drawMesh(CUBE,
+   multiply(translation(o.x,o.y,o.z),scale(o.sx,o.sy,o.sz)),
+   o.color||[.3,.3,.3,1]);
  }
- updateHUD();renderBattle();raf=requestAnimationFrame(loop);
+ if(o.type==="tree"){
+  // opaque trunk
+  drawMesh(CUBE,multiply(translation(o.x,2,o.z),scale(.45,2,.45)),[.29,.19,.10,1]);
+  // opaque layered foliage — intentionally NOT transparent
+  drawMesh(CUBE,multiply(translation(o.x,4.1,o.z),scale(2.2,2.2,2.2)),[.16,.38,.16,1]);
+  drawMesh(CUBE,multiply(translation(o.x+1,5,o.z),scale(1.3,1.5,1.3)),[.20,.45,.18,1]);
+ }
 }
-function endBattle(){
- if(battleState.ends)return;
- battleState.ends=true;
- let win=battleState.blue>=battleState.red;
- let xp=win?300:120, reward=Math.floor(battleState.fund*(win?.25:.12));
- profile.crystals+=reward;addXP(xp);
- $("resultTitle").textContent=win?"ПОБЕДА!":"ПОРАЖЕНИЕ";
- $("resultTitle").className=win?"blue":"red";
- $("resultReason").textContent=battleState.time<=0?"Время битвы закончилось":"Достигнут лимит очков";
- $("rKills").textContent=battleState.player.kills;$("rDeaths").textContent=battleState.player.deaths;
- $("rXp").textContent=xp;$("rMoney").textContent=reward;
- $("result").style.display="flex";save();
+
+function drawTank(t){
+ const base=t.team==="blue"?[.20,.40,.72,1]:[.67,.19,.18,1];
+ const dark=t.team==="blue"?[.10,.23,.42,1]:[.38,.09,.08,1];
+
+ let hull=multiply(translation(t.x,.9,t.z),multiply(rotationY(t.heading),scale(2.6,.8,3.2)));
+ drawMesh(CUBE,hull,base);
+
+ // sloped upper armor
+ let upper=multiply(translation(t.x,.1+1.6,t.z),multiply(rotationY(t.heading),scale(2.05,.55,2.0)));
+ drawMesh(CUBE,upper,[base[0]*1.15,base[1]*1.15,base[2]*1.15,1]);
+
+ // tracks
+ for(const side of[-1,1]){
+  let tr=multiply(
+   translation(t.x+Math.cos(t.heading)*side*2.35,.55,t.z-Math.sin(t.heading)*side*2.35),
+   multiply(rotationY(t.heading),scale(.48,.65,3.25))
+  );
+  drawMesh(CUBE,tr,[.075,.085,.07,1]);
+  for(let i=-2;i<=2;i++){
+   let tread=multiply(
+    translation(t.x+Math.cos(t.heading)*side*2.85,.56,t.z-Math.sin(t.heading)*side*2.85+i*.95),
+    multiply(rotationY(t.heading),scale(.16,.5,.35))
+   );
+   drawMesh(CUBE,tread,[.17,.18,.15,1]);
+  }
+ }
+
+ // turret
+ let turret=multiply(
+  translation(t.x,2.35,t.z),
+  multiply(rotationY(t.turret),scale(1.75,.65,1.75))
+ );
+ drawMesh(CUBE,turret,base);
+
+ // gun
+ let gun=GUNS[state.gun].n;
+ let len=gun==="Shaft"?6.2:gun==="Railgun"?5.2:gun==="Thunder"?4.4:3.8;
+ if(!t.isPlayer){
+  const choices=["Smoky","Thunder","Twins","Railgun","Firebird"];
+  gun=choices[Math.abs(Math.floor(t.x+t.z))%choices.length];
+  len=gun==="Railgun"?5.2:gun==="Thunder"?4.4:3.8;
+ }
+ let barrel=multiply(
+  translation(
+   t.x+Math.sin(t.turret)*(1.4+len/2),
+   2.45,
+   t.z+Math.cos(t.turret)*(1.4+len/2)
+  ),
+  multiply(rotationY(t.turret),scale(.32,.32,len/2))
+ );
+ drawMesh(CUBE,barrel,[.12,.14,.12,1]);
+
+ // gun-specific muzzle
+ if(gun==="Twins"){
+  for(const y of[2.25,2.65]){
+   let b=multiply(
+    translation(t.x+Math.sin(t.turret)*3,y,t.z+Math.cos(t.turret)*3),
+    multiply(rotationY(t.turret),scale(.28,.28,.9))
+   );
+   drawMesh(CUBE,b,[.13,.15,.12,1]);
+  }
+ }
+ if(gun==="Firebird"){
+  let b=multiply(
+   translation(t.x+Math.sin(t.turret)*4,2.45,t.z+Math.cos(t.turret)*4),
+   multiply(rotationY(t.turret),scale(.55,.55,.55))
+  );
+  drawMesh(CUBE,b,[.72,.27,.08,1],.25);
+ }
+ if(gun==="Freeze"){
+  let b=multiply(
+   translation(t.x+Math.sin(t.turret)*4,2.45,t.z+Math.cos(t.turret)*4),
+   multiply(rotationY(t.turret),scale(.6,.6,.6))
+  );
+  drawMesh(CUBE,b,[.20,.65,.92,1],.3);
+ }
+ if(gun==="Shaft"&&t.isPlayer){
+  let laser=multiply(
+   translation(t.x+Math.sin(t.turret)*8,2.45,t.z+Math.cos(t.turret)*8),
+   multiply(rotationY(t.turret),scale(.025,.025,8))
+  );
+  drawMesh(CUBE,laser,[1,.15,.1,1],.7);
+ }
+
+ // health bar
+ const hp=Math.max(0,t.hp/t.maxHp);
+ drawMesh(CUBE,
+  multiply(translation(t.x,4,t.z),scale(2.4,.08,.12)),
+  [.05,.05,.05,1]);
+ drawMesh(CUBE,
+  multiply(translation(t.x-2.4+2.4*hp,4.02,t.z),scale(2.4*hp,.09,.14)),
+  t.team==="blue"?[.15,.55,1,1]:[1,.15,.12,1]);
+}
+
+function drawDrop(d){
+ const y=.6+Math.sin(performance.now()/180)*.15;
+ let c=d.type==="repair"?[.25,.9,.25,1]:
+ d.type==="armor"?[.2,.55,1,1]:
+ d.type==="damage"?[1,.35,.1,1]:
+ d.type==="speed"?[1,.85,.1,1]:[.75,.35,.15,1];
+ drawMesh(CUBE,multiply(translation(d.x,y,d.z),scale(1,.6,1)),c,.15);
+ // parachute
+ drawMesh(CUBE,multiply(translation(d.x,y+4,d.z),scale(2.5,.08,1.4)),c,.1);
+}
+function drawGold(g){
+ drawMesh(CUBE,multiply(translation(g.x,.8,g.z),scale(1.3,1.1,1.3)),[1,.72,.05,1],.6);
+ drawMesh(CUBE,multiply(translation(g.x,4,g.z),scale(2.8,.12,1.5)),[1,1,1,1],.3);
+}
+function drawParticles(){
+ const now=performance.now();
+ for(const p of particles){
+  if(p.kind==="muzzle"){
+   drawMesh(CUBE,multiply(translation(p.x,p.y,p.z),scale(.6,.6,.6)),[1,.7,.25,1],.7);
+  }else{
+   drawMesh(CUBE,multiply(translation(p.x,p.y,p.z),scale(.18,.18,.18)),[1,.4,.1,1],.5);
+  }
+ }
+ particles=particles.filter(p=>{
+  p.life-=.016;
+  if(p.vx){p.x+=p.vx*.016;p.y+=p.vy*.016;p.z+=p.vz*.016;p.vy-=9*.016}
+  return p.life>0;
+ });
+}
+function drawRailBeam(){
+ railBeam-=.016;
+ if(!player)return;
+ const o=getMuzzle(player),d=norm([Math.sin(player.turret),0,Math.cos(player.turret)]);
+ const len=35;
+ drawMesh(CUBE,
+  multiply(translation(o[0]+d[0]*len/2,o[1],o[2]+d[2]*len/2),
+  multiply(rotationY(player.turret),scale(.07,.07,len/2))),
+  [1,.08,.05,1],1);
+}
+
+/* -------------------- GAME LOOP -------------------- */
+function loop(now){
+ if(!battleRunning)return;
+ const dt=Math.min(.05,(now-lastFrame)/1000);lastFrame=now;
+
+ if(!battle.ended){
+  battle.remaining-=dt;
+  updatePlayer(dt);
+  updateBots(dt);
+  updateDrops(dt);
+  updateGold(dt);
+
+  if(Math.random()<dt*.015)spawnSupply();
+
+  for(const b of bots){
+   if(b.dead){
+    b.respawn-=dt;
+    if(b===player){
+     document.getElementById("respawnText").textContent=
+      "Возрождение через "+Math.ceil(b.respawn);
+    }
+    if(b.respawn<=0)respawnTank(b);
+   }
+  }
+
+  if(battle.remaining<=0)endBattle();
+  updateBattleHUD();
+  drawWorld();
+ }
+ requestAnimationFrame(loop);
+}
+
+/* -------------------- HUD -------------------- */
+function updateBattleHUD(){
+ if(!battle||!player)return;
+ const r=rankInfo();
+ document.getElementById("redScore").textContent=battle.red;
+ document.getElementById("blueScore").textContent=battle.blue;
+ document.getElementById("battleTimer").textContent=fmtTime(battle.remaining);
+ document.getElementById("fund").textContent=Math.floor(battle.fund);
+ document.getElementById("battleRankIcon").textContent=r.i+1;
+ document.getElementById("battleRankName").textContent=r.name;
+ document.getElementById("battleXpText").textContent=state.xp+" / "+(r.next===Infinity?"∞":r.next);
+ const p=r.next===Infinity?100:Math.min(100,Math.max(0,(state.xp-r.min)/(r.next-r.min)*100));
+ document.getElementById("battleXpFill").style.width=p+"%";
+ const hp=Math.max(0,player.hp/player.maxHp*100);
+ document.getElementById("healthFill").style.width=hp+"%";
+ document.getElementById("healthText").textContent=Math.ceil(player.hp)+" / "+player.maxHp;
 }
 function updateScoreboard(){
- let red=battleState.bots.filter(x=>x.team==="red"),blue=battleState.bots.filter(x=>x.team==="blue");
- let rows=a=>a.map(x=>`<div class="playerRow"><span>${x.name}</span><span>${x.kills}/${x.deaths}</span></div>`).join("");
- $("redPlayers").innerHTML=rows(red);$("bluePlayers").innerHTML=rows([battleState.player,...blue]);
+ if(!battle)return;
+ const blue=document.getElementById("bluePlayers"),red=document.getElementById("redPlayers");
+ blue.innerHTML="";red.innerHTML="";
+ bots.filter(b=>b.team==="blue").forEach(b=>{
+  const d=document.createElement("div");d.className="scorePlayer";
+  d.innerHTML=`<span>${b.isPlayer?"★ "+state.name:"Танкист "+Math.floor(Math.abs(b.x+b.z))}</span><b>${b.dead?"💀":"●"}</b>`;
+  blue.appendChild(d);
+ });
+ bots.filter(b=>b.team==="red").forEach(b=>{
+  const d=document.createElement("div");d.className="scorePlayer";
+  d.innerHTML=`<span>Красный ${Math.floor(Math.abs(b.x+b.z))}</span><b>${b.dead?"💀":"●"}</b>`;
+  red.appendChild(d);
+ });
 }
-$("leaveBattle").onclick=()=>{
- $("result").style.display="none";$("battle").style.display="none";battleState=null;
- document.exitPointerLock?.();showPage("home");updateProfile();renderBattles();
+
+/* -------------------- END BATTLE -------------------- */
+function endBattle(){
+ if(battle.ended)return;
+ battle.ended=true;
+ battleRunning=false;
+
+ const win=battle.blue>battle.red;
+ const xpReward=100+battle.kills*80+(win?150:30);
+ const crystalReward=Math.max(30,Math.floor(battle.fund*.1)+(win?100:30));
+
+ state.xp+=xpReward;
+ state.crystals+=crystalReward;
+ battle.xp=xpReward;
+ battle.crystals=crystalReward;
+ save();
+
+ document.getElementById("resultTitle").textContent=win?"ПОБЕДА!":"ПОРАЖЕНИЕ";
+ document.getElementById("resultTitle").style.color=win?"#a8d07b":"#df7770";
+ document.getElementById("resultReason").textContent=
+  battle.remaining<=0?"Время боя закончилось":
+  "Команда набрала больше очков";
+ document.getElementById("rKills").textContent=battle.kills;
+ document.getElementById("rXp").textContent="+"+xpReward;
+ document.getElementById("rCrystals").textContent="+"+crystalReward;
+ document.getElementById("rFund").textContent=Math.floor(battle.fund);
+ show("result");
+ updateTop();
+}
+
+document.getElementById("returnLobby").onclick=()=>{
+ openLobby("home");
 };
 
-/* ---------- MOBILE JOYSTICK ---------- */
+/* -------------------- SCOPE -------------------- */
+document.addEventListener("mousedown",e=>{
+ if(e.button===0)startFire();
+});
+document.addEventListener("mouseup",e=>{
+ if(e.button===0)releaseFire();
+});
+
+/* -------------------- MOUSE TURRET -------------------- */
+let mouseAim=false;
+document.getElementById("battle").addEventListener("mousemove",e=>{
+ if(!battle||!player)return;
+ if(e.buttons===2||mouseAim){
+  player.turret+=e.movementX*.008;
+ }
+});
+document.getElementById("battle").addEventListener("contextmenu",e=>e.preventDefault());
+document.getElementById("battle").addEventListener("mousedown",e=>{
+ if(e.button===2)mouseAim=true;
+});
+document.getElementById("battle").addEventListener("mouseup",e=>{
+ if(e.button===2)mouseAim=false;
+});
+
+/* -------------------- MOBILE -------------------- */
+const joystick=document.getElementById("joystick");
+const stick=document.getElementById("stick");
 let joyActive=false;
-$("joy").addEventListener("pointerdown",e=>{joyActive=true;$("joy").setPointerCapture(e.pointerId)});
-$("joy").addEventListener("pointermove",e=>{
- if(!joyActive)return;
- let r=$("joy").getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
- let x=clamp(e.clientX-cx,-45,45),y=clamp(e.clientY-cy,-45,45);
- $("joyKnob").style.transform=`translate(${x}px,${y}px)`;
- keys.w=y<-10;keys.s=y>10;keys.a=x<-10;keys.d=x>10;
+joystick.addEventListener("pointerdown",e=>{
+ joyActive=true;joystick.setPointerCapture(e.pointerId);moveJoy(e);
 });
-$("joy").addEventListener("pointerup",()=>{joyActive=false;$("joyKnob").style.transform="";keys.w=keys.s=keys.a=keys.d=false});
-$("mobileAim").addEventListener("pointermove",e=>{
- if(e.buttons){battleState.player.turret+=e.movementX*.015}
-});
-
-/* ---------- STARTUP ---------- */
-$("loginBtn").onclick=()=>enter();
-$("guestBtn").onclick=()=>enter();
-function enter(){
- profile.name=$("loginName").value.trim()||"Танкист";save();updateProfile();
- $("login").style.display="none";$("app").style.display="block";showPage("home");
+joystick.addEventListener("pointermove",e=>{if(joyActive)moveJoy(e)});
+joystick.addEventListener("pointerup",()=>{joyActive=false;stick.style.left="34px";stick.style.top="34px";keys={}});
+function moveJoy(e){
+ const r=joystick.getBoundingClientRect();
+ let x=e.clientX-r.left-60,y=e.clientY-r.top-60;
+ const l=Math.hypot(x,y),m=42;
+ if(l>m){x=x/l*m;y=y/l*m}
+ stick.style.left=(60+x-24)+"px";stick.style.top=(60+y-24)+"px";
+ keys={};
+ if(y<-12)keys.KeyW=true;
+ if(y>12)keys.KeyS=true;
+ if(x<-12)keys.KeyA=true;
+ if(x>12)keys.KeyD=true;
 }
-let bootN=0;
-function bootTick(){
- bootN+=25;$("bootFill").style.width=bootN+"%";
- if(bootN<100)setTimeout(bootTick,55);
- else{
-  setTimeout(()=>{$("boot").style.display="none";$("login").style.display="flex"},100);
- }
-}
-bootTick();
-addEventListener("resize",()=>{resizeGarage();resizeBattle()});
-updateProfile();
+document.getElementById("mobileFire").onpointerdown=()=>startFire();
+document.getElementById("mobileFire").onpointerup=()=>releaseFire();
 
-/* ---------- DECAL OVERLAY STYLE / HEALTH BARS ---------- */
-const oldRender=renderBattle;
-renderBattle=function(){
- oldRender();
- if(!gl||!battleState)return;
- // decals are represented as dark discs/marks on map surfaces
- for(let d of battleState.decals){
-  let vp=cameraMatrix();
-  modelPart(T(d.x,.03,d.z,.65,.015,.65),[.015,.012,.01],1);
+/* -------------------- UTIL -------------------- */
+function roundRect(ctx,x,y,w,h,r){
+ ctx.beginPath();
+ ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+ ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+ ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+ ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+}
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+let toastTimer;
+function toast(text){
+ let t=document.getElementById("toast");
+ if(!t){
+  t=document.createElement("div");t.id="toast";
+  t.style.cssText="position:fixed;left:50%;top:18%;transform:translateX(-50%);z-index:9999;padding:12px 20px;background:#152018eF;border:1px solid #84947e;color:#fff;box-shadow:0 5px 25px #000;pointer-events:none";
+  document.body.appendChild(t);
  }
- // health bars are rendered as DOM labels for enemies
- renderLabels();
-};
-function renderLabels(){
- let c=$("battleLabels");
- if(!c){
-  c=document.createElement("div");c.id="battleLabels";
-  c.style.cssText="position:absolute;inset:0;pointer-events:none;z-index:8";$("battle").appendChild(c);
- }
- let p=battleState.player;
- let w=$("gameCanvas").clientWidth,h=$("gameCanvas").clientHeight;
- c.innerHTML=battleState.bots.filter(t=>t.alive).map(t=>{
-  let dx=t.x-p.x,dz=t.z-p.z;
-  let yaw=p.heading;
-  let fx=-Math.sin(yaw),fz=-Math.cos(yaw);
-  let rx=Math.cos(yaw),rz=-Math.sin(yaw);
-  let side=dx*rx+dz*rz,front=dx*fx+dz*fz;
-  if(front<0)return "";
-  let sx=w/2+side*7,sy=h/2-front*3.8;
-  if(sx<0||sx>w||sy<60||sy>h)return "";
-  return `<div style="position:absolute;left:${sx}px;top:${sy}px;transform:translate(-50%,-50%);font-size:9px;color:${t.team==="red"?"#f66":"#6af"};text-shadow:0 1px #000">${t.name}<div style="width:42px;height:4px;background:#111"><i style="display:block;width:${t.health}%;height:100%;background:#c44"></i></div></div>`;
- }).join("");
+ t.textContent=text;t.style.display="block";
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display="none",2200);
+}
+function damageFlash(){
+ const f=document.getElementById("damageFlash");
+ f.style.opacity=".35";
+ setTimeout(()=>f.style.opacity="0",90);
 }
 
-/* Keep battle firing responsive even when no pointer lock */
-$("gameCanvas").addEventListener("touchstart",e=>{e.preventDefault();startCharge()},{passive:false});
-$("gameCanvas").addEventListener("touchend",e=>{e.preventDefault();releaseCharge()},{passive:false});
+/* -------------------- INITIAL -------------------- */
+initMissions();
+updateTop();
 
-/* ---------- INITIAL SETTINGS ---------- */
-$("createMap").value="Полигон";
-window.addEventListener("blur",()=>{keys={}});
+/* prevent browser scrolling / accidental zoom */
+document.addEventListener("touchmove",e=>{
+ if(e.target.closest("#battle"))e.preventDefault();
+},{passive:false});
 </script>
 </body>
 </html>
