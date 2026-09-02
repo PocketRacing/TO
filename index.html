@@ -3,2176 +3,2754 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>TANKI ONLINE — OLD ERA</title>
+<title>TANKI — CLASSIC 3D</title>
+
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080c0b;color:#d8e0dc;font-family:Arial,Helvetica,sans-serif}
-button,input{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
-
-/* =========================
-   LOADING
-========================= */
+html,body{
+ margin:0;
+ width:100%;
+ height:100%;
+ overflow:hidden;
+ background:#07100b;
+ color:#dce8d7;
+ font-family:Arial,Helvetica,sans-serif;
+ user-select:none;
+ touch-action:none
+}
+#game{
+ position:fixed;
+ inset:0;
+ width:100%;
+ height:100%;
+ display:block;
+ background:#000
+}
 #loading{
- position:fixed;inset:0;z-index:9999;
+ position:fixed;
+ inset:0;
+ z-index:1000;
+ display:flex;
+ align-items:center;
+ justify-content:center;
  background:
- radial-gradient(circle at 50% 42%,rgba(100,120,110,.25),transparent 30%),
- linear-gradient(135deg,#101714,#303b36 45%,#101513);
- display:flex;align-items:center;justify-content:center;
+ radial-gradient(circle at 50% 35%,#506158,#101713 48%,#050807 100%);
 }
-.loadBox{width:min(900px,94vw);text-align:center}
-.loadLogo{
- width:150px;height:150px;margin:auto;
- border-radius:18px;
- background:linear-gradient(145deg,#5f6c66,#202824);
- border:5px solid #111715;
- box-shadow:0 0 0 2px #76827c,0 18px 50px #000;
- display:flex;align-items:center;justify-content:center;
- font-size:74px;filter:drop-shadow(0 8px 8px #000)
+.loader{
+ width:min(760px,92vw);
+ text-align:center;
 }
-.loadTitle{
- font-size:44px;font-weight:900;letter-spacing:7px;
- color:#d8ddd9;text-shadow:0 4px 5px #000;margin-top:18px
+.logo{
+ font-weight:900;
+ letter-spacing:5px;
+ font-size:clamp(34px,7vw,82px);
+ color:#d5dfd7;
+ text-shadow:
+ 0 3px 0 #202722,
+ 0 7px 18px #000;
 }
-.loadSub{color:#9aa6a0;margin:8px 0 25px}
-.loadBar{height:18px;background:#080b0a;border:2px solid #64716a;box-shadow:0 3px 12px #000}
-.loadFill{height:100%;width:0;background:linear-gradient(#aebbb4,#4e6258);transition:.15s}
-.ammoLine{display:flex;justify-content:space-between;align-items:center;margin-top:25px}
-.bullet{width:30px;height:90px;background:linear-gradient(90deg,#555,#ddd,#666);border-radius:50% 50% 12px 12px;box-shadow:0 5px 10px #000}
-.ammoLine span{height:2px;background:#59645e;flex:1;margin:0 12px}
-
-/* =========================
-   LOGIN
-========================= */
-#login{
- position:fixed;inset:0;z-index:9000;
- display:none;align-items:center;justify-content:center;
+.logoSmall{
+ font-size:clamp(13px,2vw,22px);
+ letter-spacing:8px;
+ margin-top:-8px;
+ opacity:.75
+}
+.loaderBar{
+ height:18px;
+ margin:42px auto 12px;
+ border:2px solid #65736a;
+ background:#111813;
+ box-shadow:inset 0 0 15px #000;
+ max-width:600px;
+}
+.loaderFill{
+ width:0%;
+ height:100%;
+ background:linear-gradient(#b9c5bc,#4e6355);
+ box-shadow:0 0 14px #93ad9b;
+ transition:width .15s
+}
+.loaderText{
+ font-size:12px;
+ color:#a8b6ab;
+ letter-spacing:2px
+}
+#menu{
+ position:fixed;
+ inset:0;
+ z-index:500;
+ display:none;
  background:
- linear-gradient(rgba(4,8,7,.48),rgba(4,8,7,.82)),
- radial-gradient(circle at center,#46534c,#101513 70%);
+ linear-gradient(90deg,rgba(4,9,6,.96),rgba(8,15,11,.72) 30%,rgba(8,15,11,.72) 70%,rgba(4,9,6,.96));
 }
-.loginPanel{
- width:min(440px,92vw);padding:30px;
- background:linear-gradient(#34413a,#1a211e);
- border:2px solid #718078;
- box-shadow:0 20px 60px #000, inset 0 0 30px #000;
-}
-.loginPanel h1{margin:0 0 5px;text-align:center;letter-spacing:4px}
-.loginPanel p{text-align:center;color:#89968f}
-.input{
- width:100%;padding:14px;margin:7px 0;
- color:#e8eee9;background:#101613;border:1px solid #65736b;outline:none
-}
-.oldBtn{
- border:1px solid #8c9b93;
- background:linear-gradient(#66766d,#27322d);
- color:#e9efeb;padding:12px 18px;
- box-shadow:inset 0 1px #aeb8b3,0 3px 7px #000;
- font-weight:800
-}
-.oldBtn:hover{filter:brightness(1.18)}
-.bigBtn{width:100%;font-size:18px;margin-top:10px}
-.loginSmall{font-size:11px;color:#69766f}
-
-/* =========================
-   APP
-========================= */
-#app{position:fixed;inset:0;display:none;background:#111}
 .top{
- height:58px;position:absolute;left:0;right:0;top:0;z-index:50;
- background:linear-gradient(#39463f,#151c19);
- border-bottom:2px solid #65736b;
- display:flex;align-items:center;padding:0 10px;gap:12px;
- box-shadow:0 4px 15px #000
+ height:66px;
+ display:flex;
+ align-items:center;
+ gap:22px;
+ padding:0 22px;
+ border-bottom:1px solid #526057;
+ background:linear-gradient(#26332c,#111a15);
+ box-shadow:0 5px 20px #000
 }
-.logoMini{font-size:19px;font-weight:900;letter-spacing:2px;white-space:nowrap}
-.xpBox{flex:1;min-width:80px;max-width:450px}
-.xpText{font-size:11px;color:#aebbb4}
-.xpBar{height:9px;background:#090c0b;border:1px solid #536159}
-.xpBar i{display:block;height:100%;width:0;background:#9ea9a3}
-.balance{display:flex;gap:13px;white-space:nowrap;font-size:13px}
-.navBtn{padding:8px 10px;background:#202a25;border:1px solid #5d6a63;color:#dce3df}
-.navBtn.active{background:#65766b;color:#fff}
-.menuBtn{display:none}
-
-/* =========================
-   LOBBY
-========================= */
-#lobby{position:absolute;inset:58px 0 0;background:#18211d}
-.lobbyGrid{
- display:grid;grid-template-columns:300px 1fr 340px;height:100%
+.brand{
+ font-size:25px;
+ font-weight:900;
+ letter-spacing:3px
+}
+.nav{
+ display:flex;
+ gap:8px;
+ flex:1
+}
+.nav button,.metal{
+ border:1px solid #536158;
+ color:#dce7df;
+ background:linear-gradient(#36443b,#19231d);
+ padding:11px 17px;
+ cursor:pointer;
+ font-weight:bold;
+ box-shadow:inset 0 1px #69786e,0 2px 5px #000;
+}
+.nav button:hover,.metal:hover{
+ background:linear-gradient(#4c5c51,#253128)
+}
+.account{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ font-size:13px
+}
+.crystal{
+ color:#8ed7ff;
+ font-weight:bold
+}
+.layout{
+ position:absolute;
+ top:66px;
+ bottom:0;
+ left:0;
+ right:0;
+ display:grid;
+ grid-template-columns:320px minmax(420px,1fr) 330px;
+ gap:8px;
+ padding:8px
+}
+.panel{
+ background:linear-gradient(180deg,rgba(34,48,40,.96),rgba(12,20,15,.97));
+ border:1px solid #526056;
+ box-shadow:0 4px 15px #000;
+ min-height:0
+}
+.panelTitle{
+ padding:11px 13px;
+ background:linear-gradient(#425148,#222d26);
+ border-bottom:1px solid #657369;
+ font-size:13px;
+ font-weight:900;
+ letter-spacing:1px
 }
 .chat{
- background:linear-gradient(90deg,#09100d,#17231d);
- border-right:2px solid #56655d;
- display:flex;flex-direction:column;min-width:0
+ display:flex;
+ flex-direction:column;
+ overflow:hidden
 }
-.chatHead,.panelHead{
- padding:11px;background:linear-gradient(#3c4942,#202a25);
- border-bottom:1px solid #68766e;font-weight:900;letter-spacing:1px
+.messages{
+ flex:1;
+ overflow:auto;
+ padding:12px;
+ font-size:12px;
+ line-height:1.55
 }
-.chatMessages{flex:1;overflow:auto;padding:10px;font-size:13px}
-.msg{margin-bottom:9px;line-height:1.25}
-.msg b{color:#9faf9f}
-.msg .sys{color:#819189}
-.chatInput{display:flex;padding:7px;border-top:1px solid #4d5a53}
-.chatInput input{min-width:0;flex:1;background:#080d0b;color:white;border:1px solid #536158;padding:9px}
-.chatInput button{width:44px}
-
-.battles{padding:12px;overflow:auto;background:
- radial-gradient(circle at 50% 0,#33443a,transparent 50%),#151d1a}
-.panelTitle{font-size:20px;font-weight:900;margin-bottom:10px}
-.battleList{border:1px solid #56645c}
-.battleRow{
- display:grid;grid-template-columns:1fr 90px 70px;
- padding:11px;border-bottom:1px solid #37443e;background:#1d2722;
+.msg{margin-bottom:8px}
+.msg b{color:#b7c8bb}
+.chatInput{
+ border:0;
+ border-top:1px solid #536057;
+ background:#0b110d;
+ color:white;
+ padding:12px;
+ outline:0
+}
+.center{
+ display:flex;
+ flex-direction:column;
+ overflow:hidden
+}
+.battles{
+ flex:1;
+ overflow:auto
+}
+.battle{
+ margin:8px;
+ padding:12px;
+ display:grid;
+ grid-template-columns:1fr 100px 100px;
+ gap:8px;
+ border:1px solid #4d5b52;
+ background:linear-gradient(90deg,#1b271f,#101711);
  cursor:pointer
 }
-.battleRow:hover{background:#2b3831}
-.battleRow.selected{background:#46584e}
-.battleRow small{color:#87958d}
-.goBattle{
- width:100%;font-size:25px;margin-top:12px;padding:16px;
- background:linear-gradient(#74877b,#2f4036);
- border:2px solid #a0ada5;color:white;font-weight:900
+.battle:hover{background:#29382e}
+.battle .map{
+ font-weight:bold
 }
-
+.red{color:#e36e6e}
+.blue{color:#73a6e9}
+.mode{
+ color:#9faea2;
+ font-size:11px
+}
 .info{
- background:linear-gradient(90deg,#101714,#202b25);
- border-left:2px solid #526158;overflow:auto
+ overflow:auto
 }
+.infoBody{padding:13px}
 .mapPreview{
- height:190px;margin:10px;
- border:2px solid #68776e;position:relative;overflow:hidden;
- background:#4c574e
-}
-.mapPreview canvas{width:100%;height:100%}
-.infoBody{padding:10px}
-.teamBox{padding:8px;margin:6px 0;border:1px solid #526057;background:#111914}
-.red{color:#ff7777}.blue{color:#76a9ff}
-.statline{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #29332e}
-
-/* =========================
-   PAGES
-========================= */
-.page{position:absolute;inset:58px 0 0;display:none;background:#17201c}
-.page.show{display:block}
-.pageInner{height:100%;padding:18px;overflow:auto}
-.pageTitle{font-size:28px;font-weight:900;margin-bottom:15px}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-.card{
- background:linear-gradient(#29362f,#151d1a);
- border:1px solid #637168;padding:13px;
- box-shadow:0 4px 12px #000
-}
-.card h3{margin:0 0 8px}
-.card small{color:#9aa69f}
-.price{color:#c8d5cc;font-weight:bold}
-.equipVisual{
- height:100px;background:
- linear-gradient(145deg,#36443b,#111714);
- display:flex;align-items:center;justify-content:center;
- font-size:50px;margin:-13px -13px 10px;
- border-bottom:1px solid #59665f
-}
-.selectBtn{width:100%;margin-top:8px}
-
-/* =========================
-   GARAGE
-========================= */
-.garage{
- height:100%;display:grid;
- grid-template-columns:270px 1fr 300px;
+ height:170px;
+ border:1px solid #5a685e;
  background:
- radial-gradient(circle at 50% 45%,#3a4a41,#101612 70%);
+ radial-gradient(circle,#60776b 0 8%,transparent 9%),
+ repeating-linear-gradient(45deg,#25362b 0 12px,#1d2b23 12px 24px);
+ position:relative;
+ overflow:hidden
 }
-.garageChat{border-right:2px solid #58665e;display:flex;flex-direction:column}
-.garageCenter{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.garageInfo{padding:15px;background:rgba(8,13,11,.7);border-left:2px solid #58665e}
-.garageTank{
- position:relative;width:360px;height:250px;
- transform:perspective(600px) rotateX(8deg) rotateY(-12deg);
- filter:drop-shadow(0 30px 25px #000)
+.mapPreview:before{
+ content:"";
+ position:absolute;
+ width:70%;
+ height:20px;
+ background:#707c75;
+ left:15%;
+ top:55%;
+ transform:rotate(-12deg)
 }
-.tankBody{
- position:absolute;left:70px;top:105px;width:220px;height:90px;
- background:linear-gradient(#68766e,#29352f);
- border:4px solid #121815;border-radius:25px;
- box-shadow:inset 0 8px 8px #9ba59f
+.bigFight{
+ width:100%;
+ padding:17px;
+ margin-top:12px;
+ font-size:22px;
+ font-weight:900;
+ letter-spacing:2px
 }
-.tankTop{
- position:absolute;left:115px;top:75px;width:130px;height:70px;
- background:linear-gradient(#76857c,#35433b);
- border:4px solid #121815;border-radius:50%
+.screen{
+ position:absolute;
+ inset:0;
+ display:none
 }
-.tankCannon{
- position:absolute;left:220px;top:99px;width:155px;height:19px;
- background:linear-gradient(#909a94,#313b36);
- border:3px solid #101411;border-radius:8px;
- transform-origin:left center
+#garage{
+ background:
+ radial-gradient(circle at 50% 35%,#34473a,#0a100d 70%);
+ z-index:400
 }
-.tankTrack{position:absolute;top:103px;width:65px;height:100px;background:#161d19;border:5px solid #050706;border-radius:17px}
-.tankTrack.a{left:43px}.tankTrack.b{right:42px}
-.tankTrack:after{
- content:"";position:absolute;inset:8px;
- border:3px dashed #515c56;border-radius:10px
+.garageGrid{
+ display:grid;
+ grid-template-columns:300px 1fr 330px;
+ height:100%;
+ padding:12px;
+ gap:12px
 }
-.tankNameplate{
- position:absolute;top:5px;left:50%;transform:translateX(-50%);
- background:#101512cc;padding:5px 10px;border:1px solid #637169
+.garageItems{
+ overflow:auto;
+ padding:10px
 }
-.garageBottom{
- position:absolute;bottom:0;left:270px;right:300px;height:145px;
- background:linear-gradient(transparent,#101612 25%);
- display:flex;gap:10px;padding:18px;overflow:auto
+.item{
+ border:1px solid #4f5e54;
+ background:linear-gradient(#29372f,#111912);
+ padding:10px;
+ margin-bottom:8px;
+ cursor:pointer
 }
-
-/* =========================
-   MISSIONS
-========================= */
+.item:hover{background:#3a4b40}
+.tankStage{
+ position:relative;
+ overflow:hidden;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:
+ radial-gradient(circle at 50% 50%,rgba(101,122,107,.4),transparent 30%),
+ linear-gradient(#1b2821,#080c09)
+}
+.tankStage canvas{
+ width:100%;
+ height:100%
+}
+.back{
+ position:absolute;
+ top:12px;
+ left:12px;
+ z-index:3
+}
+#missions{
+ z-index:450;
+ background:rgba(3,8,5,.95)
+}
+.missionsBox{
+ width:min(700px,94vw);
+ max-height:90vh;
+ overflow:auto;
+ margin:auto;
+ margin-top:6vh;
+ padding:18px
+}
 .mission{
- max-width:900px;margin-bottom:12px;
- background:linear-gradient(#2c3932,#161e1b);
- border:1px solid #65736b;padding:15px
+ border:1px solid #536158;
+ background:linear-gradient(#27352c,#111811);
+ padding:15px;
+ margin:10px 0
 }
-.missionTop{display:flex;justify-content:space-between}
-.missionBar{height:10px;background:#090d0b;margin-top:10px}
-.missionBar i{display:block;height:100%;background:#879b8e}
-
-/* =========================
-   BATTLE
-========================= */
-#battle{position:fixed;inset:0;z-index:800;background:#0b0d0c;display:none}
-#world{position:absolute;inset:0;width:100%;height:100%;display:block}
+.progress{
+ height:11px;
+ background:#080d09;
+ border:1px solid #465249;
+ margin-top:10px
+}
+.progress i{
+ display:block;
+ height:100%;
+ background:linear-gradient(#b8c8bd,#58705e)
+}
+#mapSelect{
+ z-index:450;
+ background:rgba(3,8,5,.96)
+}
+.maps{
+ width:min(1100px,96vw);
+ height:90vh;
+ margin:4vh auto;
+ overflow:auto;
+ padding:14px
+}
+.mapCards{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+ gap:10px
+}
+.mapCard{
+ min-height:130px;
+ border:1px solid #526057;
+ background:linear-gradient(#26362b,#101711);
+ cursor:pointer;
+ position:relative;
+ overflow:hidden
+}
+.mapCard:hover{border-color:#a4b4a8}
+.mapCard .preview{
+ height:90px;
+ background:
+ linear-gradient(135deg,#405448,#172219);
+ position:relative
+}
+.mapCard .preview:after{
+ content:"";
+ position:absolute;
+ inset:20px;
+ border:8px solid #65746a;
+ transform:rotate(7deg)
+}
+.mapName{
+ padding:10px;
+ font-weight:bold
+}
+#battleUI{
+ z-index:300;
+ pointer-events:none
+}
 .hudTop{
- position:absolute;top:10px;left:50%;transform:translateX(-50%);
- display:flex;gap:12px;align-items:center;z-index:10
+ position:absolute;
+ top:10px;
+ left:50%;
+ transform:translateX(-50%);
+ display:flex;
+ align-items:center;
+ gap:10px;
+ font-weight:bold;
+ text-shadow:0 2px 3px #000
 }
 .score{
- background:#111b16d9;border:1px solid #6c7972;
- padding:7px 18px;min-width:240px;text-align:center;font-weight:900
+ min-width:130px;
+ padding:8px 14px;
+ text-align:center;
+ background:rgba(5,10,7,.72);
+ border:1px solid #657268
 }
-.battleTime{
- background:#111b16d9;border:1px solid #6c7972;padding:7px 12px
+.health{
+ position:absolute;
+ left:50%;
+ transform:translateX(-50%);
+ bottom:45px;
+ width:min(460px,55vw);
+ height:18px;
+ border:2px solid #aeb9b0;
+ background:#111
 }
-.battleChat{
- position:absolute;left:12px;bottom:90px;width:300px;z-index:20;
- background:linear-gradient(90deg,#09100de8,#18221ddd);
- border:1px solid #5c6b62
-}
-.battleChat .chatMessages{height:170px;max-height:170px}
-.battleChat .chatInput{height:38px}
-.hudBottom{
- position:absolute;left:0;right:0;bottom:0;height:82px;z-index:15;
- pointer-events:none;
+.health i{
+ display:block;
+ height:100%;
+ width:100%;
+ background:linear-gradient(#83ad87,#2e6a36)
 }
 .supplies{
- position:absolute;left:50%;bottom:8px;transform:translateX(-50%);
- display:flex;gap:6px;pointer-events:auto
+ position:absolute;
+ right:14px;
+ bottom:18px;
+ display:flex;
+ gap:7px
 }
 .sup{
- width:58px;height:58px;background:#17211cdd;border:2px solid #69776f;
- color:#fff;font-weight:900;position:relative
+ width:55px;
+ height:55px;
+ border:1px solid #758078;
+ background:rgba(12,18,14,.82);
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ font-size:11px
 }
-.sup b{display:block;font-size:21px}
-.sup small{font-size:9px}
-.sup.ready{box-shadow:0 0 12px #b9d1c2}
-.hp{
- position:absolute;left:15px;bottom:18px;width:240px;
- background:#101714dd;border:2px solid #65746b;padding:7px
+.sup b{font-size:18px}
+#killFeed{
+ position:absolute;
+ top:70px;
+ right:15px;
+ text-align:right;
+ font-size:12px
 }
-.hpbar{height:13px;background:#050706}.hpbar i{display:block;height:100%;width:100%;background:#879b8e}
-.fireBtn{
- position:absolute;right:25px;bottom:20px;width:90px;height:70px;
- border-radius:50%;background:linear-gradient(#a8b6ad,#39483f);
- border:3px solid #d0d7d2;color:#0c120f;font-size:18px;font-weight:900;
+.kill{
+ padding:3px 8px;
+ margin:2px;
+ background:rgba(0,0,0,.4)
+}
+#crosshair{
+ position:absolute;
+ left:50%;
+ top:50%;
+ transform:translate(-50%,-50%);
+ width:34px;
+ height:34px;
+}
+#crosshair:before,#crosshair:after{
+ content:"";
+ position:absolute;
+ background:#e7efe9;
+ box-shadow:0 0 3px #000
+}
+#crosshair:before{
+ left:16px;top:0;width:2px;height:34px
+}
+#crosshair:after{
+ top:16px;left:0;width:34px;height:2px
+}
+#mobile{
+ display:none;
+ position:absolute;
+ inset:0;
+ pointer-events:none
+}
+.joy{
+ position:absolute;
+ width:135px;
+ height:135px;
+ border-radius:50%;
+ border:2px solid rgba(210,230,215,.3);
+ background:rgba(30,45,36,.25);
  pointer-events:auto
 }
-.quitBattle{
- position:absolute;right:15px;top:12px;z-index:30;
- background:#18211cdd;border:1px solid #718077;color:white;padding:7px
+#moveJoy{left:20px;bottom:25px}
+#aimJoy{right:20px;bottom:25px}
+.knob{
+ position:absolute;
+ width:55px;
+ height:55px;
+ left:40px;
+ top:40px;
+ border-radius:50%;
+ background:rgba(210,225,214,.38);
+ border:2px solid rgba(255,255,255,.3)
 }
-.killFeed{
- position:absolute;right:15px;top:55px;z-index:10;width:260px;
- text-align:right;font-size:12px
-}
-.feed{margin:4px;background:#111713aa;padding:4px}
-
-/* =========================
-   SCOREBOARD
-========================= */
-#scoreboard{
- position:absolute;inset:70px 12%;z-index:100;
- background:#111914ed;border:2px solid #75837a;
- box-shadow:0 20px 70px #000;display:none;padding:15px
-}
-.scoreTeams{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.scoreTeam{border:1px solid #5c6962;padding:10px}
-.playerLine{display:grid;grid-template-columns:1fr 70px 70px;padding:7px;border-bottom:1px solid #29332e}
-.playerLine.me{background:#38483e}
-
-/* =========================
-   MOBILE CONTROLS
-========================= */
-.mobileControls{display:none}
-.joy{
- position:absolute;width:130px;height:130px;border-radius:50%;
- background:#26332dcc;border:2px solid #849188;
- pointer-events:auto;touch-action:none
-}
-.joy .knob{
- position:absolute;width:55px;height:55px;border-radius:50%;
- background:#829188dd;left:35px;top:35px
-}
-#moveJoy{left:18px;bottom:105px}
-#aimJoy{right:18px;bottom:105px}
 .mobileFire{
- position:absolute;right:35px;bottom:250px;width:72px;height:72px;
- border-radius:50%;background:#78897fdd;border:3px solid #d5ddd7;
- font-weight:900
+ position:absolute;
+ right:170px;
+ bottom:55px;
+ width:85px;
+ height:85px;
+ border-radius:50%;
+ background:rgba(110,25,20,.55);
+ border:2px solid #c79d98;
+ pointer-events:auto;
+ font-weight:bold;
+ color:white
 }
 .mobileSup{
- position:absolute;right:15px;bottom:15px;display:flex;gap:4px
+ position:absolute;
+ left:170px;
+ bottom:28px;
+ display:flex;
+ gap:5px;
+ pointer-events:auto
 }
-.mobileSup button{width:42px;height:42px;background:#1a241fdd;color:white;border:1px solid #78867e}
-.mobileMenu{
- position:absolute;right:15px;top:70px;width:45px;height:45px;
- background:#1b251fdd;color:white;border:1px solid #748279
+.mobileSup button{
+ width:43px;height:43px;
+ background:rgba(20,30,24,.8);
+ color:white;
+ border:1px solid #68756d
 }
-
-/* =========================
-   TOAST / MODAL
-========================= */
+#scoreboard{
+ position:absolute;
+ inset:8% 12%;
+ display:none;
+ pointer-events:auto;
+ background:rgba(8,13,10,.96);
+ border:2px solid #68766c;
+ box-shadow:0 10px 40px #000
+}
+.sbTitle{
+ padding:15px;
+ font-weight:bold;
+ font-size:20px;
+ background:#26342b
+}
+.sbTeams{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ height:calc(100% - 55px)
+}
+.team{
+ padding:15px;
+ overflow:auto
+}
+.team.redTeam{border-right:1px solid #633}
+.playerRow{
+ display:grid;
+ grid-template-columns:35px 1fr 80px 80px;
+ gap:7px;
+ padding:8px;
+ border-bottom:1px solid #263129;
+ font-size:12px
+}
 #toast{
- position:fixed;left:50%;top:15%;transform:translateX(-50%);
- z-index:999;background:#111914ed;border:2px solid #8c9b92;
- padding:13px 25px;box-shadow:0 10px 30px #000;
- display:none;text-align:center
+ position:absolute;
+ top:50%;
+ left:50%;
+ transform:translate(-50%,-50%);
+ padding:15px 25px;
+ background:rgba(8,13,10,.9);
+ border:1px solid #758178;
+ display:none;
+ font-weight:bold;
+ z-index:900
 }
-#modal{
- position:fixed;inset:0;z-index:5000;background:#0009;
- display:none;align-items:center;justify-content:center
+#chatBattle{
+ position:absolute;
+ left:12px;
+ bottom:95px;
+ width:330px;
+ max-height:170px;
+ overflow:hidden;
+ font-size:11px;
+ text-shadow:0 1px 2px #000
 }
-.modalBox{
- width:min(700px,92vw);max-height:85vh;overflow:auto;
- background:linear-gradient(#35423b,#151d19);
- border:2px solid #839087;padding:20px;box-shadow:0 20px 70px #000
+.chatLine{padding:2px}
+#goldBox{
+ position:absolute;
+ display:none;
+ z-index:50;
+ width:32px;
+ height:45px;
+ background:linear-gradient(135deg,#fff7a1,#e3a51b 40%,#fff0a0 60%,#a86d05);
+ border:2px solid #fff3a0;
+ box-shadow:0 0 35px #ffd632;
+ transform:rotate(8deg);
 }
-
-/* =========================
-   RESPONSIVE
-========================= */
-@media(max-width:950px){
- .lobbyGrid{grid-template-columns:240px 1fr}
- .info{display:none}
- .garage{grid-template-columns:190px 1fr}
- .garageBottom{left:190px;right:0}
- .garageInfo{display:none}
- .battleChat{width:250px}
-}
-@media(max-width:700px){
- .top{height:52px}
- .logoMini{font-size:13px}
- .xpBox{display:none}
- .balance{font-size:11px;gap:5px}
- .navBtn{display:none}
- .menuBtn{display:block}
- #lobby,.page{inset:52px 0 0}
- .lobbyGrid{grid-template-columns:1fr}
- .chat{position:absolute;left:0;bottom:0;height:190px;width:100%;z-index:5;opacity:.94;border-right:0;border-top:1px solid #64736a}
- .battles{padding-bottom:205px}
- .garage{display:block}
- .garageChat{display:none}
- .garageCenter{height:100%}
- .garageBottom{left:0;right:0;height:125px}
- .garageTank{transform:scale(.8) perspective(600px) rotateX(8deg) rotateY(-12deg)}
- .mobileControls{display:block}
- .battleChat{display:none}
- .hp{left:8px;bottom:15px;width:145px}
+@media(max-width:900px){
+ .layout{grid-template-columns:1fr}
+ .layout>.chat,.layout>.info{display:none}
+ .garageGrid{grid-template-columns:1fr}
+ .garageItems{display:none}
+ .nav button:nth-child(n+4){display:none}
+ .account{font-size:10px}
+ .brand{font-size:17px}
+ #mobile{display:block}
+ .health{bottom:120px}
  .supplies{display:none}
- #scoreboard{inset:65px 4px}
- .scoreTeams{grid-template-columns:1fr}
+ #scoreboard{inset:5% 3%}
+ .playerRow{grid-template-columns:25px 1fr 50px 50px}
 }
 </style>
 </head>
+
 <body>
 
-<!-- ================= LOADING ================= -->
+<canvas id="game"></canvas>
+
 <div id="loading">
- <div class="loadBox">
-  <div class="loadLogo">⚙</div>
-  <div class="loadTitle">TANKI ONLINE</div>
-  <div class="loadSub" id="loadText">Загрузка боевого клиента...</div>
-  <div class="loadBar"><div class="loadFill" id="loadFill"></div></div>
-  <div class="ammoLine">
-   <i class="bullet"></i><span></span><i class="bullet"></i><span></span><i class="bullet"></i>
-  </div>
+ <div class="loader">
+  <div class="logo">TANKI</div>
+  <div class="logoSmall">ONLINE · CLASSIC 3D</div>
+  <div class="loaderBar"><div class="loaderFill" id="loadFill"></div></div>
+  <div class="loaderText" id="loadText">ИНИЦИАЛИЗАЦИЯ ДВИЖКА...</div>
  </div>
 </div>
 
-<!-- ================= LOGIN ================= -->
-<div id="login">
- <div class="loginPanel">
-  <h1>TANKI ONLINE</h1>
-  <p>АРХИВНАЯ ЭРА • 2012–2015</p>
-  <input id="loginName" class="input" placeholder="Имя танкиста" maxlength="18">
-  <input class="input" type="password" placeholder="Пароль" value="tanki">
-  <button class="oldBtn bigBtn" onclick="loginGame()">ВОЙТИ В ИГРУ</button>
-  <button class="oldBtn bigBtn" onclick="guestLogin()">БЫСТРАЯ РЕГИСТРАЦИЯ</button>
-  <div class="loginSmall" style="margin-top:14px;text-align:center">
-   Локальный прототип. Прогресс сохраняется в браузере.
-  </div>
- </div>
-</div>
-
-<!-- ================= APP ================= -->
-<div id="app">
+<div id="menu">
 
  <div class="top">
-  <div class="logoMini">⚙ TANKI</div>
-  <div class="xpBox">
-   <div class="xpText" id="xpText">Новобранец • 0 XP</div>
-   <div class="xpBar"><i id="xpFill"></i></div>
+  <div class="brand">TANKI</div>
+  <div class="nav">
+   <button onclick="showLobby()">БИТВЫ</button>
+   <button onclick="showGarage()">ГАРАЖ</button>
+   <button onclick="showMaps()">КАРТЫ</button>
+   <button onclick="showMissions()">МИССИИ</button>
   </div>
-  <div class="balance">
-   💎 <span id="crystals">0</span>
-   <span id="playerNameTop">Танкист</span>
+  <div class="account">
+   <span id="nickTop">Новобранец</span>
+   <span>XP <b id="xpTop">0</b></span>
+   <span class="crystal">💎 <b id="crTop">5000</b></span>
   </div>
-  <button class="navBtn active" data-page="home">БИТВЫ</button>
-  <button class="navBtn" data-page="garage">ГАРАЖ</button>
-  <button class="navBtn" data-page="missions">МИССИИ</button>
-  <button class="navBtn" data-page="maps">КАРТЫ</button>
-  <button class="navBtn" data-page="ranks">ЗВАНИЯ</button>
-  <button class="navBtn menuBtn" onclick="openMenu()">☰</button>
  </div>
 
- <!-- ================= HOME ================= -->
- <section id="home" class="page show">
-  <div class="lobbyGrid">
+ <div id="lobbyView">
+  <div class="layout">
 
-   <div class="chat">
-    <div class="chatHead">ЧАТ</div>
-    <div class="chatMessages" id="globalChat"></div>
-    <div class="chatInput">
-     <input id="globalInput" placeholder="Введите сообщение..." maxlength="120">
-     <button class="oldBtn" onclick="sendGlobalChat()">➤</button>
+   <div class="panel chat">
+    <div class="panelTitle">ЧАТ</div>
+    <div class="messages" id="lobbyChat">
+     <div class="msg"><b>Система:</b> Добро пожаловать на классический сервер.</div>
+     <div class="msg"><b>SteelWolf:</b> Кто на Арену?</div>
+     <div class="msg"><b>Ranger:</b> Погнали ТДМ.</div>
+     <div class="msg"><b>TankMaster:</b> Ищу игроков 2×2.</div>
     </div>
+    <input class="chatInput" id="chatInput" placeholder="Введите сообщение..." onkeydown="chatSend(event)">
    </div>
 
-   <div class="battles">
+   <div class="panel center">
     <div class="panelTitle">СПИСОК БИТВ</div>
-
-    <div class="battleList" id="battleList"></div>
-
-    <button class="goBattle" onclick="quickBattle()">⚔ В БОЙ!</button>
-
-    <div class="card" style="margin-top:12px">
-     <h3>ТЕКУЩИЙ ВЫБОР</h3>
-     <div id="selectedBattleText">Красная команда против синей</div>
-     <div style="margin-top:8px;color:#9aa69e">
-      Классическая командная битва.<br>
-      10 XP за уничтожение танка.
-     </div>
-    </div>
+    <div class="battles" id="battleList"></div>
+    <button class="metal bigFight" onclick="startBattle()">⚔ В БОЙ!</button>
    </div>
 
-   <div class="info">
-    <div class="panelHead">ИНФОРМАЦИЯ О БИТВЕ</div>
-    <div class="mapPreview"><canvas id="miniMap"></canvas></div>
+   <div class="panel info">
+    <div class="panelTitle">ИНФОРМАЦИЯ О БИТВЕ</div>
     <div class="infoBody">
-     <h2 id="battleMapName">Полигон</h2>
-     <div class="statline"><span>Режим</span><b id="battleMode">КОМАНДНЫЙ БОЙ</b></div>
-     <div class="statline"><span>Время</span><b>15:00</b></div>
-     <div class="statline"><span>Лимит</span><b>100 очков</b></div>
-
-     <div class="teamBox">
-      <b class="red">🔴 КРАСНЫЕ</b>
-      <div id="redLobby">Картавый<br>Боец_01<br>Стальной_Кот</div>
-     </div>
-     <div class="teamBox">
-      <b class="blue">🔵 СИНИЕ</b>
-      <div id="blueLobby">Танк_77<br>Оса_2014<br>Рейдер</div>
-     </div>
+     <div class="mapPreview"></div>
+     <h2 id="selectedMapName">Арена</h2>
+     <div class="mode">ТDM · КРАСНЫЕ VS СИНИЕ</div>
+     <hr>
+     <p>Время: <b>15:00</b></p>
+     <p>Лимит: <b>100 очков</b></p>
+     <p><span class="red">● Красные</span> 4 игрока</p>
+     <p><span class="blue">● Синие</span> 4 игрока</p>
+     <button class="metal" onclick="startBattle()">ПРИСОЕДИНИТЬСЯ</button>
     </div>
    </div>
 
   </div>
- </section>
-
- <!-- ================= GARAGE ================= -->
- <section id="garage" class="page">
-  <div class="garage">
-
-   <div class="garageChat">
-    <div class="chatHead">ЧАТ</div>
-    <div class="chatMessages" id="garageChat"></div>
-    <div class="chatInput">
-     <input id="garageInput" placeholder="Сообщение...">
-     <button class="oldBtn" onclick="sendGarageChat()">➤</button>
-    </div>
-   </div>
-
-   <div class="garageCenter">
-    <div class="tankNameplate" id="garageTankName">HORNET M1 • FIREBIRD M2</div>
-    <div class="garageTank" id="garageTank">
-     <div class="tankTrack a"></div>
-     <div class="tankTrack b"></div>
-     <div class="tankBody"></div>
-     <div class="tankTop"></div>
-     <div class="tankCannon" id="garageCannon"></div>
-    </div>
-   </div>
-
-   <div class="garageInfo">
-    <div class="panelTitle">ИНФОРМАЦИЯ</div>
-    <div class="statline"><span>Корпус</span><b id="garageHull">Hornet M1</b></div>
-    <div class="statline"><span>Оружие</span><b id="garageWeapon">Firebird M2</b></div>
-    <div class="statline"><span>Броня</span><b id="garageArmor">135</b></div>
-    <div class="statline"><span>Скорость</span><b id="garageSpeed">10</b></div>
-    <div class="statline"><span>Урон</span><b id="garageDamage">35</b></div>
-    <button class="oldBtn bigBtn" onclick="openEquipment()">ОБОРУДОВАНИЕ</button>
-   </div>
-
-   <div class="garageBottom" id="garageCards"></div>
-  </div>
- </section>
-
- <!-- ================= MISSIONS ================= -->
- <section id="missions" class="page">
-  <div class="pageInner">
-   <div class="pageTitle">ЕЖЕДНЕВНЫЕ МИССИИ</div>
-   <div style="max-width:900px;color:#96a39b;margin-bottom:15px">
-    Классические задания. Три активных задания обновляются по серверному дню.
-   </div>
-   <div id="missionList"></div>
-  </div>
- </section>
-
- <!-- ================= MAPS ================= -->
- <section id="maps" class="page">
-  <div class="pageInner">
-   <div class="pageTitle">ВЫБОР КАРТЫ</div>
-   <div class="cards" id="mapCards"></div>
-  </div>
- </section>
-
- <!-- ================= RANKS ================= -->
- <section id="ranks" class="page">
-  <div class="pageInner">
-   <div class="pageTitle">ЗВАНИЯ</div>
-   <div class="cards" id="rankCards"></div>
-  </div>
- </section>
+ </div>
 
 </div>
 
-<!-- ================= BATTLE ================= -->
-<div id="battle">
- <canvas id="world"></canvas>
+<div id="garage" class="screen">
+ <button class="metal back" onclick="showLobby()">← НАЗАД</button>
+
+ <div class="garageGrid">
+
+  <div class="panel garageItems">
+   <div class="panelTitle">КОРПУСЫ</div>
+   <div id="hulls"></div>
+   <div class="panelTitle">ПУШКИ</div>
+   <div id="weapons"></div>
+  </div>
+
+  <div class="panel tankStage">
+   <div style="position:absolute;top:15px;left:50%;transform:translateX(-50%);font-size:22px;font-weight:bold;z-index:2">
+    МОЙ ТАНК
+   </div>
+   <canvas id="garageCanvas"></canvas>
+  </div>
+
+  <div class="panel">
+   <div class="panelTitle">ИНФОРМАЦИЯ</div>
+   <div class="infoBody" id="garageInfo">
+    <h2>Хорнет M1</h2>
+    <p>Скорость: ★★★★☆</p>
+    <p>Броня: ★★★☆☆</p>
+    <p>Манёвренность: ★★★★★</p>
+    <hr>
+    <p>Классический корпус лёгкого типа.</p>
+   </div>
+  </div>
+
+ </div>
+</div>
+
+<div id="missions" class="screen">
+ <div class="missionsBox panel">
+  <button class="metal" onclick="showLobby()">← НАЗАД</button>
+  <h1>ЕЖЕДНЕВНЫЕ МИССИИ</h1>
+  <p>Классическая система миссий. Задания обновляются.</p>
+  <div id="missionList"></div>
+ </div>
+</div>
+
+<div id="mapSelect" class="screen">
+ <div class="maps panel">
+  <button class="metal" onclick="showLobby()">← НАЗАД</button>
+  <h1>ВЫБОР КАРТЫ</h1>
+  <p>Классические арены. Каждая карта имеет собственную геометрию.</p>
+  <div class="mapCards" id="mapCards"></div>
+ </div>
+</div>
+
+<div id="battleUI" class="screen">
 
  <div class="hudTop">
-  <div class="score">
-   <span class="red">🔴 <b id="redScore">0</b></span>
-   &nbsp; VS &nbsp;
-   <span class="blue">🔵 <b id="blueScore">0</b></span>
-  </div>
-  <div class="battleTime" id="battleTime">15:00</div>
+  <div class="score"><span class="red">КРАСНЫЕ</span> <b id="redScore">0</b></div>
+  <div class="score" id="timer">15:00</div>
+  <div class="score"><span class="blue">СИНИЕ</span> <b id="blueScore">0</b></div>
  </div>
 
- <button class="quitBattle" onclick="leaveBattle()">ВЫЙТИ</button>
+ <div id="killFeed"></div>
+ <div id="crosshair"></div>
 
- <div class="killFeed" id="killFeed"></div>
+ <div class="health"><i id="healthBar"></i></div>
 
- <div class="battleChat">
-  <div class="chatHead">БОЕВОЙ ЧАТ</div>
-  <div class="chatMessages" id="battleChatMessages"></div>
-  <div class="chatInput">
-   <input id="battleChatInput" placeholder="Enter — чат">
-   <button class="oldBtn" onclick="sendBattleChat()">➤</button>
-  </div>
+ <div class="supplies">
+  <div class="sup"><b>🔧</b>1</div>
+  <div class="sup"><b>🛡</b>2</div>
+  <div class="sup"><b>⚡</b>3</div>
+  <div class="sup"><b>➤</b>4</div>
+  <div class="sup"><b>💣</b>5</div>
  </div>
 
- <div class="hp">
-  <div>БРОНЯ <b id="hpText">100</b></div>
-  <div class="hpbar"><i id="hpFill"></i></div>
- </div>
+ <div id="chatBattle"></div>
 
- <div class="hudBottom">
-  <div class="supplies">
-   <button class="sup" onclick="useSupply(1)"><b>🔧</b><small>1 РЕМОНТ</small></button>
-   <button class="sup" onclick="useSupply(2)"><b>🛡</b><small>2 БРОНЯ</small></button>
-   <button class="sup" onclick="useSupply(3)"><b>⚡</b><small>3 УРОН</small></button>
-   <button class="sup" onclick="useSupply(4)"><b>🚀</b><small>4 НИТРО</small></button>
-   <button class="sup" onclick="useSupply(5)"><b>💣</b><small>5 МИНА</small></button>
-  </div>
-  <button class="fireBtn" onpointerdown="mobileFire()">ОГОНЬ</button>
- </div>
-
- <div class="mobileControls">
+ <div id="mobile">
   <div class="joy" id="moveJoy"><div class="knob"></div></div>
   <div class="joy" id="aimJoy"><div class="knob"></div></div>
-  <button class="mobileFire" onclick="mobileFire()">ОГОНЬ</button>
+  <button class="mobileFire" id="mobileFire">ОГОНЬ</button>
   <div class="mobileSup">
-   <button onclick="useSupply(1)">1</button>
-   <button onclick="useSupply(2)">2</button>
-   <button onclick="useSupply(3)">3</button>
-   <button onclick="useSupply(4)">4</button>
-   <button onclick="useSupply(5)">5</button>
+   <button onclick="useSupply(1)">🔧</button>
+   <button onclick="useSupply(2)">🛡</button>
+   <button onclick="useSupply(3)">⚡</button>
+   <button onclick="useSupply(4)">➤</button>
+   <button onclick="useSupply(5)">💣</button>
   </div>
  </div>
 
  <div id="scoreboard">
-  <h2>ТАБЛИЦА БОЯ</h2>
-  <div class="scoreTeams">
-   <div class="scoreTeam">
-    <h3 class="red">🔴 КРАСНЫЕ</h3>
-    <div id="redScoreboard"></div>
+  <div class="sbTitle">ТАБЛИЦА БОЯ — TAB</div>
+  <div class="sbTeams">
+   <div class="team redTeam">
+    <h2 class="red">КРАСНЫЕ</h2>
+    <div id="redPlayers"></div>
    </div>
-   <div class="scoreTeam">
-    <h3 class="blue">🔵 СИНИЕ</h3>
-    <div id="blueScoreboard"></div>
+   <div class="team">
+    <h2 class="blue">СИНИЕ</h2>
+    <div id="bluePlayers"></div>
    </div>
   </div>
  </div>
+
+ <div id="toast"></div>
+ <div id="goldBox"></div>
+
 </div>
 
-<div id="toast"></div>
-
-<div id="modal">
- <div class="modalBox" id="modalContent"></div>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
 
 <script>
-/* =========================================================
-   TANKI ONLINE OLD ERA
-   SINGLE FILE GAME
-========================================================= */
+/* ============================================================
+   TANKI CLASSIC 3D
+   Полностью процедурный прототип.
+   ============================================================ */
 
-const SAVE_KEY="TANKI_OLD_ERA_SAVE_V3";
+const SAVE="tanki_classic_3d_save_v3";
 
-const RANKS=[
- ["Новобранец",0,100],
- ["Рядовой",100,500],
- ["Ефрейтор",500,1500],
- ["Капрал",1500,3700],
- ["Мастер-капрал",3700,7100],
- ["Сержант",7100,12300],
- ["Старший сержант",12300,20000],
- ["Старшина",20000,29000],
- ["Первый сержант",29000,41000],
- ["Сержант-майор",41000,57000],
- ["Прапорщик 1",57000,76000],
- ["Прапорщик 2",76000,98000],
- ["Прапорщик 3",98000,125000],
- ["Прапорщик 4",125000,156000],
- ["Прапорщик 5",156000,192000],
- ["Младший лейтенант",192000,233000],
- ["Лейтенант",233000,280000],
- ["Старший лейтенант",280000,332000],
- ["Капитан",332000,390000],
- ["Майор",390000,455000],
- ["Подполковник",455000,527000],
- ["Полковник",527000,606000],
- ["Бригадир",606000,692000],
- ["Генерал-майор",692000,787000],
- ["Генерал-лейтенант",787000,889000],
- ["Генерал",889000,1000000],
- ["Маршал",1000000,1122000]
-];
-
-const MAPS=[
- "Александровск","Арена","Архипелаг","Атра","Барда","Безумие","Берлин",
- "Бобруйск","Бойня","Брест","Бумбокс","Будущее","Волна","Вольфенштейн",
- "Гардер","Гравити","Год 2042","Губаха","Долина","Дуалити","Дуэль",
- "Дюссельдорф","Жаворонки","Зона","Иран","Йоркшир","Каньон","Колхоз",
- "Кунгур","Кураж","Кёльн","Лагерь","Магадан","Магистраль","Молотов",
- "Монте-Карло","Мостик","Мосты","Небоскрёбы","Новэл","Овраг","Оса",
- "Осада","Остров","Палуба 9","Парма","Перевал","Перекрёсток","Песочница",
- "Пинг-Понг","Плато","Подземка","Полигон","Промзона","Простор",
- "Противостояние","Пустыня","Ред Алерт","Рио","Сандал","Серпухов",
- "Соликамск","Стадион","Станция","Тишина","Трек","Трибьют","Тэмпл",
- "Ущелье","Фабрика","Ферма","Форест","Форт Нокс","Холм","Чернобыль",
- "Чернушка","Шоссе","Шум","Эдинбург","Эспланада"
-];
-
-const HULLS=[
- ["Wasp",1,100,14],["Hunter",2,130,12],["Titan",3,180,8],
- ["Dictator",4,160,9],["Hornet",5,135,10],["Viking",6,155,10],
- ["Mammoth",7,250,6]
-];
-
-const WEAPONS=[
- ["Smoky",1,35,1.0],["Firebird",2,45,0.85],["Twins",3,24,1.4],
- ["Railgun",4,90,.5],["Isida",5,30,1.1],["Thunder",6,70,.7],
- ["Freeze",7,32,1.2],["Ricochet",8,40,1],["Shaft",9,110,.4]
-];
-
-let game={
- name:"Картавый",
+let save={
+ nick:"Картавый",
  xp:0,
- crystals:500,
- hull:"Hornet",
+ crystals:5000,
+ hull:"Хорнет",
  hullM:1,
- weapon:"Firebird",
- weaponM:2,
- selectedMap:"Полигон",
- era:2015,
- missions:[],
- inventory:{repair:3,armor:3,damage:3,nitro:3,mine:3},
- kills:0,
- deaths:0,
- battles:0,
- wins:0
+ weapon:"Рельсотрон",
+ weaponM:1,
+ map:"Арена",
+ theme:"ЛЕТО",
+ missionsDay:"",
+ missions:[]
 };
 
-function loadGame(){
- try{
-  let s=JSON.parse(localStorage.getItem(SAVE_KEY));
-  if(s)game={...game,...s};
- }catch(e){}
- if(!game.missions.length)resetMissions();
-}
-function saveGame(){localStorage.setItem(SAVE_KEY,JSON.stringify(game))}
-loadGame();
+try{
+ let x=JSON.parse(localStorage.getItem(SAVE));
+ if(x) save={...save,...x};
+}catch(e){}
 
-/* =========================
- LOADING
-========================= */
-let lp=0;
-const loadSteps=[
- "Загрузка боевого клиента...",
- "Загрузка старых карт...",
- "Подготовка танков...",
- "Подготовка боеприпасов...",
- "Синхронизация сервера...",
- "Подключение к серверу..."
+const RANKS=[
+ ["Новобранец",0],
+ ["Рядовой",100],
+ ["Ефрейтор",500],
+ ["Капрал",1500],
+ ["Мастер-капрал",3700],
+ ["Сержант",7100],
+ ["Старший сержант",12300],
+ ["Старшина",20000],
+ ["Первый сержант",29000],
+ ["Сержант-майор",41000],
+ ["Прапорщик 1",57000],
+ ["Прапорщик 2",76000],
+ ["Прапорщик 3",98000],
+ ["Прапорщик 4",125000],
+ ["Прапорщик 5",156000],
+ ["Младший лейтенант",192000],
+ ["Лейтенант",233000],
+ ["Старший лейтенант",280000],
+ ["Капитан",332000],
+ ["Майор",390000],
+ ["Подполковник",455000],
+ ["Полковник",527000],
+ ["Бригадир",606000],
+ ["Генерал-майор",692000],
+ ["Генерал-лейтенант",787000],
+ ["Генерал",889000],
+ ["Маршал",1000000]
 ];
-let li=0;
-let loader=setInterval(()=>{
- lp+=Math.random()*14+5;
- if(lp>100)lp=100;
- document.getElementById("loadFill").style.width=lp+"%";
- document.getElementById("loadText").textContent=loadSteps[Math.min(li++,loadSteps.length-1)];
- if(lp>=100){
-  clearInterval(loader);
-  setTimeout(()=>{
-   document.getElementById("loading").style.display="none";
-   document.getElementById("login").style.display="flex";
-   document.getElementById("loginName").value=game.name;
-  },400);
- }
-},180);
 
-/* =========================
- LOGIN
-========================= */
-function loginGame(){
- let n=document.getElementById("loginName").value.trim();
- if(n)game.name=n;
- saveGame();
- document.getElementById("login").style.display="none";
- document.getElementById("app").style.display="block";
- initLobby();
- updateUI();
-}
-function guestLogin(){
- document.getElementById("loginName").value="Танкист_"+Math.floor(Math.random()*900+100);
- loginGame();
-}
-
-/* =========================
- UI
-========================= */
-function rankInfo(){
+function rank(){
  let r=RANKS[0];
- for(let i=0;i<RANKS.length;i++){
-  if(game.xp>=RANKS[i][1])r=RANKS[i];
- }
- return r;
+ for(const x of RANKS)if(save.xp>=x[1])r=x;
+ return r[0];
 }
-function updateUI(){
- let r=rankInfo();
- document.getElementById("playerNameTop").textContent=game.name;
- document.getElementById("crystals").textContent=game.crystals;
- document.getElementById("xpText").textContent=r[0]+" • "+game.xp+" XP";
- let progress=0;
- if(r[2]>r[1])progress=((game.xp-r[1])/(r[2]-r[1]))*100;
- document.getElementById("xpFill").style.width=Math.max(0,Math.min(100,progress))+"%";
- updateGarage();
- renderMissions();
+function saveGame(){
+ localStorage.setItem(SAVE,JSON.stringify(save));
+ updateTop();
+}
+function updateTop(){
+ document.getElementById("nickTop").textContent=save.nick;
+ document.getElementById("xpTop").textContent=save.xp;
+ document.getElementById("crTop").textContent=save.crystals;
 }
 
-document.querySelectorAll(".navBtn[data-page]").forEach(b=>{
- b.onclick=()=>{
-  document.querySelectorAll(".navBtn").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");
-  showPage(b.dataset.page);
- }
-});
+/* ============================================================
+   MAP DATABASE
+   ============================================================ */
 
-function showPage(id){
- document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
- document.getElementById(id).classList.add("show");
- if(id==="maps")renderMaps();
- if(id==="ranks")renderRanks();
- if(id==="garage")updateGarage();
- if(id==="missions")renderMissions();
-}
-
-/* =========================
- CHAT
-========================= */
-const chatNames=["Стальной_Кот","Оса_2014","Танк_77","Рейдер","Мастер_Боя","Критик","Боец_01"];
-const chatTexts=[
- "Кто в ТДМ?",
- "Пошли на Полигон.",
- "Кто-нибудь видел голд?",
- "Сейчас захожу.",
- "Нужен ещё один в красную.",
- "Осторожно, синий на мосту!",
- "Классическая карта 🔥"
+const MAPS=[
+ "Александровск","Арена","Архипелаг","Атра","Барда","Безумие",
+ "Берлин","Бобруйск","Бойня","Брест","Бумбокс","Будущее","Волна",
+ "Вольфенштейн","Гардер","Гравити","Год 2042","Губаха","Долина",
+ "Дуалити","Дуэль","Дюссельдорф","Жаворонки","Зона","Иран","Йоркшир",
+ "Каньон","Колхоз","Кунгур","Кураж","Кёльн","Лагерь","Магадан",
+ "Магистраль","Молотов","Монте-Карло","Мостик","Мосты","Небоскрёбы",
+ "Новэл","Овраг","Оса","Осада","Остров","Палуба 9","Парма","Перевал",
+ "Перекрёсток","Песочница","Пинг-Понг","Плато","Подземка","Полигон",
+ "Промзона","Простор","Противостояние","Пустыня","Ред Алерт","Рио",
+ "Сандал","Серпухов","Соликамск","Стадион","Станция","Тишина","Трек",
+ "Трибьют","Тэмпл","Ущелье","Фабрика","Ферма","Форест","Форт Нокс",
+ "Холм","Чернобыль","Чернушка","Шоссе","Шум","Эдинбург","Эспланада"
 ];
 
-function addChat(box,text,name="Система"){
- let d=document.createElement("div");
- d.className="msg";
- d.innerHTML="<b>"+escapeHTML(name)+":</b> "+escapeHTML(text);
- box.appendChild(d);
- box.scrollTop=box.scrollHeight;
+function showLobby(){
+ hideScreens();
+ document.getElementById("menu").style.display="block";
+ document.getElementById("lobbyView").style.display="block";
 }
-function escapeHTML(s){
- return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+function hideScreens(){
+ document.getElementById("menu").style.display="none";
+ document.getElementById("garage").style.display="none";
+ document.getElementById("missions").style.display="none";
+ document.getElementById("mapSelect").style.display="none";
+ document.getElementById("battleUI").style.display="none";
 }
-function initLobby(){
- let c=document.getElementById("globalChat");
- c.innerHTML="";
- addChat(c,"Добро пожаловать в ТАНКИ ONLINE!","Система");
- addChat(c,"Чат загружен.","Система");
- for(let i=0;i<5;i++)addChat(c,chatTexts[i],chatNames[i]);
+function showGarage(){
+ hideScreens();
+ document.getElementById("garage").style.display="block";
+ initGarage();
 }
-function sendGlobalChat(){
- let i=document.getElementById("globalInput");
- if(!i.value.trim())return;
- addChat(document.getElementById("globalChat"),i.value,game.name);
- i.value="";
+function showMissions(){
+ hideScreens();
+ document.getElementById("missions").style.display="block";
+ initMissions();
 }
-function sendGarageChat(){
- let i=document.getElementById("garageInput");
- if(!i.value.trim())return;
- addChat(document.getElementById("garageChat"),i.value,game.name);
- i.value="";
+function showMaps(){
+ hideScreens();
+ document.getElementById("mapSelect").style.display="block";
+ initMaps();
 }
-function sendBattleChat(){
- let i=document.getElementById("battleChatInput");
- if(!i.value.trim())return;
- addChat(document.getElementById("battleChatMessages"),i.value,game.name);
- i.value="";
-}
-document.addEventListener("keydown",e=>{
- if(e.key==="Enter"){
-  let active=document.activeElement;
-  if(active.id==="globalInput")sendGlobalChat();
-  else if(active.id==="garageInput")sendGarageChat();
-  else if(active.id==="battleChatInput")sendBattleChat();
- }
-});
 
-/* =========================
- BATTLES
-========================= */
-let battleRows=[
- ["Полигон","КОМАНДНЫЙ БОЙ","18/32"],
- ["Арена","КОМАНДНЫЙ БОЙ","21/32"],
- ["Плато","ЗАХВАТ ФЛАГА","24/32"],
- ["Барда","КОМАНДНЫЙ БОЙ","15/30"],
- ["Мосты","КОМАНДНЫЙ БОЙ","27/32"],
- ["Песочница","КОМАНДНЫЙ БОЙ","12/24"],
- ["Остров","ЗАХВАТ ФЛАГА","19/24"],
- ["Дюэль","КОМАНДНЫЙ БОЙ","8/16"]
-];
-let selectedBattle=0;
+/* ============================================================
+   LOBBY
+   ============================================================ */
 
 function initLobby(){
- let c=document.getElementById("globalChat");
- c.innerHTML="";
- addChat(c,"Добро пожаловать в ТАНКИ ONLINE!","Система");
- addChat(c,"Красная и синяя команды готовы к бою.","Система");
- ["Кто в ТДМ?","Пошли на Полигон.","Кто-нибудь видел голд?","Сейчас захожу.","Нужен ещё один в красную."]
- .forEach((x,i)=>addChat(c,x,chatNames[i]));
- renderBattleRows();
- drawMiniMap();
-}
-function renderBattleRows(){
- let el=document.getElementById("battleList");
- el.innerHTML="";
- battleRows.forEach((b,i)=>{
-  let d=document.createElement("div");
-  d.className="battleRow"+(i===selectedBattle?" selected":"");
-  d.innerHTML="<b>"+b[0]+"</b><small>"+b[1]+"</small><small>"+b[2]+"</small>";
-  d.onclick=()=>{
-   selectedBattle=i;
-   game.selectedMap=b[0];
-   renderBattleRows();
-   updateBattleInfo();
-  };
-  el.appendChild(d);
- });
- updateBattleInfo();
-}
-function updateBattleInfo(){
- let b=battleRows[selectedBattle];
- game.selectedMap=b[0];
- document.getElementById("battleMapName").textContent=b[0];
- document.getElementById("selectedBattleText").textContent=
-  b[0]+" • "+b[1]+" • "+b[2]+" игроков";
- drawMiniMap();
- saveGame();
-}
-function quickBattle(){
- selectedBattle=Math.floor(Math.random()*battleRows.length);
- game.selectedMap=battleRows[selectedBattle][0];
- renderBattleRows();
- startBattle(game.selectedMap);
-}
-
-/* =========================
- MINI MAP
-========================= */
-function drawMiniMap(){
- let c=document.getElementById("miniMap");
- if(!c)return;
- let x=c.getContext("2d");
- let w=c.width=c.clientWidth*2,h=c.height=c.clientHeight*2;
- x.clearRect(0,0,w,h);
- x.fillStyle="#576259";x.fillRect(0,0,w,h);
- x.strokeStyle="#28332d";x.lineWidth=8;
- let seed=MAPS.indexOf(game.selectedMap)+5;
- let rand=mulberry32(seed);
+ const list=document.getElementById("battleList");
+ list.innerHTML="";
+ const modes=["TDM","TDM","CTF","CP","TDM","DM"];
+ const maps=["Арена","Полигон","Плато","Барда","Мосты","Песочница","Овраг","Стадион"];
  for(let i=0;i<12;i++){
-  let xx=rand()*w,yy=rand()*h;
-  let ww=25+rand()*100,hh=15+rand()*60;
-  x.fillStyle=i%3?"#39463e":"#28352e";
-  x.fillRect(xx,yy,ww,hh);
- }
- x.fillStyle="#e44";x.beginPath();x.arc(30,h-30,10,0,7);x.fill();
- x.fillStyle="#58f";x.beginPath();x.arc(w-30,30,10,0,7);x.fill();
-}
-function mulberry32(a){
- return function(){
-  a|=0;a=a+0x6D2B79F5|0;
-  let t=Math.imul(a^a>>>15,1|a);
-  t=t+Math.imul(t^t>>>7,61|t)^t;
-  return ((t^t>>>14)>>>0)/4294967296;
- }
-}
-
-/* =========================
- GARAGE
-========================= */
-function updateGarage(){
- document.getElementById("garageHull").textContent=game.hull+" M"+game.hullM;
- document.getElementById("garageWeapon").textContent=game.weapon+" M"+game.weaponM;
- let h=HULLS.find(x=>x[0]===game.hull)||HULLS[4];
- let w=WEAPONS.find(x=>x[0]===game.weapon)||WEAPONS[1];
- document.getElementById("garageArmor").textContent=h[2];
- document.getElementById("garageSpeed").textContent=h[3];
- document.getElementById("garageDamage").textContent=w[2];
- document.getElementById("garageTankName").textContent=
-  game.hull.toUpperCase()+" M"+game.hullM+" • "+game.weapon.toUpperCase()+" M"+game.weaponM;
-
- let cards=document.getElementById("garageCards");
- cards.innerHTML="";
- HULLS.forEach(h=>{
-  let d=document.createElement("div");d.className="card";
-  d.innerHTML="<div class='equipVisual'>▰</div><h3>"+h[0]+" M"+game.hullM+"</h3>"+
-   "<small>Броня "+h[2]+" • Скорость "+h[3]+"</small>";
-  let b=document.createElement("button");b.className="oldBtn selectBtn";b.textContent=
-   game.hull===h[0]?"УСТАНОВЛЕН":"УСТАНОВИТЬ";
-  b.onclick=()=>{game.hull=h[0];saveGame();updateGarage();toast(h[0]+" установлен")};
-  d.appendChild(b);cards.appendChild(d);
- });
- WEAPONS.forEach(w=>{
-  let d=document.createElement("div");d.className="card";
-  d.innerHTML="<div class='equipVisual'>╋</div><h3>"+w[0]+" M"+game.weaponM+"</h3>"+
-   "<small>Урон "+w[2]+" • Скорострельность "+w[3]+"</small>";
-  let b=document.createElement("button");b.className="oldBtn selectBtn";b.textContent=
-   game.weapon===w[0]?"УСТАНОВЛЕНО":"УСТАНОВИТЬ";
-  b.onclick=()=>{game.weapon=w[0];saveGame();updateGarage();toast(w[0]+" установлен")};
-  d.appendChild(b);cards.appendChild(d);
- });
-}
-function openEquipment(){
- showPage("garage");
- toast("Выберите корпус или оружие в нижней панели");
-}
-
-/* =========================
- MAPS
-========================= */
-function renderMaps(){
- let c=document.getElementById("mapCards");c.innerHTML="";
- MAPS.forEach(name=>{
-  let d=document.createElement("div");d.className="card";
-  d.innerHTML="<div class='equipVisual' style='font-size:32px'>▦</div>"+
-   "<h3>"+name+"</h3><small>Летняя / ночная / зимняя вариация</small>";
-  let b=document.createElement("button");b.className="oldBtn selectBtn";
-  b.textContent="ВЫБРАТЬ";
-  b.onclick=()=>{
-   game.selectedMap=name;saveGame();
-   toast("Выбрана карта: "+name);
+  let m=maps[i%maps.length];
+  let mode=modes[i%modes.length];
+  let div=document.createElement("div");
+  div.className="battle";
+  div.innerHTML=`
+   <div>
+    <div class="map">${m}</div>
+    <div class="mode">${mode} · ЛЕТО · ${i%3===0?"НОЧЬ":"ДЕНЬ"}</div>
+   </div>
+   <div><span class="red">● ${2+i%4}</span></div>
+   <div><span class="blue">● ${2+(i+1)%4}</span></div>
+  `;
+  div.onclick=()=>{
+   save.map=m;
+   document.getElementById("selectedMapName").textContent=m;
   };
-  d.appendChild(b);c.appendChild(d);
- });
-}
-
-/* =========================
- RANKS
-========================= */
-function renderRanks(){
- let c=document.getElementById("rankCards");c.innerHTML="";
- RANKS.forEach((r,i)=>{
-  let d=document.createElement("div");d.className="card";
-  let current=game.xp>=r[1]&&(i===RANKS.length-1||game.xp<RANKS[i+1][1]);
-  d.innerHTML=(current?"<b>★ ТЕКУЩЕЕ ЗВАНИЕ</b>":"")+
-   "<h3>"+r[0]+"</h3>"+
-   "<div>От "+r[1].toLocaleString("ru")+" XP</div>"+
-   "<small>До "+r[2].toLocaleString("ru")+" XP</small>";
-  c.appendChild(d);
- });
-}
-
-/* =========================
- MISSIONS
-========================= */
-const missionTypes=[
- {type:"kills",text:"Уничтожить противников",base:5,reward:80},
- {type:"xp",text:"Заработать XP",base:100,reward:100},
- {type:"supplies",text:"Подобрать supplies",base:5,reward:60},
- {type:"win",text:"Занять 1-е место",base:1,reward:150},
- {type:"flags",text:"Доставить флаги",base:2,reward:120},
- {type:"points",text:"Захватить контрольные точки",base:3,reward:100}
-];
-
-function resetMissions(){
- game.missions=[];
- let day=Math.floor(Date.now()/86400000);
- let rand=mulberry32(day);
- for(let i=0;i<3;i++){
-  let t=missionTypes[Math.floor(rand()*missionTypes.length)];
-  let target=t.base+Math.floor(rand()*Math.max(2,t.base));
-  game.missions.push({
-   type:t.type,
-   text:t.text,
-   target,
-   progress:0,
-   reward:t.reward+Math.floor(rand()*100),
-   day
-  });
+  list.appendChild(div);
  }
- saveGame();
 }
-function checkMissionDay(){
- let day=Math.floor(Date.now()/86400000);
- if(!game.missions.length||game.missions[0].day!==day)resetMissions();
+function chatSend(e){
+ if(e.key!=="Enter")return;
+ const v=e.target.value.trim();
+ if(!v)return;
+ const box=document.getElementById("lobbyChat");
+ box.innerHTML+=`<div class="msg"><b>${escapeHtml(save.nick)}:</b> ${escapeHtml(v)}</div>`;
+ box.scrollTop=box.scrollHeight;
+ e.target.value="";
+}
+function escapeHtml(s){
+ return s.replace(/[&<>"']/g,m=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[m]));
+}
+
+/* ============================================================
+   GARAGE
+   ============================================================ */
+
+const HULLS=["Оса","Охотник","Титан","Диктатор","Хорнет","Викинг","Мамонт"];
+const WEAPONS=["Смоки","Огнемёт","Твинс","Рельсотрон","Изида","Гром","Фриз","Рикошет","Шафт"];
+
+function initGarage(){
+ let h=document.getElementById("hulls");
+ let w=document.getElementById("weapons");
+ h.innerHTML="";
+ w.innerHTML="";
+ HULLS.forEach(x=>{
+  let d=document.createElement("div");
+  d.className="item";
+  d.innerHTML=`<b>${x}</b><br><small>M0 · M1 · M2 · M3</small>`;
+  d.onclick=()=>{
+   save.hull=x;
+   saveGame();
+   initGarage();
+  };
+  h.appendChild(d);
+ });
+ WEAPONS.forEach(x=>{
+  let d=document.createElement("div");
+  d.className="item";
+  d.innerHTML=`<b>${x}</b><br><small>M0 · M1 · M2 · M3</small>`;
+  d.onclick=()=>{
+   save.weapon=x;
+   saveGame();
+   initGarage();
+  };
+  w.appendChild(d);
+ });
+ document.getElementById("garageInfo").innerHTML=`
+  <h2>${save.hull} M${save.hullM}</h2>
+  <h3>${save.weapon} M${save.weaponM}</h3>
+  <p>Скорость: ★★★★☆</p>
+  <p>Броня: ★★★☆☆</p>
+  <p>Манёвренность: ★★★★☆</p>
+  <p>Орудие: ★★★★☆</p>
+  <hr>
+  <p>Классическая конфигурация танка.</p>
+ `;
+ renderGarageTank();
+}
+
+let garageRenderer,garageScene,garageCamera,garageTank;
+
+function renderGarageTank(){
+ const c=document.getElementById("garageCanvas");
+ if(garageRenderer)garageRenderer.dispose?.();
+ garageRenderer=new THREE.WebGLRenderer({canvas:c,antialias:true,alpha:true});
+ garageRenderer.setPixelRatio(Math.min(devicePixelRatio,2));
+ garageRenderer.setSize(c.clientWidth||600,c.clientHeight||500,false);
+ garageScene=new THREE.Scene();
+ garageCamera=new THREE.PerspectiveCamera(45,1,.1,100);
+ garageCamera.position.set(6,3.8,7);
+ garageCamera.lookAt(0,1,0);
+
+ const a=new THREE.AmbientLight(0xb8d0bd,1.5);
+ garageScene.add(a);
+ const l=new THREE.DirectionalLight(0xffffff,2);
+ l.position.set(5,10,5);
+ garageScene.add(l);
+
+ garageScene.add(new THREE.GridHelper(30,30,0x506057,0x26342b));
+
+ garageTank=makeTank(0xfff0a0,0x39493e);
+ garageTank.position.y=.2;
+ garageScene.add(garageTank);
+
+ function loop(){
+  if(!document.getElementById("garage").style.display||
+     document.getElementById("garage").style.display==="none")return;
+  garageTank.rotation.y+=.004;
+  garageRenderer.render(garageScene,garageCamera);
+  requestAnimationFrame(loop);
+ }
+ loop();
+}
+
+/* ============================================================
+   MISSIONS
+   ============================================================ */
+
+function todayKey(){
+ const d=new Date();
+ return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+}
+
+function initMissions(){
+ if(save.missionsDay!==todayKey()){
+  save.missionsDay=todayKey();
+  save.missions=[
+   {type:"xp",text:"Заработать 500 XP",goal:500,value:0,reward:250},
+   {type:"kills",text:"Уничтожить 10 противников",goal:10,value:0,reward:350},
+   {type:"supplies",text:"Подобрать 5 припасов",goal:5,value:0,reward:200}
+  ];
+  saveGame();
+ }
+ const box=document.getElementById("missionList");
+ box.innerHTML="";
+ save.missions.forEach((m,i)=>{
+  let p=Math.min(100,m.value/m.goal*100);
+  box.innerHTML+=`
+   <div class="mission">
+    <b>${m.text}</b>
+    <div>${m.value} / ${m.goal}</div>
+    <div class="progress"><i style="width:${p}%"></i></div>
+    <p>Награда: 💎 ${m.reward}</p>
+   </div>
+  `;
+ });
 }
 function missionProgress(type,n=1){
- checkMissionDay();
- game.missions.forEach(m=>{
-  if(m.type===type&&!m.done){
-   m.progress=Math.min(m.target,m.progress+n);
-   if(m.progress>=m.target){
-    m.done=true;
-    game.crystals+=m.reward;
-    toast("Миссия выполнена! +"+m.reward+" 💎");
+ save.missions.forEach(m=>{
+  if(m.type===type)m.value=Math.min(m.goal,m.value+n);
+ });
+ saveGame();
+}
+
+/* ============================================================
+   MAP SELECT
+   ============================================================ */
+
+function initMaps(){
+ const box=document.getElementById("mapCards");
+ box.innerHTML="";
+ MAPS.forEach(m=>{
+  const d=document.createElement("div");
+  d.className="mapCard";
+  d.innerHTML=`<div class="preview"></div><div class="mapName">${m}</div>`;
+  d.onclick=()=>{
+   save.map=m;
+   saveGame();
+   document.getElementById("selectedMapName").textContent=m;
+   showLobby();
+  };
+  box.appendChild(d);
+ });
+}
+
+/* ============================================================
+   THREE.JS 3D ENGINE
+   ============================================================ */
+
+let renderer,scene,camera,clock;
+let player;
+let tanks=[];
+let bullets=[];
+let particles=[];
+let pickups=[];
+let mines=[];
+let mapObjects=[];
+let keys={};
+let battleRunning=false;
+let fireHeld=false;
+let battleTime=900;
+let scores={red:0,blue:0};
+let currentTheme="day";
+
+const WORLD=190;
+
+function init3D(){
+
+ renderer=new THREE.WebGLRenderer({
+  canvas:document.getElementById("game"),
+  antialias:true,
+  powerPreference:"high-performance"
+ });
+ renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));
+ renderer.setSize(innerWidth,innerHeight);
+ renderer.shadowMap.enabled=true;
+ renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ renderer.outputColorSpace=THREE.SRGBColorSpace;
+
+ scene=new THREE.Scene();
+ scene.background=new THREE.Color(0x7d9583);
+ scene.fog=new THREE.Fog(0x7d9583,70,230);
+
+ camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,500);
+ clock=new THREE.Clock();
+
+ setupLighting();
+ createWorld(save.map);
+ animate();
+}
+
+function setupLighting(){
+ const hemi=new THREE.HemisphereLight(0xb9d4bd,0x29342c,1.5);
+ scene.add(hemi);
+
+ const sun=new THREE.DirectionalLight(0xfff4d0,2.2);
+ sun.position.set(70,120,50);
+ sun.castShadow=true;
+ sun.shadow.mapSize.set(2048,2048);
+ sun.shadow.camera.left=-130;
+ sun.shadow.camera.right=130;
+ sun.shadow.camera.top=130;
+ sun.shadow.camera.bottom=-130;
+ scene.add(sun);
+}
+
+function clearWorld(){
+ while(scene.children.length>0){
+  const o=scene.children.pop();
+  if(o.geometry)o.geometry.dispose();
+  if(o.material){
+   if(Array.isArray(o.material))o.material.forEach(x=>x.dispose());
+   else o.material.dispose();
+  }
+ }
+ tanks=[];
+ bullets=[];
+ particles=[];
+ pickups=[];
+ mines=[];
+ mapObjects=[];
+}
+
+function createWorld(map){
+ clearWorld();
+ setupLighting();
+
+ const groundMat=new THREE.MeshStandardMaterial({
+  color:0x3c5141,
+  roughness:1
+ });
+ const ground=new THREE.Mesh(
+  new THREE.PlaneGeometry(400,400),
+  groundMat
+ );
+ ground.rotation.x=-Math.PI/2;
+ ground.receiveShadow=true;
+ scene.add(ground);
+
+ /* сетка/разметка поверхности */
+ const grid=new THREE.GridHelper(400,80,0x52665a,0x34443a);
+ grid.position.y=.02;
+ scene.add(grid);
+
+ if(map==="Арена")buildArena();
+ else if(map==="Полигон")buildPolygon();
+ else if(map==="Плато")buildPlateau();
+ else if(map==="Барда")buildBarda();
+ else if(map==="Мосты")buildBridges();
+ else if(map==="Песочница")buildSandbox();
+ else if(map==="Овраг")buildRavine();
+ else buildGeneric(map);
+
+ createBaseZones();
+
+ player=spawnTank("player","blue",0,0,save.hull,save.weapon);
+ player.position.set(0,1.2,32);
+
+ const spawnBlue=[
+  [-16,22],[-8,30],[8,30],[16,22]
+ ];
+ const spawnRed=[
+  [-16,-22],[-8,-30],[8,-30],[16,-22]
+ ];
+
+ spawnBlue.forEach((p,i)=>{
+  tanks.push(spawnTank("ally"+i,"blue",p[0],p[1],
+   HULLS[i%HULLS.length],WEAPONS[i%WEAPONS.length]));
+ });
+ spawnRed.forEach((p,i)=>{
+  tanks.push(spawnTank("enemy"+i,"red",p[0],p[1],
+   HULLS[(i+2)%HULLS.length],WEAPONS[(i+3)%WEAPONS.length]));
+ });
+
+ for(let i=0;i<10;i++)spawnSupply();
+}
+
+function createBaseZones(){
+ const red=new THREE.Mesh(
+  new THREE.CircleGeometry(15,32),
+  new THREE.MeshBasicMaterial({
+   color:0x771e1e,transparent:true,opacity:.17
+  })
+ );
+ red.rotation.x=-Math.PI/2;
+ red.position.set(0,.04,-75);
+ scene.add(red);
+
+ const blue=red.clone();
+ blue.material=red.material.clone();
+ blue.material.color.set(0x1d4477);
+ blue.position.z=75;
+ scene.add(blue);
+
+ addFlag(0,-75,0xe23e3e);
+ addFlag(0,75,0x4b8de0);
+}
+
+function addFlag(x,z,color){
+ const pole=new THREE.Mesh(
+  new THREE.CylinderGeometry(.12,.12,5,8),
+  new THREE.MeshStandardMaterial({color:0x737c75})
+ );
+ pole.position.set(x,2.5,z);
+ scene.add(pole);
+
+ const flag=new THREE.Mesh(
+  new THREE.BoxGeometry(2.8,1.5,.06),
+  new THREE.MeshStandardMaterial({
+   color,
+   emissive:color,
+   emissiveIntensity:.08
+  })
+ );
+ flag.position.set(1.3,3.7,z);
+ scene.add(flag);
+}
+
+/* ============================================================
+   ПРЕДМЕТЫ КАРТЫ
+   ============================================================ */
+
+function box(x,y,z,sx,sy,sz,color=0x46564a,rot=0){
+ const m=new THREE.Mesh(
+  new THREE.BoxGeometry(sx,sy,sz),
+  new THREE.MeshStandardMaterial({color,roughness:.9})
+ );
+ m.position.set(x,y+sy/2,z);
+ m.rotation.y=rot;
+ m.castShadow=true;
+ m.receiveShadow=true;
+ scene.add(m);
+ mapObjects.push(m);
+ return m;
+}
+
+function ramp(x,z,w,l,h,rot=0){
+ const g=new THREE.BoxGeometry(w,h,l);
+ const m=new THREE.MeshStandardMaterial({color:0x59665d});
+ const o=new THREE.Mesh(g,m);
+ o.position.set(x,h/2,z);
+ o.rotation.set(0,rot,Math.atan2(h,l));
+ o.castShadow=true;
+ o.receiveShadow=true;
+ scene.add(o);
+ mapObjects.push(o);
+ return o;
+}
+
+function bridge(x,z,w,l,h,rot=0){
+ box(x,h,z,w,.7,l,0x737b75,rot);
+ for(let s=-1;s<=1;s+=2){
+  box(
+   x+s*w*.4,
+   0,
+   z,
+   .5,
+   h,
+   l,
+   0x39443d,
+   rot
+  );
+ }
+}
+
+function tower(x,z,h=9){
+ box(x,0,z,7,h,7,0x4a584e);
+ box(x,0,z,8,.5,8,0x69746d);
+}
+
+function house(x,z,w=9,d=9,h=5){
+ box(x,0,z,w,h,d,0x515d55);
+ box(x,h,z,w,2,d,0x323d36);
+ box(x-w*.22,h+1,z-d*.01,w*.25,2,d*.4,0x222a25);
+}
+
+function wall(x,z,w,d,h=2.8,rot=0){
+ box(x,0,z,w,h,d,0x56635a,rot);
+}
+
+function buildArena(){
+ /* центральная арена с мостами и несколькими уровнями */
+ bridge(0,0,7,45,7);
+ bridge(-34,0,6,35,4);
+ bridge(34,0,6,35,4);
+
+ box(0,0,0,14,1.4,14,0x68746c);
+
+ wall(-58,0,24,3,4);
+ wall(58,0,24,3,4);
+
+ for(let x of [-52,-35,35,52]){
+  tower(x,-20,6);
+  tower(x,20,6);
+ }
+
+ ramp(-15,-45,9,20,7,.12);
+ ramp(15,45,9,20,7,.12);
+
+ for(let i=-2;i<=2;i++){
+  box(i*12,0,-62,7,3,7,0x4c5a50);
+  box(i*12,0,62,7,3,7,0x4c5a50);
+ }
+}
+
+function buildPolygon(){
+ /* большой промышленный двор с ямой в центре */
+ box(0,0,0,65,1,55,0x46544b);
+
+ for(let x of [-55,-40,40,55]){
+  house(x,-38,14,10,6);
+  house(x,38,14,10,6);
+ }
+
+ wall(-20,0,3,80,5);
+ wall(20,0,3,80,5);
+
+ /* центральная нижняя яма */
+ box(0,-5,0,24,.5,46,0x202821);
+ for(let z=-18;z<=18;z+=9){
+  ramp(-15,z,8,8,5,Math.PI/2);
+  ramp(15,z,8,8,5,-Math.PI/2);
+ }
+
+ bridge(0,0,9,50,6);
+}
+
+function buildPlateau(){
+ /* холмы и дома */
+ for(let i=0;i<9;i++){
+  let x=(i%3-1)*45;
+  let z=(Math.floor(i/3)-1)*45;
+  box(x,Math.random()*3,z,18,5+Math.random()*6,18,0x56655a);
+ }
+
+ house(-42,-42,10,9,5);
+ house(42,42,10,9,5);
+ house(-42,42,12,8,6);
+ house(42,-42,12,8,6);
+
+ for(let i=0;i<8;i++){
+  wall(
+   Math.random()*110-55,
+   Math.random()*110-55,
+   4+Math.random()*8,
+   2,
+   2
+  );
+ }
+}
+
+function buildBarda(){
+ bridge(-25,0,8,65,5);
+ bridge(25,0,8,65,5);
+
+ wall(0,-42,30,3,6);
+ wall(0,42,30,3,6);
+
+ house(-45,-35,13,10,7);
+ house(45,35,13,10,7);
+
+ for(let z=-25;z<=25;z+=12){
+  ramp(-10,z,10,10,5,Math.PI/2);
+  ramp(10,z,10,10,5,-Math.PI/2);
+ }
+}
+
+function buildBridges(){
+ for(let x of [-55,-18,18,55])
+  for(let z of [-35,35])
+   tower(x,z,8);
+
+ bridge(0,-48,8,100,8);
+ bridge(-48,0,8,90,6,Math.PI/2);
+ bridge(48,0,8,90,6,Math.PI/2);
+
+ box(0,0,0,24,3,24,0x59675e);
+
+ for(let i=0;i<10;i++)
+  wall(Math.random()*110-55,Math.random()*100-50,5,3,3);
+}
+
+function buildSandbox(){
+ box(0,0,0,35,2,35,0x657269);
+
+ for(let i=0;i<16;i++){
+  let x=Math.random()*120-60;
+  let z=Math.random()*120-60;
+  let s=3+Math.random()*7;
+  box(x,0,z,s,1+Math.random()*5,s,0x4b5a50);
+ }
+
+ for(let i=0;i<5;i++)
+  ramp(Math.random()*80-40,Math.random()*80-40,12,16,7,Math.random()*6);
+}
+
+function buildRavine(){
+ /* длинный овраг */
+ box(0,-7,0,30,.5,130,0x202821);
+
+ for(let z=-55;z<=55;z+=20){
+  ramp(-20,z,10,18,7,Math.PI/2);
+  ramp(20,z,10,18,7,-Math.PI/2);
+ }
+
+ bridge(0,0,9,130,10);
+
+ for(let x of [-50,50])
+  for(let z of [-45,-15,15,45])
+   box(x,0,z,10,8,10,0x515d54);
+}
+
+function buildGeneric(name){
+ const seed=name.length*17;
+ for(let i=0;i<20;i++){
+  const x=Math.sin(seed+i*2.4)*65;
+  const z=Math.cos(seed+i*1.8)*65;
+  const w=6+(i%5)*3;
+  const h=1+(i%4)*2;
+  box(x,0,z,w,h,w*.7,0x4c5a50,i*.4);
+ }
+ for(let i=0;i<8;i++)
+  wall(Math.sin(i*4)*60,Math.cos(i*4)*60,15,3,3,i);
+}
+
+/* ============================================================
+   TANK MODEL
+   ============================================================ */
+
+function mat(color,metal=.15){
+ return new THREE.MeshStandardMaterial({
+  color,
+  metalness:metal,
+  roughness:.62
+ });
+}
+
+function makeTank(teamColor=0x41684a,accent=0x29382f){
+ const root=new THREE.Group();
+
+ const hull=new THREE.Mesh(
+  new THREE.BoxGeometry(4.2,1.15,6),
+  mat(teamColor,.25)
+ );
+ hull.position.y=1;
+ hull.castShadow=true;
+ root.add(hull);
+
+ const lower=new THREE.Mesh(
+  new THREE.BoxGeometry(4.7,.65,5.6),
+  mat(0x202a23,.35)
+ );
+ lower.position.y=.65;
+ lower.castShadow=true;
+ root.add(lower);
+
+ /* гусеницы */
+ for(let x of [-2.35,2.35]){
+  const track=new THREE.Mesh(
+   new THREE.BoxGeometry(.72,1.2,5.9),
+   mat(0x181d1a,.5)
+  );
+  track.position.set(x,.8,0);
+  track.castShadow=true;
+  root.add(track);
+
+  for(let i=-2;i<=2;i++){
+   const wheel=new THREE.Mesh(
+    new THREE.CylinderGeometry(.43,.43,.78,12),
+    mat(0x323a35,.7)
+   );
+   wheel.rotation.z=Math.PI/2;
+   wheel.position.set(x,0.65,i*1.1);
+   root.add(wheel);
+  }
+ }
+
+ const turret=new THREE.Group();
+ turret.position.y=1.85;
+
+ const base=new THREE.Mesh(
+  new THREE.CylinderGeometry(1.75,1.9,.65,16),
+  mat(accent,.35)
+ );
+ base.castShadow=true;
+ turret.add(base);
+
+ const top=new THREE.Mesh(
+  new THREE.BoxGeometry(2.8,.75,2.5),
+  mat(teamColor,.28)
+ );
+ top.position.y=.48;
+ top.castShadow=true;
+ turret.add(top);
+
+ const barrel=new THREE.Mesh(
+  new THREE.CylinderGeometry(.22,.29,5.2,12),
+  mat(0x1c231f,.65)
+ );
+ barrel.rotation.x=Math.PI/2;
+ barrel.position.z=-3.0;
+ barrel.position.y=.55;
+ barrel.castShadow=true;
+ turret.add(barrel);
+
+ const muzzle=new THREE.Mesh(
+  new THREE.CylinderGeometry(.34,.24,.65,12),
+  mat(0x151a17,.7)
+ );
+ muzzle.rotation.x=Math.PI/2;
+ muzzle.position.z=-5.55;
+ muzzle.position.y=.55;
+ turret.add(muzzle);
+
+ root.add(turret);
+ root.userData.turret=turret;
+ root.userData.barrel=barrel;
+
+ return root;
+}
+
+function spawnTank(id,team,x,z,hull,weapon){
+ const color=team==="red"?0x6d3030:0x385f46;
+ const accent=team==="red"?0x3a2020:0x223b2d;
+
+ const obj=makeTank(color,accent);
+ obj.position.set(x,0,z);
+ obj.userData={
+  id,team,hull,weapon,
+  hp:100,
+  maxHp:100,
+  alive:true,
+  speed:7+Math.random()*2,
+  turn:1.8,
+  turretAngle:0,
+  cooldown:0,
+  kills:0,
+  deaths:0,
+  xp:0,
+  ai: id!=="player",
+  target:null,
+  name:id==="player"?save.nick:
+   team==="red"?["RedWolf","FireTank","SteelFox","Hunter"][Math.floor(Math.random()*4)]:
+   ["BlueGhost","Ranger","TitanBoy","Falcon"][Math.floor(Math.random()*4)]
+ };
+
+ scene.add(obj);
+ return obj;
+}
+
+/* ============================================================
+   PLAYER MOVEMENT
+   ============================================================ */
+
+const input={
+ forward:0,
+ turn:0,
+ turret:0,
+ fire:false
+};
+
+window.addEventListener("keydown",e=>{
+ keys[e.code]=true;
+
+ if(e.code==="Tab"){
+  e.preventDefault();
+  toggleScore();
+ }
+ if(e.code==="Enter"){
+  if(battleRunning){
+   let v=prompt("Сообщение в чат:");
+   if(v)battleChat(save.nick,v);
+  }
+ }
+ if(e.code==="Space"){
+  e.preventDefault();
+  input.fire=true;
+ }
+ if(e.code==="Digit1")useSupply(1);
+ if(e.code==="Digit2")useSupply(2);
+ if(e.code==="Digit3")useSupply(3);
+ if(e.code==="Digit4")useSupply(4);
+ if(e.code==="Digit5")useSupply(5);
+ if(e.code==="KeyC"&&player)player.userData.turretAngle=0;
+ if(e.code==="KeyF")dropMine();
+});
+
+window.addEventListener("keyup",e=>{
+ keys[e.code]=false;
+ if(e.code==="Space")input.fire=false;
+});
+
+function readKeyboard(){
+ input.forward=0;
+ input.turn=0;
+ input.turret=0;
+
+ if(keys.KeyW||keys.ArrowUp)input.forward=1;
+ if(keys.KeyS||keys.ArrowDown)input.forward=-1;
+ if(keys.KeyA||keys.ArrowLeft)input.turn=1;
+ if(keys.KeyD||keys.ArrowRight)input.turn=-1;
+ if(keys.KeyZ)input.turret=1;
+ if(keys.KeyX)input.turret=-1;
+}
+
+/* ============================================================
+   ФИЗИКА ТАНКА
+   ============================================================ */
+
+function updatePlayer(dt){
+ if(!player||!player.userData.alive)return;
+
+ readKeyboard();
+
+ const u=player.userData;
+
+ player.rotation.y += input.turn*u.turn*dt;
+
+ const move=input.forward*u.speed*dt;
+
+ const dir=new THREE.Vector3(
+  Math.sin(player.rotation.y),
+  0,
+  Math.cos(player.rotation.y)
+ );
+
+ player.position.addScaledVector(dir,move);
+
+ /* ограничение карты */
+ player.position.x=THREE.MathUtils.clamp(player.position.x,-90,90);
+ player.position.z=THREE.MathUtils.clamp(player.position.z,-90,90);
+
+ u.turretAngle += input.turret*2.4*dt;
+ u.turretAngle=Math.max(-Math.PI,Math.min(Math.PI,u.turretAngle));
+
+ player.userData.turret.rotation.y=u.turretAngle;
+
+ if(input.fire)fireTank(player);
+}
+
+function fireTank(tank){
+ const u=tank.userData;
+ if(u.cooldown>0)return;
+
+ u.cooldown=.48;
+
+ const turret=u.turret;
+ const worldPos=new THREE.Vector3();
+ const barrel=u.barrel;
+
+ barrel.getWorldPosition(worldPos);
+
+ const dir=new THREE.Vector3(0,0,-1);
+ dir.applyQuaternion(barrel.getWorldQuaternion(new THREE.Quaternion()));
+ dir.normalize();
+
+ const mesh=new THREE.Mesh(
+  new THREE.SphereGeometry(.17,8,8),
+  new THREE.MeshBasicMaterial({
+   color:tank===player?0xfff4a0:0xff7777
+  })
+ );
+ mesh.position.copy(worldPos);
+ scene.add(mesh);
+
+ bullets.push({
+  mesh,
+  owner:tank,
+  dir,
+  speed:52,
+  life:3
+ });
+
+ createMuzzleFlash(worldPos,dir);
+}
+
+function createMuzzleFlash(pos,dir){
+ const p=new THREE.Mesh(
+  new THREE.SphereGeometry(.35,8,8),
+  new THREE.MeshBasicMaterial({
+   color:0xffdf79,
+   transparent:true,
+   opacity:.9
+  })
+ );
+ p.position.copy(pos).addScaledVector(dir,-.4);
+ scene.add(p);
+ particles.push({
+  mesh:p,
+  life:.08,
+  max:.08,
+  scale:1
+ });
+}
+
+/* ============================================================
+   AI
+   ============================================================ */
+
+function updateAI(t,dt){
+ const u=t.userData;
+ if(!u.alive)return;
+
+ u.cooldown=Math.max(0,u.cooldown-dt);
+
+ let target=null;
+ let best=9999;
+
+ for(const other of [player,...tanks]){
+  if(!other||other===t)continue;
+  if(!other.userData.alive)continue;
+  if(other.userData.team===u.team)continue;
+
+  const d=t.position.distanceTo(other.position);
+  if(d<best){
+   best=d;
+   target=other;
+  }
+ }
+
+ if(target){
+  const dx=target.position.x-t.position.x;
+  const dz=target.position.z-t.position.z;
+  const desired=Math.atan2(dx,dz);
+
+  let delta=THREE.MathUtils.euclideanModulo(
+   desired-t.rotation.y+Math.PI,
+   Math.PI*2
+  )-Math.PI;
+
+  t.rotation.y+=THREE.MathUtils.clamp(delta,-u.turn*dt,u.turn*dt);
+
+  if(best>15){
+   t.position.x+=Math.sin(t.rotation.y)*u.speed*dt;
+   t.position.z+=Math.cos(t.rotation.y)*u.speed*dt;
+  }
+
+  const turret=t.userData.turret;
+
+  let td=THREE.MathUtils.euclideanModulo(
+   desired-t.rotation.y+Math.PI,
+   Math.PI*2
+  )-Math.PI;
+
+  u.turretAngle+=THREE.MathUtils.clamp(
+   td-u.turretAngle,
+   -2*dt,
+   2*dt
+  );
+
+  turret.rotation.y=u.turretAngle;
+
+  if(best<55 && Math.abs(td)<.15)
+   fireTank(t);
+ }
+
+ t.position.x=THREE.MathUtils.clamp(t.position.x,-88,88);
+ t.position.z=THREE.MathUtils.clamp(t.position.z,-88,88);
+}
+
+/* ============================================================
+   СНАРЯДЫ
+   ============================================================ */
+
+function updateBullets(dt){
+ for(let i=bullets.length-1;i>=0;i--){
+  const b=bullets[i];
+  b.mesh.position.addScaledVector(b.dir,b.speed*dt);
+  b.life-=dt;
+
+  let hit=null;
+
+  for(const t of [player,...tanks]){
+   if(!t||!t.userData.alive||t===b.owner)continue;
+   if(t.userData.team===b.owner.userData.team)continue;
+
+   if(b.mesh.position.distanceTo(t.position)<3){
+    hit=t;
+    break;
+   }
+  }
+
+  if(hit){
+   damageTank(hit,b.owner,25);
+   explosion(b.mesh.position);
+   scene.remove(b.mesh);
+   bullets.splice(i,1);
+   continue;
+  }
+
+  if(b.life<=0){
+   scene.remove(b.mesh);
+   bullets.splice(i,1);
+  }
+ }
+}
+
+function damageTank(target,attacker,damage){
+ if(!target.userData.alive)return;
+
+ target.userData.hp-=damage;
+
+ if(target===player)
+  document.getElementById("healthBar").style.width=
+   Math.max(0,target.userData.hp)+"%";
+
+ if(target.userData.hp<=0){
+  killTank(target,attacker);
+ }
+}
+
+function killTank(victim,killer){
+ const vu=victim.userData;
+ if(!vu.alive)return;
+
+ vu.alive=false;
+ vu.deaths++;
+ victim.visible=false;
+
+ killer.userData.kills++;
+
+ const team=killer.userData.team;
+ scores[team]++;
+
+ document.getElementById(team==="red"?"redScore":"blueScore").textContent=scores[team];
+
+ /* исторически простой сольный фраг = 10 XP */
+ if(killer===player){
+  save.xp+=10;
+  missionProgress("xp",10);
+  missionProgress("kills",1);
+  battleChat("Система",`Уничтожен танк: +10 XP`);
+  addKillFeed(killer,victim);
+ }
+
+ setTimeout(()=>{
+  respawnTank(victim);
+ },4000);
+
+ if(scores[team]>=100){
+  endBattle(team==="blue");
+ }
+}
+
+function respawnTank(t){
+ const u=t.userData;
+ u.alive=true;
+ u.hp=100;
+ t.visible=true;
+
+ if(u.team==="blue"){
+  t.position.set(
+   (Math.random()-.5)*35,
+   0,
+   60+Math.random()*15
+  );
+ }else{
+  t.position.set(
+   (Math.random()-.5)*35,
+   0,
+   -60-Math.random()*15
+  );
+ }
+}
+
+function explosion(pos){
+ for(let i=0;i<22;i++){
+  const m=new THREE.Mesh(
+   new THREE.SphereGeometry(.12+Math.random()*.15,6,6),
+   new THREE.MeshBasicMaterial({
+    color:i%2?0xffa51f:0xffe18a
+   })
+  );
+  m.position.copy(pos);
+  scene.add(m);
+
+  const v=new THREE.Vector3(
+   Math.random()-.5,
+   Math.random()*.8,
+   Math.random()-.5
+  ).normalize().multiplyScalar(8+Math.random()*10);
+
+  particles.push({
+   mesh:m,
+   life:.4+Math.random()*.7,
+   max:1,
+   vel:v
+  });
+ }
+}
+
+/* ============================================================
+   SUPPLIES
+   ============================================================ */
+
+function spawnSupply(){
+ const type=["repair","armor","damage","speed"][Math.floor(Math.random()*4)];
+
+ const g=new THREE.Group();
+
+ const base=new THREE.Mesh(
+  new THREE.BoxGeometry(1.7,1.2,1.7),
+  new THREE.MeshStandardMaterial({
+   color:type==="repair"?0x5aa15d:
+    type==="armor"?0x6682b0:
+    type==="damage"?0xb33c32:0xb9a22d,
+   emissive:type==="repair"?0x173d1b:
+    type==="armor"?0x172a4b:
+    type==="damage"?0x45100c:0x473d0c,
+   emissiveIntensity:.7
+  })
+ );
+ base.position.y=.7;
+ g.add(base);
+
+ const x=Math.random()*130-65;
+ const z=Math.random()*130-65;
+
+ g.position.set(x,0,z);
+ scene.add(g);
+
+ pickups.push({
+  mesh:g,
+  type,
+  life:30
+ });
+}
+
+function updatePickups(dt){
+ for(let i=pickups.length-1;i>=0;i--){
+  const p=pickups[i];
+  p.life-=dt;
+  p.mesh.rotation.y+=dt;
+  p.mesh.position.y=.8+Math.sin(performance.now()/250)*.2;
+
+  if(player&&p.mesh.position.distanceTo(player.position)<3){
+   usePickup(p.type);
+   scene.remove(p.mesh);
+   pickups.splice(i,1);
+   missionProgress("supplies",1);
+  }else if(p.life<=0){
+   scene.remove(p.mesh);
+   pickups.splice(i,1);
+  }
+ }
+
+ if(Math.random()<dt*.025)spawnSupply();
+}
+
+function usePickup(type){
+ if(!player)return;
+ if(type==="repair")player.userData.hp=Math.min(100,player.userData.hp+35);
+ if(type==="armor")player.userData.armor=2;
+ if(type==="damage")player.userData.damage=2;
+ if(type==="speed")player.userData.speedBoost=2;
+}
+
+function useSupply(n){
+ if(!player)return;
+ const types=["repair","armor","damage","speed","mine"];
+ const t=types[n-1];
+
+ if(t==="mine"){
+  dropMine();
+  return;
+ }
+ usePickup(t);
+}
+
+/* ============================================================
+   МИНЫ
+   ============================================================ */
+
+function dropMine(){
+ if(!player||!battleRunning)return;
+
+ const m=new THREE.Mesh(
+  new THREE.CylinderGeometry(.65,.65,.18,12),
+  new THREE.MeshStandardMaterial({
+   color:0x141815,
+   metalness:.6
+  })
+ );
+ m.position.copy(player.position);
+ m.position.y=.12;
+ scene.add(m);
+
+ mines.push({
+  mesh:m,
+  owner:player,
+  life:60
+ });
+}
+
+function updateMines(dt){
+ for(let i=mines.length-1;i>=0;i--){
+  const m=mines[i];
+  m.life-=dt;
+
+  for(const t of [player,...tanks]){
+   if(!t.userData.alive||t===m.owner)continue;
+
+   if(t.position.distanceTo(m.mesh.position)<2.5){
+    damageTank(t,m.owner,50);
+    explosion(m.mesh.position);
+    scene.remove(m.mesh);
+    mines.splice(i,1);
+    break;
+   }
+  }
+
+  if(m.life<=0){
+   scene.remove(m.mesh);
+   mines.splice(i,1);
+  }
+ }
+}
+
+/* ============================================================
+   ЧАСТИЦЫ
+   ============================================================ */
+
+function updateParticles(dt){
+ for(let i=particles.length-1;i>=0;i--){
+  const p=particles[i];
+  p.life-=dt;
+
+  if(p.vel)p.mesh.position.addScaledVector(p.vel,dt);
+
+  p.mesh.scale.setScalar(Math.max(0,p.life/p.max*1.8));
+
+  if(p.life<=0){
+   scene.remove(p.mesh);
+   particles.splice(i,1);
+  }
+ }
+}
+
+/* ============================================================
+   КАМЕРА — НАСТОЯЩАЯ ТРЕТЬЯ ЛИЧНОСТЬ
+   ============================================================ */
+
+let cameraHeight=4;
+let cameraDistance=11;
+
+function updateCamera(dt){
+ if(!player)return;
+
+ const behind=new THREE.Vector3(
+  -Math.sin(player.rotation.y)*cameraDistance,
+  cameraHeight,
+  -Math.cos(player.rotation.y)*cameraDistance
+ );
+
+ const target=player.position.clone().add(new THREE.Vector3(0,2,0));
+
+ const desired=player.position.clone().add(behind);
+
+ camera.position.lerp(desired,1-Math.pow(.001,dt));
+ camera.lookAt(target);
+}
+
+/* ============================================================
+   GOLD BOX
+   ============================================================ */
+
+let goldTimer=0;
+
+function updateGold(dt){
+ if(!battleRunning)return;
+
+ goldTimer-=dt;
+
+ /* редкий шанс, несколько ящиков теоретически возможны */
+ if(goldTimer<=0){
+  goldTimer=90+Math.random()*160;
+
+  if(Math.random()<.22){
+   spawnGold();
+  }
+ }
+}
+
+function spawnGold(){
+ if(document.getElementById("goldBox").style.display==="block")return;
+
+ const box=document.getElementById("goldBox");
+
+ let x=Math.random()*70+15;
+ let y=Math.random()*50+15;
+
+ box.style.left=x+"%";
+ box.style.top=y+"%";
+ box.style.display="block";
+
+ battleChat("Система","⚠ ВНИМАНИЕ! На карте появился редкий GOLD BOX!");
+
+ setTimeout(()=>{
+  if(box.style.display==="block"){
+   box.style.display="none";
+  }
+ },15000);
+
+ box.onclick=()=>{
+  box.style.display="none";
+  save.crystals+=1000;
+  saveGame();
+  battleChat("Система","🏆 GOLD BOX! Получено +1000 кристаллов.");
+ };
+}
+
+/* ============================================================
+   CHAT / KILL FEED
+   ============================================================ */
+
+function battleChat(name,text){
+ const c=document.getElementById("chatBattle");
+ c.innerHTML+=`<div class="chatLine"><b>${escapeHtml(name)}:</b> ${escapeHtml(text)}</div>`;
+ while(c.children.length>8)c.removeChild(c.firstChild);
+}
+
+function addKillFeed(killer,victim){
+ const f=document.getElementById("killFeed");
+ const d=document.createElement("div");
+ d.className="kill";
+ d.innerHTML=
+  `<span class="${killer.userData.team==="red"?"red":"blue"}">${killer.userData.name}</span>
+   уничтожил
+   <span class="${victim.userData.team==="red"?"red":"blue"}">${victim.userData.name}</span>`;
+ f.appendChild(d);
+ setTimeout(()=>d.remove(),4000);
+}
+
+/* ============================================================
+   SCOREBOARD
+   ============================================================ */
+
+function toggleScore(){
+ if(!battleRunning)return;
+ const s=document.getElementById("scoreboard");
+ s.style.display=s.style.display==="block"?"none":"block";
+ buildScoreboard();
+}
+
+function buildScoreboard(){
+ const red=document.getElementById("redPlayers");
+ const blue=document.getElementById("bluePlayers");
+
+ red.innerHTML="";
+ blue.innerHTML="";
+
+ const all=[player,...tanks];
+
+ all.sort((a,b)=>b.userData.kills-a.userData.kills);
+
+ all.forEach((t,i)=>{
+  const u=t.userData;
+  const row=document.createElement("div");
+  row.className="playerRow";
+  row.innerHTML=`
+   <span>${i+1}</span>
+   <span>${escapeHtml(u.name)}</span>
+   <span>${u.kills}</span>
+   <span>${u.deaths}</span>
+  `;
+  (u.team==="red"?red:blue).appendChild(row);
+ });
+}
+
+/* ============================================================
+   BATTLE
+   ============================================================ */
+
+function startBattle(){
+ document.getElementById("menu").style.display="none";
+ document.getElementById("battleUI").style.display="block";
+ document.getElementById("scoreboard").style.display="none";
+
+ battleRunning=true;
+ battleTime=900;
+ scores={red:0,blue:0};
+ goldTimer=50+Math.random()*100;
+
+ createWorld(save.map);
+
+ showToast(save.map+" · TDM · КРАСНЫЕ VS СИНИЕ",1500);
+
+ document.getElementById("redScore").textContent="0";
+ document.getElementById("blueScore").textContent="0";
+ document.getElementById("healthBar").style.width="100%";
+
+ battleChat("Система","Бой начался.");
+ battleChat("Система","Команды: КРАСНЫЕ против СИНИХ.");
+ battleChat("Система","WASD / стрелки — движение.");
+ battleChat("Система","Z/X — башня, C — центр, SPACE — огонь.");
+}
+
+function endBattle(blueWon){
+ battleRunning=false;
+
+ const text=blueWon?
+  "СИНИЕ ПОБЕДИЛИ! +100 XP":
+  "КРАСНЫЕ ПОБЕДИЛИ!";
+
+ if(blueWon){
+  save.xp+=100;
+  missionProgress("xp",100);
+ }
+
+ saveGame();
+
+ showToast(text,5000);
+
+ setTimeout(()=>{
+  showLobby();
+ },5200);
+}
+
+function showToast(text,time=1500){
+ const t=document.getElementById("toast");
+ t.textContent=text;
+ t.style.display="block";
+ setTimeout(()=>t.style.display="none",time);
+}
+
+/* ============================================================
+   ТАЙМЕР
+   ============================================================ */
+
+function updateBattleTimer(dt){
+ if(!battleRunning)return;
+
+ battleTime-=dt;
+
+ if(battleTime<=0){
+  const winner=scores.blue>=scores.red;
+  endBattle(winner);
+  return;
+ }
+
+ let sec=Math.floor(battleTime);
+ const m=Math.floor(sec/60);
+ const s=sec%60;
+
+ document.getElementById("timer").textContent=
+  m+":"+String(s).padStart(2,"0");
+}
+
+/* ============================================================
+   MAIN LOOP
+   ============================================================ */
+
+function animate(){
+ requestAnimationFrame(animate);
+
+ const dt=Math.min(.04,clock.getDelta());
+
+ if(battleRunning){
+  updatePlayer(dt);
+
+  for(const t of tanks){
+   t.userData.cooldown=Math.max(0,t.userData.cooldown-dt);
+   updateAI(t,dt);
+  }
+
+  updateBullets(dt);
+  updatePickups(dt);
+  updateMines(dt);
+  updateParticles(dt);
+  updateCamera(dt);
+  updateBattleTimer(dt);
+  updateGold(dt);
+
+  /* визуальная подвеска */
+  for(const t of [player,...tanks]){
+   if(!t)continue;
+   const bob=Math.sin(performance.now()/140+t.position.x)*.015;
+   t.position.y=bob;
+  }
+ }
+
+ if(renderer)renderer.render(scene,camera);
+}
+
+/* ============================================================
+   TOUCH CONTROLS
+   ============================================================ */
+
+function setupJoystick(el,type){
+ let active=false;
+ let start={x:0,y:0};
+
+ const knob=el.querySelector(".knob");
+
+ function move(ev){
+  if(!active)return;
+  const p=ev.touches?ev.touches[0]:ev;
+  const r=el.getBoundingClientRect();
+
+  let x=p.clientX-(r.left+r.width/2);
+  let y=p.clientY-(r.top+r.height/2);
+
+  const max=42;
+  const d=Math.hypot(x,y);
+
+  if(d>max){
+   x=x/d*max;
+   y=y/d*max;
+  }
+
+  knob.style.transform=`translate(${x}px,${y}px)`;
+
+  if(type==="move"){
+   input.forward=-y/max;
+   input.turn=x/max*-1;
+  }else{
+   if(player){
+    player.userData.turretAngle+=x/max*.08;
+    player.userData.turret.rotation.y=player.userData.turretAngle;
+   }
+  }
+ }
+
+ function end(){
+  active=false;
+  knob.style.transform="";
+  if(type==="move"){
+   input.forward=0;
+   input.turn=0;
+  }
+ }
+
+ el.addEventListener("touchstart",e=>{
+  e.preventDefault();
+  active=true;
+  move(e);
+ },{passive:false});
+
+ el.addEventListener("touchmove",e=>{
+  e.preventDefault();
+  move(e);
+ },{passive:false});
+
+ el.addEventListener("touchend",end);
+}
+
+setupJoystick(
+ document.getElementById("moveJoy"),
+ "move"
+);
+
+setupJoystick(
+ document.getElementById("aimJoy"),
+ "aim"
+);
+
+document.getElementById("mobileFire").addEventListener("touchstart",e=>{
+ e.preventDefault();
+ input.fire=true;
+},{passive:false});
+
+document.getElementById("mobileFire").addEventListener("touchend",e=>{
+ e.preventDefault();
+ input.fire=false;
+},{passive:false});
+
+/* ============================================================
+   RESIZE
+   ============================================================ */
+
+window.addEventListener("resize",()=>{
+ if(renderer){
+  renderer.setSize(innerWidth,innerHeight);
+  camera.aspect=innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+ }
+});
+
+/* ============================================================
+   ИНИЦИАЛИЗАЦИЯ
+   ============================================================ */
+
+let progress=0;
+
+function loading(){
+ const fill=document.getElementById("loadFill");
+ const text=document.getElementById("loadText");
+
+ const stages=[
+  "ЗАГРУЗКА ГРАФИЧЕСКОГО ДВИЖКА...",
+  "ПОДГОТОВКА 3D-КАМЕРЫ...",
+  "ЗАГРУЗКА КЛАССИЧЕСКИХ КАРТ...",
+  "СОЗДАНИЕ ГЕОМЕТРИИ...",
+  "ПОДГОТОВКА ТАНКОВ...",
+  "ПОДГОТОВКА СИСТЕМЫ БОЯ...",
+  "ПОДГОТОВКА ПРИПАСОВ...",
+  "ПОДГОТОВКА ЗОЛОТОГО ЯЩИКА...",
+  "СИНХРОНИЗАЦИЯ ПРОФИЛЯ...",
+  "ГОТОВО."
+ ];
+
+ const timer=setInterval(()=>{
+  progress+=Math.random()*10+4;
+  if(progress>=100){
+   progress=100;
+   clearInterval(timer);
+
+   setTimeout(()=>{
+    document.getElementById("loading").style.display="none";
+    showLobby();
+   },500);
+  }
+
+  fill.style.width=progress+"%";
+  text.textContent=stages[
+   Math.min(stages.length-1,Math.floor(progress/10))
+  ];
+ },180);
+}
+
+updateTop();
+initLobby();
+init3D();
+loading();
+
+/* ============================================================
+   ДОПОЛНИТЕЛЬНЫЕ КЛАССИЧЕСКИЕ ФУНКЦИИ
+   ============================================================ */
+
+/* камера Q/E */
+window.addEventListener("keydown",e=>{
+ if(e.code==="KeyQ"){
+  cameraHeight=Math.max(2.5,cameraHeight-.4);
+ }
+ if(e.code==="KeyE"){
+  cameraHeight=Math.min(9,cameraHeight+.4);
+ }
+});
+
+/* P — пауза */
+window.addEventListener("keydown",e=>{
+ if(e.code==="KeyP"&&battleRunning){
+  battleRunning=false;
+  showToast("ПАУЗА",999999);
+ }
+});
+
+/* ESC */
+window.addEventListener("keydown",e=>{
+ if(e.code==="Escape"){
+  if(document.getElementById("scoreboard").style.display==="block"){
+   document.getElementById("scoreboard").style.display="none";
+   return;
+  }
+  if(battleRunning){
+   battleRunning=false;
+   showLobby();
+  }
+ }
+});
+
+/* автоматические сообщения */
+setInterval(()=>{
+ if(battleRunning&&Math.random()<.45){
+  const messages=[
+   ["BlueGhost","Нужна помощь!"],
+   ["RedWolf","Держим центр!"],
+   ["Ranger","Кто на флаге?"],
+   ["SteelFox","Иду на мост."],
+   ["TitanBoy","Прикройте меня!"]
+  ];
+  const x=messages[Math.floor(Math.random()*messages.length)];
+  battleChat(x[0],x[1]);
+ }
+},7000);
+
+/* случайная смена погоды НЕ используется:
+   дождь специально отсутствует.
+   Возможны только день / ночь / зима в расширенной версии.
+*/
+
+/* ============================================================
+   ДИНАМИЧЕСКИЙ ДЕНЬ / НОЧЬ
+   ============================================================ */
+
+function setNight(){
+ if(!scene)return;
+
+ scene.background=new THREE.Color(0x07101c);
+ scene.fog.color.set(0x07101c);
+
+ scene.traverse(o=>{
+  if(o.isLight&&o.type==="DirectionalLight")
+   o.intensity=.35;
+ });
+}
+
+function setDay(){
+ if(!scene)return;
+
+ scene.background=new THREE.Color(0x7d9583);
+ scene.fog.color.set(0x7d9583);
+
+ scene.traverse(o=>{
+  if(o.isLight&&o.type==="DirectionalLight")
+   o.intensity=2.2;
+ });
+}
+
+/* ============================================================
+   ЗИМНЯЯ ВЕРСИЯ
+   ============================================================ */
+
+function setWinter(){
+ if(!scene)return;
+
+ scene.background=new THREE.Color(0xb8c7c8);
+ scene.fog.color.set(0xb8c7c8);
+
+ scene.traverse(o=>{
+  if(o.isMesh&&o.material&&o.material.color){
+   if(o.userData&&o.userData.isGround){
+    o.material.color.set(0xdce5e2);
    }
   }
  });
- saveGame();
- renderMissions();
-}
-function renderMissions(){
- checkMissionDay();
- let c=document.getElementById("missionList");if(!c)return;
- c.innerHTML="";
- game.missions.forEach((m,i)=>{
-  let pct=Math.min(100,m.progress/m.target*100);
-  let d=document.createElement("div");d.className="mission";
-  d.innerHTML=
-   "<div class='missionTop'><b>"+(i+1)+". "+m.text+"</b>"+
-   "<span>💎 "+m.reward+"</span></div>"+
-   "<div style='margin-top:7px'>"+m.progress+" / "+m.target+"</div>"+
-   "<div class='missionBar'><i style='width:"+pct+"%'></i></div>"+
-   (m.done?"<div style='margin-top:8px;color:#b9c7bf'>✓ ВЫПОЛНЕНО</div>":"");
-  c.appendChild(d);
- });
 }
 
-/* =========================
- BATTLE ENGINE
-========================================================= */
+/* ============================================================
+   ВЫБОР ТЕМЫ
+   ============================================================ */
 
-let B={
- active:false,
- map:"Полигон",
- theme:"day",
- mode:"TDM",
- time:900,
- red:0,
- blue:0,
- playerTeam:"red",
- player:null,
- bots:[],
- shots:[],
- particles:[],
- supplies:[],
- golds:[],
- mines:[],
- keys:{},
- last:0,
- cameraYaw:0,
- cameraPitch:.18,
- shake:0,
- spawnTimer:0,
- goldTimer:0,
- selectedTarget:null
-};
+function randomTheme(){
+ const r=Math.random();
 
-const world=document.getElementById("world");
-const ctx=world.getContext("2d");
-
-function resizeCanvas(){
- world.width=innerWidth*devicePixelRatio;
- world.height=innerHeight*devicePixelRatio;
- ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-}
-addEventListener("resize",resizeCanvas);
-resizeCanvas();
-
-/* =========================
- MAP GEOMETRY
-========================= */
-
-let MAPDATA={};
-
-function addBox(a,x,z,w,d,h=2,material="wall"){
- a.push({x,z,w,d,h,material});
-}
-
-function buildMap(name){
- let a=[];
- if(name==="Арена"){
-  addBox(a,0,0,18,2,3);
-  addBox(a,0,18,18,2,3);
-  addBox(a,-18,0,2,38,3);
-  addBox(a,18,0,2,38,3);
-  addBox(a,-9,-7,7,3,3);
-  addBox(a,9,7,7,3,3);
-  addBox(a,0,0,5,5,5);
-  addBox(a,-12,12,5,5,2);
-  addBox(a,12,-12,5,5,2);
- }else if(name==="Полигон"){
-  addBox(a,0,-30,65,3,4);
-  addBox(a,-30,0,3,65,4);
-  addBox(a,30,0,3,65,4);
-  addBox(a,0,30,65,3,4);
-  addBox(a,-16,-14,16,7,5);
-  addBox(a,16,-14,16,7,5);
-  addBox(a,-17,16,11,7,4);
-  addBox(a,17,16,11,7,4);
-  addBox(a,0,0,7,20,2);
-  addBox(a,-13,3,5,8,3);
-  addBox(a,13,3,5,8,3);
-  addBox(a,-24,-22,5,5,2);
-  addBox(a,24,22,5,5,2);
- }else if(name==="Песочница"){
-  addBox(a,-24,0,3,50,3);
-  addBox(a,24,0,3,50,3);
-  addBox(a,0,-24,50,3,3);
-  addBox(a,0,24,50,3,3);
-  addBox(a,-10,-10,8,3,4);
-  addBox(a,10,-10,8,3,4);
-  addBox(a,-10,10,8,3,4);
-  addBox(a,10,10,8,3,4);
-  addBox(a,0,0,5,5,2);
- }else if(name==="Плато"){
-  addBox(a,-30,0,4,60,3);
-  addBox(a,30,0,4,60,3);
-  addBox(a,0,-30,60,4,3);
-  addBox(a,0,30,60,4,3);
-  addBox(a,-15,-15,12,7,6);
-  addBox(a,15,12,12,8,5);
-  addBox(a,-12,14,7,6,8);
-  addBox(a,12,-12,8,6,7);
-  addBox(a,0,0,10,4,2);
-  addBox(a,-22,8,6,5,4);
- }else if(name==="Барда"){
-  addBox(a,-27,0,3,52,4);
-  addBox(a,27,0,3,52,4);
-  addBox(a,0,-25,54,3,4);
-  addBox(a,0,25,54,3,4);
-  addBox(a,-12,-8,8,5,6);
-  addBox(a,12,8,8,5,6);
-  addBox(a,0,0,4,25,2);
-  addBox(a,-16,16,9,3,4);
-  addBox(a,16,-16,9,3,4);
- }else if(name==="Мосты"){
-  addBox(a,-30,0,3,65,4);
-  addBox(a,30,0,3,65,4);
-  addBox(a,0,-30,65,3,4);
-  addBox(a,0,30,65,3,4);
-  addBox(a,-15,-15,12,4,6);
-  addBox(a,15,-15,12,4,6);
-  addBox(a,-15,15,12,4,6);
-  addBox(a,15,15,12,4,6);
-  addBox(a,0,0,7,7,8);
-  addBox(a,0,-12,4,18,3,"bridge");
-  addBox(a,0,12,4,18,3,"bridge");
+ if(r<.18){
+  currentTheme="night";
+  setNight();
+ }else if(r<.32){
+  currentTheme="winter";
+  setWinter();
  }else{
-  let seed=MAPS.indexOf(name)+10,rand=mulberry32(seed);
-  addBox(a,-30,0,3,70,4);
-  addBox(a,30,0,3,70,4);
-  addBox(a,0,-30,70,3,4);
-  addBox(a,0,30,70,3,4);
-  for(let i=0;i<14;i++){
-   let x=(rand()-.5)*48,z=(rand()-.5)*48;
-   addBox(a,x,z,3+rand()*8,3+rand()*7,2+rand()*6);
+  currentTheme="day";
+  setDay();
+ }
+}
+
+/* ============================================================
+   ФИЗИЧЕСКАЯ ПРОВЕРКА СТЕН
+   ============================================================ */
+
+function collisionTank(t){
+ for(const o of mapObjects){
+  if(!o.geometry)return;
+
+  const box1=new THREE.Box3().setFromObject(t);
+  const box2=new THREE.Box3().setFromObject(o);
+
+  if(box1.intersectsBox(box2)){
+   return true;
   }
- }
- return a;
-}
-
-/* =========================
- 3D PROJECTION
-========================= */
-
-function project(x,y,z){
- let p=B.player;
- let dx=x-p.x,dz=z-p.z;
- let sy=Math.sin(B.cameraYaw),cy=Math.cos(B.cameraYaw);
- let rx=dx*cy-dz*sy;
- let rz=dx*sy+dz*cy;
- let cp=Math.cos(B.cameraPitch),sp=Math.sin(B.cameraPitch);
- let ry=y*cp-rz*sp;
- let rz2=y*sp+rz*cp;
- if(rz2<.2)return null;
- let f=650/rz2;
- return {
-  x:innerWidth/2+rx*f,
-  y:innerHeight*.55-ry*f,
-  s:f
- };
-}
-
-function quad3D(points,fill,stroke){
- let ps=points.map(v=>project(v[0],v[1],v[2]));
- if(ps.some(p=>!p))return;
- ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);
- for(let i=1;i<ps.length;i++)ctx.lineTo(ps[i].x,ps[i].y);
- ctx.closePath();ctx.fillStyle=fill;ctx.fill();
- if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}
-}
-
-function drawGround(){
- let col=B.theme==="winter"?"#d2d7d3":B.theme==="night"?"#17211e":"#596057";
- ctx.fillStyle=col;ctx.fillRect(0,0,innerWidth,innerHeight);
-
- let horizon=innerHeight*.42;
- ctx.fillStyle=B.theme==="winter"?"#e3e6e3":B.theme==="night"?"#0c1312":"#53645b";
- ctx.fillRect(0,0,innerWidth,horizon);
-
- if(B.theme==="night"){
-  ctx.fillStyle="#cdd9cf";
-  for(let i=0;i<70;i++){
-   let x=(i*97)%innerWidth,y=(i*53)%horizon;
-   ctx.fillRect(x,y,1,1);
-  }
- }
-
- /* perspective grid */
- ctx.strokeStyle=B.theme==="winter"?"#aab1ad":"#667169";
- ctx.globalAlpha=.45;
- for(let z=4;z<90;z+=5){
-  let a=project(-70,0,z),b=project(70,0,z);
-  if(a&&b){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}
- }
- ctx.globalAlpha=1;
-}
-
-function drawBox(o){
- let x=o.x,z=o.z,w=o.w,d=o.d,h=o.h;
- let top=[
-  [x-w/2,h,z-d/2],[x+w/2,h,z-d/2],
-  [x+w/2,h,z+d/2],[x-w/2,h,z+d/2]
- ];
- let front=[
-  [x-w/2,0,z-d/2],[x+w/2,0,z-d/2],
-  [x+w/2,h,z-d/2],[x-w/2,h,z-d/2]
- ];
- let side=[
-  [x+w/2,0,z-d/2],[x+w/2,0,z+d/2],
-  [x+w/2,h,z+d/2],[x+w/2,h,z-d/2]
- ];
- let base=o.material==="bridge"?"#66776d":B.theme==="winter"?"#b8c0bb":"#3e4a43";
- quad3D(top,base,"#1a211e");
- quad3D(front,"#303a34","#171c19");
- quad3D(side,"#4c5951","#171c19");
-}
-
-/* =========================
- TANK OBJECT
-========================= */
-function tankObj(team,x,z,bot=false){
- return {
-  id:Math.random().toString(36).slice(2),
-  team,x,z,
-  y:0,
-  yaw:team==="red"?0:Math.PI,
-  turret:team==="red"?0:Math.PI,
-  hp:bot?100:135,
-  maxhp:bot?100:135,
-  speed:bot?4.3:5,
-  reload:0,
-  alive:true,
-  bot,
-  name:bot?chatNames[Math.floor(Math.random()*chatNames.length)]:game.name,
-  rank:bot?RANKS[Math.floor(Math.random()*10)][0]:rankInfo()[0],
-  flash:0,
-  armor:false,
-  damageBoost:false,
-  nitro:0
- };
-}
-
-function drawTank(t){
- if(!t.alive)return;
- let dx=t.x-B.player.x,dz=t.z-B.player.z;
- let dist=Math.hypot(dx,dz);
- if(dist>85)return;
-
- let bodyW=2.8,bodyD=4.4,bodyH=1.3;
- let y=.15;
-
- let corners=[
-  [-bodyW/2,y,-bodyD/2],[bodyW/2,y,-bodyD/2],
-  [bodyW/2,y,bodyD/2],[-bodyW/2,y,bodyD/2]
- ];
-
- /* tank local transform */
- function tr(v){
-  let [xx,yy,zz]=v;
-  let c=Math.cos(t.yaw),s=Math.sin(t.yaw);
-  return [t.x+xx*c-zz*s,yy,t.z+xx*s+zz*c];
- }
-
- let top=corners.map(v=>tr([v[0],bodyH,v[2]]));
- let low=corners.map(v=>tr(v));
-
- quad3D(top,t.team==="red"?"#8d4a4a":"#496a9a","#111");
- for(let i=0;i<4;i++){
-  quad3D([low[i],low[(i+1)%4],top[(i+1)%4],top[i]],
-   t.team==="red"?"#5c3030":"#304d72","#111");
- }
-
- /* tracks */
- for(let side of [-1,1]){
-  let tx=side*2;
-  let p1=tr([tx,.1,-2]),p2=tr([tx,.1,2]);
-  let a=project(p1[0],p1[1],p1[2]),b=project(p2[0],p2[1],p2[2]);
-  if(a&&b){
-   ctx.strokeStyle="#111514";ctx.lineWidth=Math.max(4,12*a.s/500);
-   ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
-  }
- }
-
- /* turret */
- let tc=Math.cos(t.turret),ts=Math.sin(t.turret);
- let tx=t.x, tz=t.z;
- let r=1.45;
- quad3D([
-  [tx-r,.9,tz-r],[tx+r,.9,tz-r],
-  [tx+r,.9,tz+r],[tx-r,.9,tz+r]
- ],t.team==="red"?"#a45a58":"#557fae","#111");
-
- /* cannon */
- let cannonStart=[tx,t.y+1.05,tz];
- let cannonLen=5.5;
- let cannonEnd=[
-  tx+Math.sin(t.turret)*cannonLen,
-  1.05,
-  tz+Math.cos(t.turret)*cannonLen
- ];
- let a=project(...cannonStart),b=project(...cannonEnd);
- if(a&&b){
-  ctx.strokeStyle="#202724";
-  ctx.lineWidth=Math.max(5,10*a.s/450);
-  ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
-  ctx.strokeStyle="#89948e";ctx.lineWidth=Math.max(2,4*a.s/450);
-  ctx.beginPath();ctx.moveTo(a.x,a.y-2);ctx.lineTo(b.x,b.y-2);ctx.stroke();
- }
-
- /* name */
- let pp=project(t.x,2.7,t.z);
- if(pp){
-  ctx.textAlign="center";
-  ctx.font="bold 11px Arial";
-  ctx.fillStyle=t.team==="red"?"#ff8b8b":"#83b0ff";
-  ctx.fillText(t.name,pp.x,pp.y);
-  ctx.fillStyle="#101311";
-  ctx.fillRect(pp.x-30,pp.y+4,60,4);
-  ctx.fillStyle="#aebbb3";
-  ctx.fillRect(pp.x-30,pp.y+4,60*Math.max(0,t.hp/t.maxhp),4);
- }
-}
-
-/* =========================
- PLAYER + CAMERA
-========================= */
-function drawPlayerTank(){
- /* close third-person camera:
-    camera sits behind and above player, almost first-person */
- if(!B.player)return;
- let t=B.player;
-
- /* shadow */
- let p=project(t.x,0.03,t.z);
- if(p){
-  ctx.fillStyle="#0007";
-  ctx.beginPath();
-  ctx.ellipse(p.x,p.y+8,100,28,0,0,Math.PI*2);
-  ctx.fill();
- }
-
- drawTank(t);
-}
-
-function updateCamera(){
- /* camera yaw follows turret for near-first-person feeling */
- let target=tankCameraTarget();
- B.cameraYaw=lerpAngle(B.cameraYaw,target,.08);
-}
-function tankCameraTarget(){
- return B.player ? B.player.turret : 0;
-}
-function lerpAngle(a,b,t){
- let d=Math.atan2(Math.sin(b-a),Math.cos(b-a));
- return a+d*t;
-}
-
-/* =========================
- COLLISION
-========================= */
-function blocked(x,z,r=1.5){
- let boxes=MAPDATA;
- for(let o of boxes){
-  let cx=Math.max(o.x-o.w/2,Math.min(x,o.x+o.w/2));
-  let cz=Math.max(o.z-o.d/2,Math.min(z,o.z+o.d/2));
-  if(Math.hypot(x-cx,z-cz)<r)return true;
  }
  return false;
 }
-function moveTank(t,dx,dz){
- let nx=t.x+dx,nz=t.z+dz;
- if(!blocked(nx,nz,1.5)){
-  t.x=nx;t.z=nz;
- }else{
-  if(!blocked(nx,t.z,1.5))t.x=nx;
-  if(!blocked(t.x,nz,1.5))t.z=nz;
- }
+
+/* ============================================================
+   ПРОСТАЯ СИСТЕМА ЗВУКА WEB AUDIO
+   ============================================================ */
+
+let audioCtx=null;
+
+function sound(freq,duration=.08,type="square"){
+ try{
+  if(!audioCtx)
+   audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+
+  const osc=audioCtx.createOscillator();
+  const gain=audioCtx.createGain();
+
+  osc.type=type;
+  osc.frequency.value=freq;
+  gain.gain.value=.035;
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  gain.gain.exponentialRampToValueAtTime(
+   .0001,
+   audioCtx.currentTime+duration
+  );
+  osc.stop(audioCtx.currentTime+duration);
+ }catch(e){}
 }
 
-/* =========================
- BOT AI
-========================= */
-function updateBots(dt){
- B.bots.forEach(bot=>{
-  if(!bot.alive)return;
-  let enemies=B.bots.concat([B.player]).filter(x=>x&&x.alive&&x.team!==bot.team);
-  let target=enemies.sort((a,b)=>
-   Math.hypot(a.x-bot.x,a.z-bot.z)-Math.hypot(b.x-bot.x,b.z-bot.z)
-  )[0];
-  if(!target)return;
+/* звуковые события */
+const oldFire=fireTank;
+fireTank=function(tank){
+ sound(tank===player?140:110,.06,"sawtooth");
+ oldFire(tank);
+};
 
-  let dx=target.x-bot.x,dz=target.z-bot.z;
-  let dist=Math.hypot(dx,dz);
-  let ang=Math.atan2(dx,dz);
-  bot.turret=lerpAngle(bot.turret,ang,Math.min(1,dt*3));
+const oldExplosion=explosion;
+explosion=function(pos){
+ sound(55,.22,"sawtooth");
+ oldExplosion(pos);
+};
 
-  if(dist>12){
-   let sp=bot.speed*dt;
-   moveTank(bot,Math.sin(ang)*sp,Math.cos(ang)*sp);
-   bot.yaw=ang;
-  }else if(dist<7){
-   let sp=bot.speed*.45*dt;
-   moveTank(bot,-Math.sin(ang)*sp,-Math.cos(ang)*sp);
-  }
+/* ============================================================
+   ПАРТИКЛЫ ПЫЛИ ПОД ТАНКОМ
+   ============================================================ */
 
-  bot.reload-=dt;
-  if(dist<27&&bot.reload<=0&&Math.random()<.04){
-   bot.reload=1.1+Math.random()*.9;
-   fireShot(bot);
-  }
- });
+function dust(pos){
+ for(let i=0;i<3;i++){
+  const m=new THREE.Mesh(
+   new THREE.SphereGeometry(.1,5,5),
+   new THREE.MeshBasicMaterial({
+    color:0x9b9b7c,
+    transparent:true,
+    opacity:.35
+   })
+  );
 
- /* allies/enemies periodically wander */
-}
+  m.position.copy(pos);
+  m.position.x+=(Math.random()-.5)*2;
+  m.position.z+=(Math.random()-.5)*2;
 
-/* =========================
- SHOOTING
-========================= */
-function fireShot(shooter){
- if(!shooter.alive)return;
- let speed=35;
- let a=shooter.turret;
- B.shots.push({
-  x:shooter.x+Math.sin(a)*2,
-  y:1.1,
-  z:shooter.z+Math.cos(a)*2,
-  vx:Math.sin(a)*speed,
-  vy:0,
-  vz:Math.cos(a)*speed,
-  team:shooter.team,
-  owner:shooter,
-  life:2,
-  damage:shooter===B.player?
-   (WEAPONS.find(x=>x[0]===game.weapon)?.[2]||45):
-   25+Math.random()*20
- });
- B.particles.push({
-  type:"muzzle",x:shooter.x+Math.sin(a)*3,y:1,z:shooter.z+Math.cos(a)*3,life:.15
- });
- B.shake=shooter===B.player?.08:B.shake;
-}
+  scene.add(m);
 
-function updateShots(dt){
- for(let i=B.shots.length-1;i>=0;i--){
-  let s=B.shots[i];
-  s.x+=s.vx*dt;s.y+=s.vy*dt;s.z+=s.vz*dt;s.life-=dt;
-  if(blocked(s.x,s.z,.3)||s.life<=0){
-   explosion(s.x,s.y,s.z,false);
-   B.shots.splice(i,1);continue;
-  }
-
-  let targets=B.bots.concat([B.player]);
-  let hit=null;
-  for(let t of targets){
-   if(!t.alive||t.team===s.team)continue;
-   if(Math.hypot(t.x-s.x,t.z-s.z)<1.7){hit=t;break}
-  }
-  if(hit){
-   hit.hp-=s.damage*(hit.armor?.5:1);
-   hit.flash=.15;
-   explosion(hit.x,1,hit.z,true);
-   B.shots.splice(i,1);
-   if(hit.hp<=0)destroyTank(hit,s.owner);
-  }
- }
-}
-
-/* =========================
- DAMAGE / KILLS
-========================= */
-function destroyTank(victim,killer){
- victim.alive=false;
- game.deaths+=victim===B.player?1:0;
-
- if(killer===B.player){
-  game.kills++;
-  game.xp+=10;
-  B[killer.team==="red"?"red":"blue"]++;
-  missionProgress("kills",1);
-  missionProgress("xp",10);
-  addFeed("💥 "+game.name+" уничтожил "+victim.name+"  +10 XP");
- }else{
-  B[victim.team==="red"?"blue":"red"]++;
-  addFeed("💥 "+killer.name+" уничтожил "+victim.name);
- }
-
- saveGame();
- updateUI();
-
- setTimeout(()=>{
-  victim.hp=victim.maxhp;
-  victim.alive=true;
-  if(victim===B.player){
-   victim.x=B.playerTeamSpawnX;
-   victim.z=B.playerTeamSpawnZ;
-   victim.turret=B.player.turret;
-  }else{
-   respawnBot(victim);
-  }
- },2200);
-
- if(B.red>=100||B.blue>=100)endBattle();
-}
-
-function respawnBot(b){
- let side=b.team==="red"?-1:1;
- b.x=side*(18+Math.random()*8);
- b.z=(Math.random()-.5)*35;
-}
-
-/* =========================
- EXPLOSIONS
-========================= */
-function explosion(x,y,z,big=true){
- for(let i=0;i<(big?20:8);i++){
-  B.particles.push({
-   type:"particle",x,y,z,
-   vx:(Math.random()-.5)*8,
-   vy:Math.random()*7,
-   vz:(Math.random()-.5)*8,
-   life:.4+Math.random()*.6,
-   size:big?3:1.5
+  particles.push({
+   mesh:m,
+   life:.4,
+   max:.4,
+   vel:new THREE.Vector3(
+    (Math.random()-.5)*1,
+    Math.random()*.7,
+    (Math.random()-.5)*1
+   )
   });
  }
- B.particles.push({type:"explosion",x,y,z,life:.35});
 }
 
-function updateParticles(dt){
- for(let i=B.particles.length-1;i>=0;i--){
-  let p=B.particles[i];
-  p.life-=dt;
-  if(p.vx){p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.vy-=12*dt}
-  if(p.life<=0)B.particles.splice(i,1);
- }
-}
-function drawParticles(){
- B.particles.forEach(p=>{
-  let q=project(p.x,p.y,p.z);if(!q)return;
-  if(p.type==="explosion"){
-   let r=(1-p.life/.35)*60;
-   ctx.globalAlpha=Math.max(0,p.life/.35);
-   ctx.fillStyle="#e5c68c";
-   ctx.beginPath();ctx.arc(q.x,q.y,r,0,7);ctx.fill();
-   ctx.globalAlpha=1;
-  }else{
-   ctx.globalAlpha=Math.max(0,p.life);
-   ctx.fillStyle="#d2a46b";
-   ctx.fillRect(q.x,q.y,p.size||2,p.size||2);
-   ctx.globalAlpha=1;
-  }
- });
-}
+/* ============================================================
+   УЛУЧШЕННАЯ АНИМАЦИЯ
+   ============================================================ */
 
-/* =========================
- SUPPLIES
-========================= */
-function spawnSupply(){
- let types=["repair","armor","damage","nitro","mine"];
- let type=types[Math.floor(Math.random()*types.length)];
- let x=(Math.random()-.5)*45,z=(Math.random()-.5)*45;
- if(blocked(x,z,1))return;
- B.supplies.push({type,x,z,y:1,life:40});
-}
-function updateSupplies(dt){
- B.spawnTimer-=dt;
- if(B.spawnTimer<=0){
-  B.spawnTimer=22+Math.random()*28;
-  if(Math.random()<.65)spawnSupply();
- }
- for(let i=B.supplies.length-1;i>=0;i--){
-  let s=B.supplies[i];s.life-=dt;s.y=1+Math.sin(performance.now()/300)*.2;
-  if(Math.hypot(s.x-B.player.x,s.z-B.player.z)<2){
-   pickupSupply(s);
-   B.supplies.splice(i,1);
-  }else if(s.life<=0)B.supplies.splice(i,1);
- }
-}
-function pickupSupply(s){
- game.inventory[s.type]=(game.inventory[s.type]||0)+1;
- missionProgress("supplies",1);
- toast("Подобран supply: "+s.type.toUpperCase());
- saveGame();
-}
+const oldUpdatePlayer=updatePlayer;
 
-function drawSupplies(){
- B.supplies.forEach(s=>{
-  let p=project(s.x,s.y,s.z);if(!p)return;
-  ctx.save();
-  ctx.translate(p.x,p.y);
-  if(B.theme==="night")ctx.shadowBlur=20;
-  ctx.shadowColor="#fff";
-  ctx.fillStyle="#d6ded9";
-  ctx.fillRect(-10,-10,20,20);
-  ctx.fillStyle="#1b241f";
-  ctx.font="bold 14px Arial";
-  ctx.textAlign="center";
-  ctx.fillText(s.type==="repair"?"🔧":s.type==="armor"?"🛡":s.type==="damage"?"⚡":s.type==="nitro"?"🚀":"💣",0,5);
-  ctx.restore();
- });
-}
+updatePlayer=function(dt){
+ oldUpdatePlayer(dt);
 
-/* =========================
- GOLD BOX
-========================= */
-function updateGold(dt){
- B.goldTimer-=dt;
- if(B.goldTimer<=0){
-  B.goldTimer=55+Math.random()*100;
-  if(Math.random()<.16){
-   let x=(Math.random()-.5)*42,z=(Math.random()-.5)*42;
-   if(!blocked(x,z,1)){
-    B.golds.push({x,z,y:4,life:25,drop:3});
-    addFeed("⚠ ЗОЛОТОЙ ЯЩИК СБРОШЕН!");
-   }
-  }
- }
- for(let i=B.golds.length-1;i>=0;i--){
-  let g=B.golds[i];
-  g.life-=dt;
-  if(g.drop>0){g.y-=dt*1.3;g.drop-=dt}
-  if(Math.hypot(g.x-B.player.x,g.z-B.player.z)<2.5){
-   game.crystals+=1000;
-   missionProgress("xp",0);
-   saveGame();updateUI();
-   toast("💰 ЗОЛОТОЙ ЯЩИК! +1000 КРИСТАЛЛОВ");
-   addFeed("💰 "+game.name+" подобрал ЗОЛОТОЙ ЯЩИК!");
-   B.golds.splice(i,1);
-  }else if(g.life<=0)B.golds.splice(i,1);
- }
-}
-function drawGold(){
- B.golds.forEach(g=>{
-  let p=project(g.x,g.y,g.z);if(!p)return;
-  ctx.save();ctx.translate(p.x,p.y);
-  ctx.shadowBlur=25;ctx.shadowColor="#ffe66d";
-  ctx.fillStyle="#d6aa32";
-  ctx.fillRect(-15,-12,30,24);
-  ctx.fillStyle="#fff0a0";
-  ctx.fillRect(-10,-7,20,4);
-  ctx.fillStyle="#8b641b";
-  ctx.fillRect(-4,-12,8,24);
-  ctx.restore();
- });
-}
-
-/* =========================
- MINES
-========================= */
-function dropMine(){
- if(game.inventory.mine<=0){toast("Нет мин");return}
- game.inventory.mine--;
- B.mines.push({x:B.player.x-Math.sin(B.player.turret)*2,z:B.player.z-Math.cos(B.player.turret)*2,team:B.player.team,life:80});
- toast("Мина установлена");
-}
-function updateMines(){
- B.mines.forEach(m=>{
-  B.bots.concat([B.player]).forEach(t=>{
-   if(!t.alive||t.team===m.team)return;
-   if(Math.hypot(t.x-m.x,t.z-m.z)<2){
-    t.hp-=70;explosion(m.x,1,m.z,true);m.life=0;
-    if(t.hp<=0)destroyTank(t,B.player);
-   }
-  });
- });
- B.mines=B.mines.filter(m=>m.life>0);
-}
-function drawMines(){
- B.mines.forEach(m=>{
-  let p=project(m.x,.25,m.z);if(!p)return;
-  ctx.fillStyle="#171c1a";ctx.beginPath();ctx.arc(p.x,p.y,7,0,7);ctx.fill();
-  ctx.strokeStyle="#aeb8b2";ctx.stroke();
- });
-}
-
-/* =========================
- SUPPLY USE
-========================= */
-function useSupply(n){
- if(!B.active)return;
- let type=["","repair","armor","damage","nitro","mine"][n];
- if((game.inventory[type]||0)<=0){
-  toast("Supply закончился");
-  return;
- }
- game.inventory[type]--;
-
- if(type==="repair"){
-  B.player.hp=Math.min(B.player.maxhp,B.player.hp+45);
-  toast("Ремонт +45");
- }else if(type==="armor"){
-  B.player.armor=true;
-  setTimeout(()=>B.player.armor=false,10000);
-  toast("Двойная броня активирована");
- }else if(type==="damage"){
-  B.player.damageBoost=true;
-  setTimeout(()=>B.player.damageBoost=false,10000);
-  toast("Двойной урон активирован");
- }else if(type==="nitro"){
-  B.player.nitro=5;
-  toast("Нитро!");
- }else if(type==="mine"){
-  dropMine();
- }
- saveGame();
-}
-
-/* =========================
- BATTLE START
-========================= */
-function startBattle(map){
- if(B.active)return;
- document.getElementById("app").style.display="none";
- document.getElementById("battle").style.display="block";
- B.active=true;
- B.map=map||"Полигон";
- B.theme=["day","night","winter"][Math.floor(Math.random()*3)];
- B.mode="TDM";
- B.time=900;
- B.red=0;B.blue=0;
- B.shots=[];B.particles=[];B.supplies=[];B.golds=[];B.mines=[];
- B.spawnTimer=10;
- B.goldTimer=35+Math.random()*30;
-
- MAPDATA=buildMap(B.map);
-
- B.playerTeam=Math.random()<.5?"red":"blue";
- B.player=B.playerTeam==="red"?tankObj("red",-18,0,false):tankObj("blue",18,0,false);
- B.playerTeamSpawnX=B.player.x;
- B.playerTeamSpawnZ=B.player.z;
-
- B.bots=[];
- for(let i=0;i<7;i++){
-  let side=i<4?B.playerTeam:(B.playerTeam==="red"?"blue":"red");
-  let x=side==="red"?-10-Math.random()*15:10+Math.random()*15;
-  let z=(Math.random()-.5)*42;
-  B.bots.push(tankObj(side,x,z,true));
- }
- B.last=performance.now();
- addBattleChat("Система","Добро пожаловать на карту "+B.map);
- addBattleChat("Система","Вы — "+(B.playerTeam==="red"?"КРАСНЫЕ":"СИНИЕ"));
- addBattleChat("Система","WASD — движение | Z/X — башня | C — центр | SPACE — огонь");
- addBattleChat("Система","1–5 — supplies | TAB — таблица");
- requestAnimationFrame(loop);
-}
-
-function leaveBattle(){
- B.active=false;
- document.getElementById("battle").style.display="none";
- document.getElementById("app").style.display="block";
- updateUI();
- showPage("home");
-}
-
-function endBattle(){
- if(!B.active)return;
- B.active=false;
- game.battles++;
- let won=(B.playerTeam==="red"?B.red>B.blue:B.blue>B.red);
- if(won){
-  game.wins++;
-  game.xp+=50;
-  game.crystals+=100;
-  missionProgress("win",1);
-  toast("ПОБЕДА! +50 XP +100 💎");
- }else{
-  game.xp+=10;
-  toast("БИТВА ОКОНЧЕНА. +10 XP");
- }
- missionProgress("xp",won?50:10);
- saveGame();
- setTimeout(()=>{
-  document.getElementById("battle").style.display="none";
-  document.getElementById("app").style.display="block";
-  updateUI();showPage("home");
- },2500);
-}
-
-/* =========================
- BATTLE LOOP
-========================= */
-function loop(now){
- if(!B.active)return;
- let dt=Math.min(.05,(now-B.last)/1000);
- B.last=now;
-
- updateBattle(dt);
- renderBattle();
-
- requestAnimationFrame(loop);
-}
-
-function updateBattle(dt){
- B.time-=dt;
- if(B.time<=0){endBattle();return}
-
- updatePlayer(dt);
- updateBots(dt);
- updateShots(dt);
- updateParticles(dt);
- updateSupplies(dt);
- updateGold(dt);
- updateMines();
- updateCamera();
-
- B.player.flash=Math.max(0,B.player.flash-dt);
- B.shake=Math.max(0,B.shake-dt);
-
- document.getElementById("redScore").textContent=B.red;
- document.getElementById("blueScore").textContent=B.blue;
-
- let mins=Math.floor(B.time/60),secs=Math.floor(B.time%60);
- document.getElementById("battleTime").textContent=
-  mins+":"+(secs<10?"0":"")+secs;
-
- document.getElementById("hpText").textContent=Math.max(0,Math.floor(B.player.hp));
- document.getElementById("hpFill").style.width=
-  Math.max(0,B.player.hp/B.player.maxhp*100)+"%";
-}
-
-function updatePlayer(dt){
- let t=B.player;
- let f=0,r=0;
- if(B.keys.w||B.keys.arrowup)f++;
- if(B.keys.s||B.keys.arrowdown)f--;
- if(B.keys.a||B.keys.arrowleft)r--;
- if(B.keys.d||B.keys.arrowright)r++;
-
- let sp=t.speed*(t.nitro>0?2.1:1)*dt;
- if(t.nitro>0)t.nitro-=dt;
-
- /* movement is relative to turret/camera like a close third-person tank */
- if(f||r){
-  let a=t.yaw;
-  let dx=Math.sin(a)*f*sp+Math.cos(a)*r*sp;
-  let dz=Math.cos(a)*f*sp-Math.sin(a)*r*sp;
-  moveTank(t,dx,dz);
-  if(Math.abs(f)>0)t.yaw=lerpAngle(t.yaw,a+(f<0?Math.PI:0),.1);
-  else if(r)t.yaw=lerpAngle(t.yaw,a+(r>0?Math.PI/2:-Math.PI/2),.1);
+ if(player&&Math.abs(input.forward)>.1){
+  dust(player.position);
  }
 
- if(B.keys.z) t.turret-=dt*2.4;
- if(B.keys.x) t.turret+=dt*2.4;
-
- if(B.keys.c)t.turret=t.yaw;
-
- if(B.keys[" "]){
-  if(t.reload<=0){
-   t.reload=(WEAPONS.find(x=>x[0]===game.weapon)?.[3]||1)*.8;
-   fireShot(t);
-  }
+ if(player){
+  player.userData.turret.rotation.y=
+   player.userData.turretAngle;
  }
- t.reload=Math.max(0,t.reload-dt);
-}
+};
 
-/* =========================
- BATTLE RENDER
-========================= */
-function renderBattle(){
- ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
- ctx.clearRect(0,0,innerWidth,innerHeight);
+/* ============================================================
+   ОПТИМИЗАЦИЯ
+   ============================================================ */
 
- drawGround();
-
- /* far objects first */
- let objects=[];
- MAPDATA.forEach(o=>{
-  let d=Math.hypot(o.x-B.player.x,o.z-B.player.z);
-  objects.push({d,type:"box",o});
- });
- B.bots.forEach(t=>{
-  let d=Math.hypot(t.x-B.player.x,t.z-B.player.z);
-  objects.push({d,type:"tank",o:t});
- });
- objects.sort((a,b)=>b.d-a.d);
-
- objects.forEach(o=>{
-  if(o.type==="box")drawBox(o.o);
-  else drawTank(o.o);
- });
-
- drawSupplies();
- drawGold();
- drawMines();
-
- /* projectiles */
- B.shots.forEach(s=>{
-  let p=project(s.x,s.y,s.z);if(!p)return;
-  ctx.fillStyle="#f4e4a5";
-  ctx.shadowBlur=10;ctx.shadowColor="#fff";
-  ctx.beginPath();ctx.arc(p.x,p.y,3,0,7);ctx.fill();ctx.shadowBlur=0;
- });
-
- drawParticles();
- drawPlayerTank();
-
- /* crosshair */
- drawCrosshair();
-}
-
-function drawCrosshair(){
- let cx=innerWidth/2,cy=innerHeight*.48;
- ctx.strokeStyle="#dce6dfb8";ctx.lineWidth=2;
- ctx.beginPath();
- ctx.moveTo(cx-15,cy);ctx.lineTo(cx-5,cy);
- ctx.moveTo(cx+5,cy);ctx.lineTo(cx+15,cy);
- ctx.moveTo(cx,cy-15);ctx.lineTo(cx,cy-5);
- ctx.moveTo(cx,cy+5);ctx.lineTo(cx,cy+15);
- ctx.stroke();
-}
-
-/* =========================
- INPUT
-========================= */
-addEventListener("keydown",e=>{
- let k=e.key.toLowerCase();
-
- if(B.active){
-  if(k==="tab"){
-   e.preventDefault();
-   toggleScoreboard(true);
-   return;
-  }
-  if(k==="f"){
-   toast("Флаг: функция доступна в CTF");
-  }
-  if(k>="1"&&k<="5")useSupply(+k);
-  if(k==="enter"){
-   document.getElementById("battleChatInput").focus();
-  }
-  if(k==="q")B.cameraPitch=Math.min(.5,B.cameraPitch+.04);
-  if(k==="e")B.cameraPitch=Math.max(-.05,B.cameraPitch-.04);
-
-  B.keys[k]=true;
-  B.keys[e.key.toLowerCase()]=true;
- }
-});
-addEventListener("keyup",e=>{
- if(B.active)B.keys[e.key.toLowerCase()]=false;
-});
-addEventListener("keyup",e=>{
- if(e.key==="Tab"&&B.active)toggleScoreboard(false);
-});
-
-function toggleScoreboard(force){
- let s=document.getElementById("scoreboard");
- if(force===true)s.style.display="block";
- else if(force===false)s.style.display="none";
- else s.style.display=s.style.display==="block"?"none":"block";
- renderScoreboard();
-}
-function renderScoreboard(){
- let r=document.getElementById("redScoreboard");
- let b=document.getElementById("blueScoreboard");
- r.innerHTML="";b.innerHTML="";
- let players=[B.player,...B.bots];
- players.filter(x=>x.team==="red").sort((a,b)=>b.hp-a.hp).forEach(t=>scoreLine(r,t));
- players.filter(x=>x.team==="blue").sort((a,b)=>b.hp-a.hp).forEach(t=>scoreLine(b,t));
-}
-function scoreLine(box,t){
- let d=document.createElement("div");
- d.className="playerLine"+(t===B.player?" me":"");
- d.innerHTML="<span>"+t.name+"</span><span>"+(t===B.player?game.kills:Math.floor(Math.random()*8))+"</span><span>"+t.rank+"</span>";
- box.appendChild(d);
-}
-
-/* =========================
- MOBILE JOYSTICKS
-========================= */
-function setupJoy(id,callback){
- let el=document.getElementById(id),knob=el.querySelector(".knob");
- let active=false;
- function move(e){
-  if(!active)return;
-  let r=el.getBoundingClientRect();
-  let p=e.touches?e.touches[0]:e;
-  let x=p.clientX-(r.left+r.width/2);
-  let y=p.clientY-(r.top+r.height/2);
-  let len=Math.hypot(x,y),max=43;
-  if(len>max){x=x/len*max;y=y/len*max}
-  knob.style.transform="translate("+x+"px,"+y+"px)";
-  callback(x/max,y/max);
- }
- function end(){
-  active=false;knob.style.transform="";
-  callback(0,0);
- }
- el.addEventListener("pointerdown",e=>{active=true;el.setPointerCapture(e.pointerId);move(e)});
- el.addEventListener("pointermove",move);
- el.addEventListener("pointerup",end);
- el.addEventListener("pointercancel",end);
-}
-setupJoy("moveJoy",(x,y)=>{
- B.keys.w=y<-.25;B.keys.s=y>.25;B.keys.a=x<-.25;B.keys.d=x>.25;
-});
-setupJoy("aimJoy",(x,y)=>{
- if(!B.active)return;
- if(Math.abs(x)>.1)B.player.turret+=x*.07;
- if(Math.abs(y)>.1)B.player.turret+=y*.02;
-});
-function mobileFire(){
- if(!B.active)return;
- if(B.player.reload<=0){
-  B.player.reload=(WEAPONS.find(x=>x[0]===game.weapon)?.[3]||1)*.8;
-  fireShot(B.player);
- }
-}
-
-/* =========================
- FEED / CHAT
-========================= */
-function addFeed(text){
- let f=document.getElementById("killFeed");
- let d=document.createElement("div");d.className="feed";d.textContent=text;
- f.prepend(d);
- while(f.children.length>5)f.lastChild.remove();
-}
-function addBattleChat(name,text){
- addChat(document.getElementById("battleChatMessages"),text,name);
-}
-
-/* =========================
- TOAST
-========================= */
-let toastTimer;
-function toast(text){
- let t=document.getElementById("toast");
- t.textContent=text;t.style.display="block";
- clearTimeout(toastTimer);
- toastTimer=setTimeout(()=>t.style.display="none",1800);
-}
-
-/* =========================
- MENU
-========================= */
-function openMenu(){
- document.getElementById("modal").style.display="flex";
- document.getElementById("modalContent").innerHTML=
-  "<h2>МЕНЮ</h2>"+
-  "<button class='oldBtn bigBtn' onclick='showPage(\"home\");closeModal()'>БИТВЫ</button>"+
-  "<button class='oldBtn bigBtn' onclick='showPage(\"garage\");closeModal()'>ГАРАЖ</button>"+
-  "<button class='oldBtn bigBtn' onclick='showPage(\"missions\");closeModal()'>МИССИИ</button>"+
-  "<button class='oldBtn bigBtn' onclick='showPage(\"maps\");closeModal()'>КАРТЫ</button>"+
-  "<button class='oldBtn bigBtn' onclick='closeModal()'>ЗАКРЫТЬ</button>";
-}
-function closeModal(){document.getElementById("modal").style.display="none"}
-
-/* =========================
- INIT
-========================= */
-renderRanks();
-renderMaps();
-renderMissions();
-updateUI();
-
-window.addEventListener("beforeunload",saveGame);
-
-/* periodic fake lobby chat */
 setInterval(()=>{
- if(document.getElementById("app").style.display!=="none"){
-  let c=document.getElementById("globalChat");
-  if(c){
-   let i=Math.floor(Math.random()*chatTexts.length);
-   addChat(c,chatTexts[i],chatNames[Math.floor(Math.random()*chatNames.length)]);
-  }
- }
-},12000);
+ if(!battleRunning)return;
 
-/* prevent mobile page gestures */
-document.addEventListener("touchmove",e=>{
- if(B.active)e.preventDefault();
-},{passive:false});
+ /* удаляем слишком старые частицы */
+ while(particles.length>350){
+  const p=particles.shift();
+  scene.remove(p.mesh);
+ }
+
+ /* ограничиваем количество снарядов */
+ while(bullets.length>60){
+  const b=bullets.shift();
+  scene.remove(b.mesh);
+ }
+},1000);
+
+/* ============================================================
+   ДАННЫЕ КЛАССИЧЕСКОГО ГАРАЖА
+   ============================================================ */
+
+const GARAGE_PAIRS={
+ "Смоки":"Гром",
+ "Гром":"Смоки",
+ "Огнемёт":"Фриз",
+ "Фриз":"Огнемёт",
+ "Твинс":"Рикошет",
+ "Рикошет":"Твинс",
+ "Рельсотрон":"Шафт",
+ "Шафт":"Рельсотрон",
+ "Изида":"Изида"
+};
+
+const HULL_PAIRS={
+ "Оса":"Хорнет",
+ "Хорнет":"Оса",
+ "Охотник":"Викинг",
+ "Викинг":"Охотник",
+ "Титан":"Мамонт",
+ "Мамонт":"Титан",
+ "Диктатор":"Диктатор"
+};
+
+/* ============================================================
+   СТАТИСТИКА БОЯ
+   ============================================================ */
+
+function stats(){
+ return {
+  rank:rank(),
+  xp:save.xp,
+  crystals:save.crystals,
+  hull:save.hull+" M"+save.hullM,
+  weapon:save.weapon+" M"+save.weaponM
+ };
+}
+
+/* ============================================================
+   СТАРТОВАЯ КОНФИГУРАЦИЯ
+   ============================================================ */
+
+window.addEventListener("load",()=>{
+ document.title="TANKI — CLASSIC 3D";
+});
+
+/* ============================================================
+   КОНЕЦ
+   ============================================================ */
 </script>
 </body>
 </html>
